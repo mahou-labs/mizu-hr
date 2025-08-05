@@ -1,8 +1,8 @@
-import { eq } from "drizzle-orm";
-import z from "zod";
-import { db } from "../db";
-import { todo } from "../db/schema/todo";
-import { publicProcedure } from "../lib/orpc";
+import { eq } from 'drizzle-orm';
+import z from 'zod';
+import { db } from '../db';
+import { todo } from '../db/schema/todo';
+import { publicProcedure } from '../lib/orpc';
 
 export const todoRouter = {
   getAll: publicProcedure.handler(async () => {
@@ -12,11 +12,9 @@ export const todoRouter = {
   create: publicProcedure
     .input(z.object({ text: z.string().min(1) }))
     .handler(async ({ input }) => {
-      return await db
-        .insert(todo)
-        .values({
-          text: input.text,
-        });
+      return await db.insert(todo).values({
+        text: input.text,
+      });
     }),
 
   toggle: publicProcedure
@@ -34,4 +32,3 @@ export const todoRouter = {
       return await db.delete(todo).where(eq(todo.id, input.id));
     }),
 };
-
