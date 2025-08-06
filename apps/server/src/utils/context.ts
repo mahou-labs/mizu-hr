@@ -1,16 +1,23 @@
-import type { Context as HonoContext } from 'hono';
-import { auth } from './auth';
+import type { Context as HonoContext } from "hono";
+import { getAuth } from "./auth";
+import { getDb } from "./db";
 
 export type CreateContextOptions = {
   context: HonoContext;
 };
 
 export async function createContext({ context }: CreateContextOptions) {
+  const db = getDb();
+  const auth = getAuth(db);
+
   const session = await auth.api.getSession({
     headers: context.req.raw.headers,
   });
+
   return {
     session,
+    db,
+    auth,
   };
 }
 

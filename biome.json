@@ -32,6 +32,12 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "suspicious": {
+        "noConsole": "warn"
+      },
+      "performance": {
+        "noNamespaceImport": "off"
+      },
       "recommended": true,
       "correctness": {
         "useExhaustiveDependencies": "info"

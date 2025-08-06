@@ -1,13 +1,13 @@
-import { protectedProcedure, publicProcedure } from '../lib/orpc';
-import { todoRouter } from './todo';
+import { protectedProcedure, publicProcedure } from "../utils/orpc";
+import { todoRouter } from "./todo";
 
 export const appRouter = {
   healthCheck: publicProcedure.handler(() => {
-    return 'OK';
+    return "OK";
   }),
   privateData: protectedProcedure.handler(({ context }) => {
     return {
-      message: 'This is private',
+      message: "This is private",
       user: context.session?.user,
     };
   }),
