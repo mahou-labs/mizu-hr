@@ -1,5 +1,6 @@
 // @ts-check
 
+import cloudflare from "@astrojs/cloudflare";
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 import starlightThemeRapide from "starlight-theme-rapide";
@@ -32,4 +33,6 @@ export default defineConfig({
       ],
     }),
   ],
+
+  adapter: cloudflare(),
 });
