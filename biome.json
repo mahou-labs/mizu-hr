@@ -21,7 +21,8 @@
       "!**/.nuxt",
       "!bts.jsonc",
       "!**/.expo",
-      "!**/.wrangler"
+      "!**/.wrangler",
+      "!**/.output"
     ]
   },
   "formatter": {
