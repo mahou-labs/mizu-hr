@@ -1,32 +1,32 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { Loader2, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { Loader2, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { orpc } from '@/utils/orpc';
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { orpc } from "@/utils/orpc";
 
-export const Route = createFileRoute('/todos')({
+export const Route = createFileRoute("/todos")({
   component: TodosRoute,
 });
 
 function TodosRoute() {
-  const [newTodoText, setNewTodoText] = useState('');
+  const [newTodoText, setNewTodoText] = useState("");
 
   const todos = useQuery(orpc.todo.getAll.queryOptions());
   const createMutation = useMutation(
     orpc.todo.create.mutationOptions({
       onSuccess: () => {
         todos.refetch();
-        setNewTodoText('');
+        setNewTodoText("");
       },
     })
   );
@@ -85,7 +85,7 @@ function TodosRoute() {
               {createMutation.isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                'Add'
+                "Add"
               )}
             </Button>
           </form>
@@ -112,7 +112,7 @@ function TodosRoute() {
                       }
                     />
                     <label
-                      className={`${todo.completed ? 'line-through' : ''}`}
+                      className={`${todo.completed ? "line-through" : ""}`}
                       htmlFor={`todo-${todo.id}`}
                     >
                       {todo.text}
