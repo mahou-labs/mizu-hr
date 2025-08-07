@@ -25,7 +25,7 @@
   },
   "references": [
     {
-      "path": "../server"
+      "path": "../api"
     }
   ]
 }

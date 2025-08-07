@@ -1,11 +1,11 @@
 {
-  "name": "server",
+  "name": "api",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
     "build": "wrangler deploy --dry-run",
     "check-types": "tsc -b",
-    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile api",
     "dev": "vite dev --port=3000",
     "start": "wrangler dev",
     "deploy": "wrangler deploy",

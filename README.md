@@ -1,4 +1,4 @@
-# hiring3
+# mizu-hr
 
 This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Start, Hono, ORPC, and more.
 
@@ -52,11 +52,11 @@ The API is running at [http://localhost:3000](http://localhost:3000).
 ## Project Structure
 
 ```
-hiring3/
+mizu-hr/
 ├── apps/
 │   ├── web/         # Frontend application (React + TanStack Start)
 │   ├── docs/        # Documentation site (Astro Starlight)
-│   └── server/      # Backend API (Hono, ORPC)
+│   └── api/      # Backend API (Hono, ORPC)
 ```
 
 ## Available Scripts
@@ -64,7 +64,7 @@ hiring3/
 - `bun dev`: Start all applications in development mode
 - `bun build`: Build all applications
 - `bun dev:web`: Start only the web application
-- `bun dev:server`: Start only the server
+- `bun dev:api`: Start only the api
 - `bun check-types`: Check TypeScript types across all apps
 - `bun db:push`: Push schema changes to database
 - `bun db:studio`: Open database studio UI

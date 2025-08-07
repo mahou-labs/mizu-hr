@@ -1,5 +1,5 @@
 {
-  "name": "hiring3-server",
+  "name": "mizu-hr-api",
   "main": "src/index.ts",
   "compatibility_date": "2025-06-15",
   "compatibility_flags": ["nodejs_compat"],
