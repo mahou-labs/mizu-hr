@@ -1,16 +1,11 @@
 import { env } from "cloudflare:workers";
-import { checkout, polar, portal, webhooks } from "@polar-sh/better-auth";
+import { checkout, polar, portal } from "@polar-sh/better-auth";
 import { Polar } from "@polar-sh/sdk";
 import { type BetterAuthOptions, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
 import * as schema from "../schema/auth";
 import { getDb } from "./db";
-
-const polarClient = new Polar({
-  accessToken: env.POLAR_ACCESS_TOKEN,
-  server: "sandbox",
-});
 
 const authOptions = (
   database: ReturnType<typeof getDb>
@@ -49,16 +44,19 @@ const authOptions = (
       allowUserToJoinOrganization: true,
     }),
     polar({
-      client: polarClient,
+      client: new Polar({
+        accessToken: env.POLAR_ACCESS_TOKEN,
+        server: "sandbox",
+      }),
       createCustomerOnSignUp: true,
       use: [
         portal(),
-        webhooks({
-          secret: env.POLAR_WEBHOOK_SECRET,
-          onOrganizationUpdated: (payload) => {
-            console.log("organization updated", payload);
-          },
-        }),
+        // webhooks({
+        //   secret: env.POLAR_WEBHOOK_SECRET,
+        //   onOrganizationUpdated: (payload) => {
+        //     console.log("organization updated", payload);
+        //   },
+        // }),
         checkout({
           products: [
             {
