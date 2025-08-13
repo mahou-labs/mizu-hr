@@ -3,7 +3,8 @@
   "packages": [
     "ni@latest",
     "nodejs@latest",
-    "bun@latest"
+    "bun@latest",
+    "claude-code@latest"
   ],
   "shell": {
     "init_hook": [
