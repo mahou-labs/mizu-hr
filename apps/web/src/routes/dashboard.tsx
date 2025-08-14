@@ -12,6 +12,8 @@ function RouteComponent() {
   const navigate = Route.useNavigate();
   const { data: session, isPending } = authClient.useSession();
 
+  console.log(session?.session.activeOrganizationId)
+
   const privateData = useQuery(orpc.privateData.queryOptions());
 
   useEffect(() => {
@@ -19,8 +21,12 @@ function RouteComponent() {
       navigate({
         to: "/login",
       });
+    } else if (session && !session.session.activeOrganizationId) {
+      navigate({
+        to: "/onboarding",
+      });
     }
-  }, [session, isPending]);
+  }, [session, isPending, navigate]);
 
   if (isPending) {
     return <div>Loading...</div>;

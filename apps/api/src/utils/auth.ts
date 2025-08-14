@@ -43,32 +43,32 @@ const authOptions = (
       allowUserToCreateOrganization: true,
       allowUserToJoinOrganization: true,
     }),
-    polar({
-      client: new Polar({
-        accessToken: env.POLAR_ACCESS_TOKEN,
-        server: "sandbox",
-      }),
-      createCustomerOnSignUp: true,
-      use: [
-        portal(),
-        // webhooks({
-        //   secret: env.POLAR_WEBHOOK_SECRET,
-        //   onOrganizationUpdated: (payload) => {
-        //     console.log("organization updated", payload);
-        //   },
-        // }),
-        checkout({
-          products: [
-            {
-              productId: "b5208a27-6aec-47fc-bb00-4d2fc50195a2",
-              slug: "hiring-test-product", // Custom slug for easy reference in Checkout URL, e.g. /checkout/hiring-test-product
-            },
-          ],
-          successUrl: process.env.POLAR_SUCCESS_URL,
-          authenticatedUsersOnly: true,
-        }),
-      ],
-    }),
+    // polar({
+    //   client: new Polar({
+    //     accessToken: env.POLAR_ACCESS_TOKEN,
+    //     server: "sandbox",
+    //   }),
+    //   createCustomerOnSignUp: true,
+    //   use: [
+    //     portal(),
+    //     // webhooks({
+    //     //   secret: env.POLAR_WEBHOOK_SECRET,
+    //     //   onOrganizationUpdated: (payload) => {
+    //     //     console.log("organization updated", payload);
+    //     //   },
+    //     // }),
+    //     checkout({
+    //       products: [
+    //         {
+    //           productId: "b5208a27-6aec-47fc-bb00-4d2fc50195a2",
+    //           slug: "hiring-test-product", // Custom slug for easy reference in Checkout URL, e.g. /checkout/hiring-test-product
+    //         },
+    //       ],
+    //       successUrl: process.env.POLAR_SUCCESS_URL,
+    //       authenticatedUsersOnly: true,
+    //     }),
+    //   ],
+    // }),
   ],
 });
 

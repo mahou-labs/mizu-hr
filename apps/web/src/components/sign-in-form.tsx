@@ -30,11 +30,17 @@ export default function SignInForm({
           password: value.password,
         },
         {
-          onSuccess: () => {
-            navigate({
-              to: "/dashboard",
-            });
+          onSuccess: (context) => {
             toast.success("Sign in successful");
+            if (context.data?.session?.activeOrganizationId) {
+              navigate({
+                to: "/dashboard",
+              });
+            } else {
+              navigate({
+                to: "/onboarding",
+              });
+            }
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);
