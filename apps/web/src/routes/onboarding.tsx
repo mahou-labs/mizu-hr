@@ -1,14 +1,20 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useDebounce } from "@uidotdev/usehooks";
 import { useCallback, useEffect, useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
+import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
-import { useQuery } from "@tanstack/react-query";
-import {useDebounce} from "@uidotdev/usehooks"
 
 export const Route = createFileRoute("/onboarding")({
   component: OnboardingComponent,
@@ -24,34 +30,18 @@ function OnboardingComponent() {
   const [isCreating, setIsCreating] = useState(false);
   const [slugError, setSlugError] = useState("");
   const debouncedSlug = useDebounce(organizationSlug, 500);
-  const { data: slugAvailability, isLoading: isCheckingSlug } = useQuery({
-    ...orpc.organization.checkSlugAvailability.queryOptions({ input: {slug: debouncedSlug} }),
+  const { data: slugAvailable, isLoading: isCheckingSlug } = useQuery({
+    ...orpc.organization.checkSlugAvailability.queryOptions({
+      input: { slug: debouncedSlug },
+    }),
     enabled: debouncedSlug.length > 0 && !slugError,
   });
 
-
   // useEffect(() => {
-  //   async function checkSlug() {
-  //     const { data, error } = await authClient.organization.checkSlug({
-  //       slug: debouncedSlug, // required
-  //     });
-
-  //     if (error) {
-  //       toast.error(error.message);
-  //     }
-
-  //     setSlugAvailability(data?.status);
+  //   if (!isPending && !session) {
+  //     navigate({ to: "/login" });
   //   }
-    
-
-  //   checkSlug();
-  // }, [debouncedSlug]);
-
-  useEffect(() => {
-    if (!isPending && !session) {
-      navigate({ to: "/login" });
-    }
-  }, [session, isPending, navigate]);
+  // }, [session, isPending, navigate]);
 
   useEffect(() => {
     if (session?.user && session.session.activeOrganizationId) {
@@ -79,7 +69,10 @@ function OnboardingComponent() {
 
   // Handle slug input with automatic formatting
   const handleSlugChange = (value: string) => {
-    const formatted = value.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+    const formatted = value
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-");
     setOrganizationSlug(formatted);
     setSlugError(validateSlug(formatted));
   };
@@ -87,7 +80,10 @@ function OnboardingComponent() {
   // Auto-generate slug from organization name
   useEffect(() => {
     if (organizationName && !organizationSlug) {
-      const autoSlug = organizationName.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "-");
+      const autoSlug = organizationName
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-");
       setOrganizationSlug(autoSlug);
       setSlugError(validateSlug(autoSlug));
     }
@@ -95,7 +91,7 @@ function OnboardingComponent() {
 
   const handleCreateOrganization = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!organizationName.trim()) {
       toast.error("Organization name is required");
       return;
@@ -111,13 +107,13 @@ function OnboardingComponent() {
       return;
     }
 
-    if (!slugAvailability?.available) {
+    if (!slugAvailable) {
       toast.error("This slug is already taken");
       return;
     }
 
     setIsCreating(true);
-    
+
     try {
       const result = await authClient.organization.create({
         name: organizationName.trim(),
@@ -130,9 +126,9 @@ function OnboardingComponent() {
       }
 
       toast.success("Organization created successfully!");
-      
+
       await authClient.organization.setActive({
-        organizationId: result.data!.id,
+        organizationId: result.data.id,
       });
 
       router.invalidate();
@@ -146,7 +142,9 @@ function OnboardingComponent() {
   };
 
   if (isPending) {
-    return <div className="flex h-full items-center justify-center">Loading...</div>;
+    return (
+      <div className="flex h-full items-center justify-center">Loading...</div>
+    );
   }
 
   if (!session) {
@@ -176,7 +174,7 @@ function OnboardingComponent() {
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="organizationSlug">Organization Slug</Label>
               <Input
@@ -188,43 +186,43 @@ function OnboardingComponent() {
                 disabled={isCreating}
                 required
               />
-              
+
               {/* Slug validation messages */}
-              {slugError && (
-                <p className="text-sm text-red-600">{slugError}</p>
-              )}
-              
+              {slugError && <p className="text-red-600 text-sm">{slugError}</p>}
+
               {!slugError && organizationSlug && (
                 <>
-                  {isCheckingSlug && (
-                    <p className="text-sm text-gray-500">Checking availability...</p>
-                  )}
-                  
-                  {slugAvailability && !isCheckingSlug && (
-                    <p className={`text-sm ${slugAvailability.available ? 'text-green-600' : 'text-red-600'}`}>
-                      {slugAvailability.available 
-                        ? '✓ This slug is available' 
-                        : '✗ This slug is already taken'
-                      }
+                  {isCheckingSlug ? (
+                    <p className="text-gray-500 text-sm">
+                      Checking availability...
+                    </p>
+                  ) : (
+                    <p
+                      className={`text-sm ${slugAvailable ? "text-green-600" : "text-red-600"}`}
+                    >
+                      {slugAvailable
+                        ? "✓ This slug is available"
+                        : "✗ This slug is already taken"}
                     </p>
                   )}
                 </>
               )}
-              
-              <p className="text-xs text-gray-500">
-                This will be used in your organization URL. Only lowercase letters, numbers, and hyphens allowed.
+
+              <p className="text-gray-500 text-xs">
+                This will be used in your organization URL. Only lowercase
+                letters, numbers, and hyphens allowed.
               </p>
             </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full" 
+
+            <Button
+              type="submit"
+              className="w-full"
               disabled={
-                isCreating || 
-                !organizationName.trim() || 
-                !organizationSlug.trim() || 
-                !!slugError || 
-                (slugAvailability && !slugAvailability.available) ||
+                isCreating ||
+                !organizationName.trim() ||
+                !organizationSlug.trim() ||
+                !!slugError ||
+                !slugAvailable ||
                 isCheckingSlug
               }
             >

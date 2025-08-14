@@ -1,15 +1,15 @@
 {
   "name": "mizu-hr",
   "devDependencies": {
-    "turbo": "^2.5.4",
-    "@biomejs/biome": "2.1.2",
+    "turbo": "^2.5.5",
+    "@biomejs/biome": "^2.2.0",
     "ultracite": "5.1.1"
   },
   "packageManager": "bun@1.2.19",
   "private": true,
   "scripts": {
     "check": "biome check --write .",
-    "dev": "turbo dev",
+    "dev": "turbo dev db:studio --parallel",
     "build": "turbo build",
     "check-types": "turbo check-types",
     "dev:native": "turbo -F native dev",

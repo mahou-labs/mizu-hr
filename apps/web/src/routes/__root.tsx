@@ -1,20 +1,21 @@
-import type { QueryClient } from "@tanstack/react-query";
-
+import { Toaster } from "@/components/ui/sonner";
+ 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
+ 
 import {
-  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
+  createRootRouteWithContext,
   useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import Loader from "@/components/loader";
-import { Toaster } from "@/components/ui/sonner";
-import type { orpc } from "@/utils/orpc";
 import Header from "../components/header";
 import appCss from "../index.css?url";
+import type { QueryClient } from "@tanstack/react-query";
+import Loader from "@/components/loader";
+
+import type { orpc } from "@/utils/orpc";
 export interface RouterAppContext {
   orpc: typeof orpc;
   queryClient: QueryClient;
@@ -49,7 +50,7 @@ function RootDocument() {
   const isFetching = useRouterState({ select: (s) => s.isLoading });
 
   return (
-    <html className="dark" lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
@@ -60,7 +61,7 @@ function RootDocument() {
         </div>
         <Toaster richColors />
         <TanStackRouterDevtools position="bottom-left" />
-        <ReactQueryDevtools buttonPosition="bottom-right" position="bottom" />
+        <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
         <Scripts />
       </body>
     </html>

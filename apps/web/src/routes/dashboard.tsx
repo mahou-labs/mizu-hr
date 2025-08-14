@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/dashboard")({
@@ -12,7 +12,7 @@ function RouteComponent() {
   const navigate = Route.useNavigate();
   const { data: session, isPending } = authClient.useSession();
 
-  console.log(session?.session.activeOrganizationId)
+  console.log(session?.session.activeOrganizationId);
 
   const privateData = useQuery(orpc.privateData.queryOptions());
 
@@ -37,6 +37,7 @@ function RouteComponent() {
       <h1>Dashboard</h1>
       <p>Welcome {session?.user.name}</p>
       <p>privateData: {privateData.data?.message}</p>
+      <p>org: {session?.session.activeOrganizationId}</p>
     </div>
   );
 }
