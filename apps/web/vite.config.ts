@@ -9,6 +9,6 @@ export default defineConfig({
     tsconfigPaths(),
     tailwindcss(),
     tanstackStart({ target: "cloudflare-module", customViteReactPlugin: true }),
-    react(),
+    react({ babel: { plugins: ["babel-plugin-react-compiler"] } }),
   ],
 });
