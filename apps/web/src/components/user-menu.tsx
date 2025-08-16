@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,22 +8,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/utils/auth-client";
+import { authClient, useAuthenticatedUser } from "@/utils/auth-client";
 import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
 
 export default function UserMenu() {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { data: session, isPending } = authClient.useSession();
+  const { user } = useAuthenticatedUser();
 
-  if (isPending) {
-    return <Skeleton className="h-9 w-24" />;
-  }
-
-  if (!session) {
+  if (!user) {
     return (
       <Button asChild variant="outline">
         <Link to="/auth/signin">Sign In</Link>
@@ -40,12 +34,12 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{session.user.name}</Button>
+        <Button variant="outline">{user.name}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-card">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>{session.user.email}</DropdownMenuItem>
+        <DropdownMenuItem>{user.email}</DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Button
             className="w-full"
