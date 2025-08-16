@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -18,6 +18,11 @@ import { orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/_app/onboarding")({
   component: OnboardingComponent,
+  beforeLoad: async ({ context }) => {
+    if (context.session?.session.activeOrganizationId) {
+      throw redirect({ to: "/dashboard" });
+    }
+  },
 });
 
 function OnboardingComponent() {
@@ -37,17 +42,7 @@ function OnboardingComponent() {
     enabled: debouncedSlug.length > 0 && !slugError,
   });
 
-  // useEffect(() => {
-  //   if (!isPending && !session) {
-  //     navigate({ to: "/login" });
-  //   }
-  // }, [session, isPending, navigate]);
-
-  useEffect(() => {
-    if (session?.user && session.session.activeOrganizationId) {
-      navigate({ to: "/dashboard" });
-    }
-  }, [session, navigate]);
+  // uKsion, navigate]);
 
   // Validate slug format
   const validateSlug = useCallback((slug: string) => {
