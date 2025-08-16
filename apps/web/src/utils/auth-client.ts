@@ -18,9 +18,9 @@ const useAuthentication = () => {
 export const useAuthenticatedUser = () => {
   const { session } = useAuthentication();
 
-  if (!session) {
-    throw new Error("User is not authenticated!");
-  }
+  // if (!session) {
+  // throw new Error("User is not authenticated!");
+  // }
 
-  return session;
+  return session ?? { user: null, session: null };
 };

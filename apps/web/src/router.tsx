@@ -36,6 +36,7 @@ export const createRouter = () => {
     context: { orpc, queryClient },
     defaultPendingComponent: () => <Loader />,
     defaultNotFoundComponent: () => <div>Not Found</div>,
+    defaultErrorComponent: ({ error }) => <div>{JSON.stringify(error)}</div>,
     Wrap: ({ children }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     ),
