@@ -1,4 +1,3 @@
-import { SignedIn, SignedOut } from "@daveyplate/better-auth-ui";
 import { Link } from "@tanstack/react-router";
 
 export default function Header() {
@@ -21,13 +20,7 @@ export default function Header() {
           })}
         </nav>
         <div className="flex items-center gap-2">
-          <SignedIn>
-            <Link to="/dashboard">Go to Dashboard</Link>
-          </SignedIn>
-
-          <SignedOut>
-            <Link to="/login">Sign In</Link>
-          </SignedOut>
+          <p>button here</p>
         </div>
       </div>
       <hr />
