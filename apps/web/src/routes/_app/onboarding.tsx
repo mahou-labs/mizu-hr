@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
 
-export const Route = createFileRoute("/onboarding")({
+export const Route = createFileRoute("/_app/onboarding")({
   component: OnboardingComponent,
 });
 

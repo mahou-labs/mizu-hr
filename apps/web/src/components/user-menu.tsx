@@ -1,4 +1,5 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,9 @@ import { Skeleton } from "./ui/skeleton";
 
 export default function UserMenu() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
   const { data: session, isPending } = authClient.useSession();
 
   if (isPending) {
@@ -22,10 +26,16 @@ export default function UserMenu() {
   if (!session) {
     return (
       <Button asChild variant="outline">
-        <Link to="/login">Sign In</Link>
+        <Link to="/auth/signin">Sign In</Link>
       </Button>
     );
   }
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    await queryClient.invalidateQueries();
+    router.invalidate();
+  };
 
   return (
     <DropdownMenu>
@@ -39,17 +49,7 @@ export default function UserMenu() {
         <DropdownMenuItem asChild>
           <Button
             className="w-full"
-            onClick={() => {
-              authClient.signOut({
-                fetchOptions: {
-                  onSuccess: () => {
-                    navigate({
-                      to: "/",
-                    });
-                  },
-                },
-              });
-            }}
+            onClick={handleLogout}
             variant="destructive"
           >
             Sign Out

@@ -1,21 +1,21 @@
-import { Toaster } from "@/components/ui/sonner";
- 
+import type { QueryClient } from "@tanstack/react-query";
+
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
- 
+
 import {
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
-  createRootRouteWithContext,
   useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import Loader from "@/components/loader";
+import { Toaster } from "@/components/ui/sonner";
+import type { orpc } from "@/utils/orpc";
+import { sessionQueryOptions } from "@/utils/session";
 import Header from "../components/header";
 import appCss from "../index.css?url";
-import type { QueryClient } from "@tanstack/react-query";
-import Loader from "@/components/loader";
-
-import type { orpc } from "@/utils/orpc";
 export interface RouterAppContext {
   orpc: typeof orpc;
   queryClient: QueryClient;
@@ -44,6 +44,10 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   }),
 
   component: RootDocument,
+  beforeLoad: async ({ context }) => {
+    const session = await context.queryClient.fetchQuery(sessionQueryOptions);
+    return { session };
+  },
 });
 
 function RootDocument() {
