@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,12 +26,10 @@ export const Route = createFileRoute("/_app/onboarding")({
 });
 
 function OnboardingComponent() {
+  const queryClient = useQueryClient();
   const router = useRouter();
-  const navigate = Route.useNavigate();
-  const { data: session, isPending } = authClient.useSession();
   const [organizationName, setOrganizationName] = useState("");
   const [organizationSlug, setOrganizationSlug] = useState("");
-  // const [debouncedSlug, setDebouncedSlug] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [slugError, setSlugError] = useState("");
   const debouncedSlug = useDebounce(organizationSlug, 500);
@@ -71,18 +69,6 @@ function OnboardingComponent() {
     setOrganizationSlug(formatted);
     setSlugError(validateSlug(formatted));
   };
-
-  // Auto-generate slug from organization name
-  useEffect(() => {
-    if (organizationName && !organizationSlug) {
-      const autoSlug = organizationName
-        .toLowerCase()
-        .replace(/[^a-z0-9\s]/g, "")
-        .replace(/\s+/g, "-");
-      setOrganizationSlug(autoSlug);
-      setSlugError(validateSlug(autoSlug));
-    }
-  }, [organizationName, organizationSlug, validateSlug]);
 
   const handleCreateOrganization = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,8 +112,8 @@ function OnboardingComponent() {
         organizationId: result.data.id,
       });
 
-      router.invalidate();
-      navigate({ to: "/dashboard" });
+      await queryClient.invalidateQueries({ queryKey: ["session"] });
+      await router.invalidate();
     } catch (error) {
       console.error("Error creating organization:", error);
       toast.error("Failed to create organization");
@@ -136,15 +122,11 @@ function OnboardingComponent() {
     }
   };
 
-  if (isPending) {
-    return (
-      <div className="flex h-full items-center justify-center">Loading...</div>
-    );
-  }
-
-  if (!session) {
-    return null;
-  }
+  // if (isPending) {
+  //   return (
+  //     <div className="flex h-full items-center justify-center">Loading...</div>
+  //   );
+  // }
 
   return (
     <div className="flex h-full items-center justify-center p-4">
