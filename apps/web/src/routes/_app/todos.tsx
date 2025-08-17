@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { orpc } from "@/utils/orpc";
 
-export const Route = createFileRoute("/todos")({
+export const Route = createFileRoute("/_app/todos")({
   component: TodosRoute,
 });
 

@@ -13,6 +13,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import Loader from "@/components/loader";
 import { Toaster } from "@/components/ui/sonner";
 import type { orpc } from "@/utils/orpc";
+import { sessionQueryOptions } from "@/utils/session";
 import Header from "../components/header";
 import appCss from "../index.css?url";
 export interface RouterAppContext {
@@ -43,13 +44,17 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   }),
 
   component: RootDocument,
+  beforeLoad: async ({ context }) => {
+    const session = await context.queryClient.fetchQuery(sessionQueryOptions);
+    return { session };
+  },
 });
 
 function RootDocument() {
   const isFetching = useRouterState({ select: (s) => s.isLoading });
 
   return (
-    <html className="dark" lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
@@ -60,7 +65,7 @@ function RootDocument() {
         </div>
         <Toaster richColors />
         <TanStackRouterDevtools position="bottom-left" />
-        <ReactQueryDevtools buttonPosition="bottom-right" position="bottom" />
+        <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
         <Scripts />
       </body>
     </html>

@@ -1,4 +1,5 @@
 import { protectedProcedure, publicProcedure } from "../utils/orpc";
+import { organizationRouter } from "./organization";
 import { todoRouter } from "./todo";
 
 export const appRouter = {
@@ -12,5 +13,6 @@ export const appRouter = {
     };
   }),
   todo: todoRouter,
+  organization: organizationRouter,
 };
 export type AppRouter = typeof appRouter;

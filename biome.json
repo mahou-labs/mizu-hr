@@ -1,6 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
-  "extends": ["ultracite"],
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -33,13 +32,13 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "recommended": true,
       "suspicious": {
         "noConsole": "warn"
       },
       "performance": {
         "noNamespaceImport": "off"
       },
-      "recommended": true,
       "correctness": {
         "useExhaustiveDependencies": "info"
       },
@@ -62,7 +61,8 @@
         "noUnusedTemplateLiteral": "error",
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
-        "noUselessElse": "error"
+        "noUselessElse": "error",
+        "noHeadElement": "off"
       }
     }
   },
@@ -74,6 +74,7 @@
   "assist": {
     "enabled": true,
     "actions": {
+      "recommended": true,
       "source": {
         "organizeImports": "on"
       }

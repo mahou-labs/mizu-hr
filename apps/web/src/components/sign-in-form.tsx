@@ -1,8 +1,10 @@
 import { useForm } from "@tanstack/react-form";
-import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/utils/auth-client";
+import { sessionQueryOptions } from "@/utils/session";
 import Loader from "./loader";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -13,6 +15,9 @@ export default function SignInForm({
 }: {
   onSwitchToSignUp: () => void;
 }) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
   const navigate = useNavigate({
     from: "/",
   });
@@ -30,16 +35,26 @@ export default function SignInForm({
           password: value.password,
         },
         {
-          onSuccess: () => {
-            navigate({
-              to: "/dashboard",
-            });
+          onSuccess: async () => {
             toast.success("Sign in successful");
+            await queryClient.invalidateQueries({ queryKey: ["session"] });
+            await router.invalidate();
+            // await queryClient.ensureQueryData(sessionQueryOptions);
+            // navigate({ to: "/dashboard" });
+            // if (context.data?.session?.activeOrganizationId) {
+            //   navigate({
+            //     to: "/dashboard",
+            //   });
+            // } else {
+            //   navigate({
+            //     to: "/onboarding",
+            //   });
+            // }
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);
           },
-        }
+        },
       );
     },
     validators: {
