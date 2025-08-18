@@ -6,7 +6,6 @@ import { logger } from "hono/logger";
 import { appRouter } from "./routers/index";
 import { getAuth } from "./utils/auth";
 import { createContext } from "./utils/context";
-import { getDb } from "./utils/db";
 
 const app = new Hono();
 
@@ -22,15 +21,14 @@ app.use(
 );
 
 app.on(["POST", "GET"], "/auth/**", (c) => {
-  const db = getDb();
-  const auth = getAuth(db);
+  const auth = getAuth();
 
   return auth.handler(c.req.raw);
 });
 
 const handler = new RPCHandler(appRouter);
 app.use("/rpc/*", async (c, next) => {
-  const context = await createContext({ context: c });
+  const context = await createContext(c);
   const { matched, response } = await handler.handle(c.req.raw, {
     prefix: "/rpc",
     context,

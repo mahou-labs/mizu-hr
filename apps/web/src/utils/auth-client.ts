@@ -7,7 +7,7 @@ import { sessionQueryOptions } from "./session";
 export const authClient = createAuthClient({
   baseURL: import.meta.env.VITE_API_URL,
   basePath: "/auth",
-  plugins: [organizationClient(), polarClient()],
+  plugins: [organizationClient()],
 });
 
 const useAuthentication = () => {

@@ -15,7 +15,8 @@
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "276497174b1b4c1d902a8700cd187243"
+      "id": "276497174b1b4c1d902a8700cd187243",
+      "localConnectionString": "postgresql://postgres:password@localhost:5432/mizu-hr"
     }
   ]
 }

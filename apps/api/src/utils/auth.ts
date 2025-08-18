@@ -9,6 +9,7 @@ import { getDb } from "./db";
 
 export const getAuth = (db?: ReturnType<typeof getDb>) => {
   const database = db ?? getDb();
+
   return betterAuth({
     database: drizzleAdapter(database, {
       provider: "pg",
@@ -30,7 +31,7 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
         httpOnly: true,
         sameSite: "none", // Allows CORS-based cookie sharing across subdomains
         partitioned: true, // New browser standards will mandate this for foreign cookies
-        domain: '.mizuhr.com'
+        domain: ".mizuhr.com",
       },
     },
     session: {
@@ -43,24 +44,6 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
       organization({
         allowUserToCreateOrganization: true,
         allowUserToJoinOrganization: true,
-      }),
-      polar({
-        client: new Polar({
-          accessToken: env.POLAR_ACCESS_TOKEN,
-          server: "sandbox",
-        }),
-        createCustomerOnSignUp: true,
-        use: [
-          portal(),
-          checkout({
-            products: [
-              {
-                productId: "b5208a27-6aec-47fc-bb00-4d2fc50195a2",
-                slug: "hiring-test-product",
-              },
-            ],
-          }),
-        ],
       }),
       // polar({
       //   client: new Polar({
