@@ -8,5 +8,8 @@
     "NODE_ENV": "production",
     "CORS_ORIGIN": "https://app.mizuhr.com",
     "BETTER_AUTH_URL": "https://api.mizuhr.com"
+  },
+  "observability": {
+    "enabled": true
   }
 }
