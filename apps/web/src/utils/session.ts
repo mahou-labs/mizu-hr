@@ -6,12 +6,17 @@ const getServerSession = createServerFn({
   method: "GET",
 }).handler(async () => {
   const request = getWebRequest();
+
+  console.log(`Debug headers: ${request.headers}`);
+
+  const cookie = request.headers.get("cookie");
+
   if (!request.headers) {
     return null;
   }
 
   const { data: session } = await authClient.getSession({
-    fetchOptions: { headers: request.headers },
+    fetchOptions: { headers: { cookie }, redirect: "manual" },
   });
 
   return session ?? null;
