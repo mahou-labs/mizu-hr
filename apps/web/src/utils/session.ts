@@ -5,18 +5,18 @@ import { authClient } from "./auth-client";
 const getServerSession = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const request = getWebRequest();
+  const req = getWebRequest();
+  const cookie = req.headers.get("cookie");
 
-  console.log(`Debug headers: ${request.headers}`);
-
-  const cookie = request.headers.get("cookie");
-
-  if (!request.headers) {
+  if (!cookie) {
     return null;
   }
 
   const { data: session } = await authClient.getSession({
-    fetchOptions: { headers: { cookie }, redirect: "manual" },
+    fetchOptions: {
+      headers: { cookie },
+      redirect: "manual",
+    },
   });
 
   return session ?? null;
