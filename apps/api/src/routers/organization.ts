@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
 import { organization } from "../schema/auth";
+import { getAuth } from "../utils/auth";
 import { getDb } from "../utils/db";
 import { protectedProcedure } from "../utils/orpc";
-import { getAuth } from "../utils/auth";
 
 export const organizationRouter = {
   checkSlugAvailability: protectedProcedure

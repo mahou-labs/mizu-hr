@@ -1,11 +1,46 @@
 import { env } from "cloudflare:workers";
-import { checkout, polar, portal } from "@polar-sh/better-auth";
-import { Polar } from "@polar-sh/sdk";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
+import { eq } from "drizzle-orm";
 import * as schema from "../schema/auth";
 import { getDb } from "./db";
+
+export const getActiveOrganization = async (
+  userId: string,
+  db: ReturnType<typeof getDb>,
+) => {
+  try {
+    const userOrganizations = await db
+      .select({ id: schema.organization.id })
+      .from(schema.member)
+      .innerJoin(
+        schema.organization,
+        eq(schema.member.organizationId, schema.organization.id),
+      )
+      .where(eq(schema.member.userId, userId));
+
+    if (userOrganizations.length === 0) {
+      return null;
+    }
+
+    // For now, return the first organization
+    // TODO: In the future, this could be enhanced to:
+    // - Return the organization marked as "active" in user preferences
+    // - Return the most recently accessed organization
+    // - Return the organization with the highest role (owner > admin > member)
+    const activeOrg = userOrganizations[0];
+
+    return {
+      id: activeOrg.id,
+    };
+  } catch (error) {
+    // Log error and throw with message for debugging
+    throw new Error(
+      `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`,
+    );
+  }
+};
 
 export const getAuth = (db?: ReturnType<typeof getDb>) => {
   const database = db ?? getDb();
@@ -31,7 +66,7 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
         httpOnly: true,
         sameSite: "none", // Allows CORS-based cookie sharing across subdomains
         partitioned: true, // New browser standards will mandate this for foreign cookies
-        domain: ".mizuhr.com",
+        domain: env.NODE_ENV === "production" ? ".mizuhr.com" : undefined,
       },
     },
     session: {
@@ -72,5 +107,24 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
       //   ],
       // }),
     ],
+
+    databaseHooks: {
+      session: {
+        create: {
+          before: async (session) => {
+            const organization = await getActiveOrganization(
+              session.userId,
+              database,
+            );
+            return {
+              data: {
+                ...session,
+                activeOrganizationId: organization?.id ?? null,
+              },
+            };
+          },
+        },
+      },
+    },
   });
 };
