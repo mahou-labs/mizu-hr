@@ -13,7 +13,6 @@ export async function createContext(c: HonoContext) {
   return {
     session,
     db,
-    auth,
   };
 }
 
