@@ -10,6 +10,7 @@
     "cf-typegen": "wrangler types --env-interface Env"
   },
   "dependencies": {
+    "@base-ui-components/react": "^1.0.0-beta.2",
     "@orpc/client": "^1.8.1",
     "@orpc/server": "^1.8.1",
     "@orpc/tanstack-query": "^1.8.1",
