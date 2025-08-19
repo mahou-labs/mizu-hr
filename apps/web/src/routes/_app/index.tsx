@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/_app/")({
@@ -26,6 +25,13 @@ const TITLE_TEXT = `
 function HomeComponent() {
   const healthCheck = useQuery(orpc.healthCheck.queryOptions());
 
+  const getStatusText = () => {
+    if (healthCheck.isLoading) {
+      return "Checking...";
+    }
+    return healthCheck.data ? "Connected" : "Disconnected";
+  };
+
   return (
     <div className="container mx-auto max-w-3xl px-4 py-2">
       <pre className="overflow-x-auto font-mono text-sm">{TITLE_TEXT}</pre>
@@ -37,17 +43,13 @@ function HomeComponent() {
               className={`h-2 w-2 rounded-full ${healthCheck.data ? "bg-green-500" : "bg-red-500"}`}
             />
             <span className="text-muted-foreground text-sm">
-              {healthCheck.isLoading
-                ? "Checking..."
-                : healthCheck.data
-                  ? "Connected"
-                  : "Disconnected"}
+              {getStatusText()}
             </span>
           </div>
         </section>
       </div>
 
-      <button
+      {/* <button
         className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
         onClick={() => authClient.checkout({ slug: "hiring-test-product" })}
         type="button"
@@ -61,7 +63,7 @@ function HomeComponent() {
         type="button"
       >
         Portal
-      </button>
+      </button> */}
     </div>
   );
 }

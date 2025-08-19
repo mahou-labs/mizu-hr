@@ -54,7 +54,7 @@ function RootDocument() {
   const isFetching = useRouterState({ select: (s) => s.isLoading });
 
   return (
-    <html lang="en" className="dark">
+    <html className="dark" lang="en">
       <head>
         <HeadContent />
       </head>
@@ -65,7 +65,7 @@ function RootDocument() {
         </div>
         <Toaster richColors />
         <TanStackRouterDevtools position="bottom-left" />
-        <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
+        <ReactQueryDevtools buttonPosition="bottom-right" position="bottom" />
         <Scripts />
       </body>
     </html>

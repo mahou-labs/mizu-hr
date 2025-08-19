@@ -1,5 +1,6 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "extends": ["ultracite"],
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -21,7 +22,9 @@
       "!bts.jsonc",
       "!**/.expo",
       "!**/.wrangler",
-      "!**/.output"
+      "!**/.output",
+      "!**/node_modules/**/*",
+      "!**/out"
     ]
   },
   "formatter": {
@@ -40,7 +43,8 @@
         "noNamespaceImport": "off"
       },
       "correctness": {
-        "useExhaustiveDependencies": "info"
+        "useExhaustiveDependencies": "info",
+        "useUniqueElementIds": "info"
       },
       "nursery": {
         "useSortedClasses": {

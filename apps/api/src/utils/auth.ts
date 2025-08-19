@@ -1,4 +1,6 @@
 import { env } from "cloudflare:workers";
+// import { checkout, polar, portal } from "@polar-sh/better-auth";
+// import { Polar } from "@polar-sh/sdk";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
@@ -6,9 +8,11 @@ import { eq } from "drizzle-orm";
 import * as schema from "../schema/auth";
 import { getDb } from "./db";
 
+const COOKIE_CACHE_TIME = 5;
+
 export const getActiveOrganization = async (
   userId: string,
-  db: ReturnType<typeof getDb>,
+  db: ReturnType<typeof getDb>
 ) => {
   try {
     const userOrganizations = await db
@@ -16,7 +20,7 @@ export const getActiveOrganization = async (
       .from(schema.member)
       .innerJoin(
         schema.organization,
-        eq(schema.member.organizationId, schema.organization.id),
+        eq(schema.member.organizationId, schema.organization.id)
       )
       .where(eq(schema.member.userId, userId));
 
@@ -32,7 +36,7 @@ export const getActiveOrganization = async (
     };
   } catch (error) {
     throw new Error(
-      `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`,
+      `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 };
@@ -59,15 +63,14 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
       defaultCookieAttributes: {
         secure: true,
         httpOnly: true,
-        sameSite: "none", // Allows CORS-based cookie sharing across subdomains
-        partitioned: true, // New browser standards will mandate this for foreign cookies
+        partitioned: true,
         domain: env.NODE_ENV === "production" ? ".mizuhr.com" : undefined,
       },
     },
     session: {
       cookieCache: {
         enabled: true,
-        maxAge: 5 * 60, // Cache duration in seconds
+        maxAge: COOKIE_CACHE_TIME * 60,
       },
     },
     plugins: [
@@ -107,14 +110,11 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
       session: {
         create: {
           before: async (session) => {
-            const organization = await getActiveOrganization(
-              session.userId,
-              database,
-            );
+            const orgId = await getActiveOrganization(session.userId, database);
             return {
               data: {
                 ...session,
-                activeOrganizationId: organization?.id ?? null,
+                activeOrganizationId: orgId,
               },
             };
           },

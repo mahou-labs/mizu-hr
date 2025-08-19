@@ -138,30 +138,30 @@ function OnboardingComponent() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleCreateOrganization} className="space-y-4">
+          <form className="space-y-4" onSubmit={handleCreateOrganization}>
             <div className="space-y-2">
               <Label htmlFor="organizationName">Organization Name</Label>
               <Input
-                id="organizationName"
-                type="text"
-                placeholder="Enter your organization name"
-                value={organizationName}
-                onChange={(e) => setOrganizationName(e.target.value)}
                 disabled={isCreating}
+                id="organizationName"
+                onChange={(e) => setOrganizationName(e.target.value)}
+                placeholder="Enter your organization name"
                 required
+                type="text"
+                value={organizationName}
               />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="organizationSlug">Organization Slug</Label>
               <Input
-                id="organizationSlug"
-                type="text"
-                placeholder="your-organization-slug"
-                value={organizationSlug}
-                onChange={(e) => handleSlugChange(e.target.value)}
                 disabled={isCreating}
+                id="organizationSlug"
+                onChange={(e) => handleSlugChange(e.target.value)}
+                placeholder="your-organization-slug"
                 required
+                type="text"
+                value={organizationSlug}
               />
 
               {/* Slug validation messages */}
@@ -192,7 +192,6 @@ function OnboardingComponent() {
             </div>
 
             <Button
-              type="submit"
               className="w-full"
               disabled={
                 isCreating ||
@@ -202,6 +201,7 @@ function OnboardingComponent() {
                 !slugAvailable ||
                 isCheckingSlug
               }
+              type="submit"
             >
               {isCreating ? "Creating..." : "Create Organization"}
             </Button>

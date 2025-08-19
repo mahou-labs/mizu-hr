@@ -1,9 +1,9 @@
 {
   "name": "mizu-hr",
   "devDependencies": {
-    "turbo": "^2.5.6",
     "@biomejs/biome": "^2.2.0",
-    "ultracite": "5.1.1"
+    "turbo": "^2.5.6",
+    "ultracite": "^5.2.4"
   },
   "packageManager": "bun@1.2.19",
   "private": true,

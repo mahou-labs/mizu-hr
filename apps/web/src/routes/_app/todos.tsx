@@ -28,21 +28,21 @@ function TodosRoute() {
         todos.refetch();
         setNewTodoText("");
       },
-    }),
+    })
   );
   const toggleMutation = useMutation(
     orpc.todo.toggle.mutationOptions({
       onSuccess: () => {
         todos.refetch();
       },
-    }),
+    })
   );
   const deleteMutation = useMutation(
     orpc.todo.delete.mutationOptions({
       onSuccess: () => {
         todos.refetch();
       },
-    }),
+    })
   );
 
   const handleAddTodo = (e: React.FormEvent) => {
