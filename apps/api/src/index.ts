@@ -34,7 +34,6 @@ app.use("/rpc/*", async (c, next) => {
     return c.newResponse(response.body, response);
   }
 
-  
   await next();
 });
 
