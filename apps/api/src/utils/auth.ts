@@ -25,17 +25,12 @@ export const getActiveOrganization = async (
     }
 
     // For now, return the first organization
-    // TODO: In the future, this could be enhanced to:
-    // - Return the organization marked as "active" in user preferences
-    // - Return the most recently accessed organization
-    // - Return the organization with the highest role (owner > admin > member)
     const activeOrg = userOrganizations[0];
 
     return {
       id: activeOrg.id,
     };
   } catch (error) {
-    // Log error and throw with message for debugging
     throw new Error(
       `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`,
     );

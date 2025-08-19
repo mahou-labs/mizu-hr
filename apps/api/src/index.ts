@@ -8,6 +8,7 @@ import { getAuth } from "./utils/auth";
 import { createContext } from "./utils/context";
 
 const app = new Hono();
+const handler = new RPCHandler(appRouter);
 
 app.use(logger());
 app.use(
@@ -20,13 +21,8 @@ app.use(
   }),
 );
 
-app.on(["POST", "GET"], "/auth/**", (c) => {
-  const auth = getAuth();
+app.on(["POST", "GET"], "/auth/**", (c) => getAuth().handler(c.req.raw));
 
-  return auth.handler(c.req.raw);
-});
-
-const handler = new RPCHandler(appRouter);
 app.use("/rpc/*", async (c, next) => {
   const context = await createContext(c);
   const { matched, response } = await handler.handle(c.req.raw, {
@@ -37,11 +33,9 @@ app.use("/rpc/*", async (c, next) => {
   if (matched) {
     return c.newResponse(response.body, response);
   }
-  await next();
-});
 
-app.get("/", (c) => {
-  return c.text("OK");
+  
+  await next();
 });
 
 export default app;

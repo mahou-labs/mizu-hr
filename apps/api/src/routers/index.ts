@@ -1,3 +1,4 @@
+import type { RouterClient } from "@orpc/server";
 import { protectedProcedure, publicProcedure } from "../utils/orpc";
 import { organizationRouter } from "./organization";
 import { todoRouter } from "./todo";
@@ -15,4 +16,6 @@ export const appRouter = {
   todo: todoRouter,
   organization: organizationRouter,
 };
-export type AppRouter = typeof appRouter;
+
+// export type AppRouter = typeof appRouter;
+export type AppRouterClient = RouterClient<typeof appRouter>;
