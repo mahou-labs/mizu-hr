@@ -2,9 +2,6 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "mizu-hr-site",
   "compatibility_date": "2025-03-25",
-  "vars": {
-    "API_URL": "https://api.mizuhr.com"
-  },
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page"
