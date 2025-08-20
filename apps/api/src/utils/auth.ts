@@ -49,7 +49,7 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
       provider: "pg",
       schema,
     }),
-    trustedOrigins: [env.CORS_ORIGIN],
+    trustedOrigins: env.CORS_ORIGIN.split(",").map((origin) => origin.trim()),
     emailAndPassword: {
       enabled: true,
     },
