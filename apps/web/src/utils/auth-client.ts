@@ -1,13 +1,11 @@
 // import { polarClient } from "@polar-sh/better-auth";
+
+import { createAuthClientInstance } from "@mizu-hr/auth";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { organizationClient } from "better-auth/client/plugins";
-import { createAuthClient } from "better-auth/react";
 import { sessionQueryOptions } from "./session";
 
-export const authClient = createAuthClient({
+export const authClient = createAuthClientInstance({
   baseURL: import.meta.env.VITE_API_URL,
-  basePath: "/auth",
-  plugins: [organizationClient()],
 });
 
 const useAuthentication = () => {
