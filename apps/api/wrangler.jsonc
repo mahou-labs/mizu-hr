@@ -6,7 +6,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "NODE_ENV": "production",
-    "CORS_ORIGIN": "https://app.mizuhr.com, https://mizuhr.com/",
+    "CORS_ORIGIN": "https://mizuhr.com,https://app.mizuhr.com",
     "BETTER_AUTH_URL": "https://api.mizuhr.com"
   },
   "observability": {

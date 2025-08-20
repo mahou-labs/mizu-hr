@@ -7,8 +7,7 @@ import { organization } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import * as schema from "../schema/auth";
 import { getDb } from "./db";
-
-const COOKIE_CACHE_TIME = 5;
+import { ALLOWED_ORIGINS } from "./origins";
 
 export const getActiveOrganization = async (
   userId: string,
@@ -49,7 +48,7 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
       provider: "pg",
       schema,
     }),
-    trustedOrigins: env.CORS_ORIGIN.split(",").map((origin) => origin.trim()),
+    trustedOrigins: [...ALLOWED_ORIGINS],
     emailAndPassword: {
       enabled: true,
     },
@@ -70,7 +69,7 @@ export const getAuth = (db?: ReturnType<typeof getDb>) => {
     session: {
       cookieCache: {
         enabled: true,
-        maxAge: COOKIE_CACHE_TIME * 60,
+        maxAge: 5 * 60, // 5 minutes
       },
     },
     plugins: [
