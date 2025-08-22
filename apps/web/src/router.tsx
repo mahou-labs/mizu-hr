@@ -10,23 +10,30 @@ import { toast } from "sonner";
 import { routeTree } from "./routeTree.gen";
 import { orpc } from "./utils/orpc";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { refetchOnWindowFocus: false },
-  },
-  queryCache: new QueryCache({
-    onError: (error) => {
-      toast.error(`Error: ${error.message}`, {
-        action: {
-          label: "retry",
-          onClick: () => {
-            queryClient.invalidateQueries();
-          },
-        },
-      });
+export function getQueryClient(): QueryClient {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 60 * 1000 * 5,
+      },
     },
-  }),
-});
+    queryCache: new QueryCache({
+      onError: (error) => {
+        toast.error(`Error: ${error.message}`, {
+          action: {
+            label: "retry",
+            onClick: () => {
+              queryClient.invalidateQueries();
+            },
+          },
+        });
+      },
+    }),
+  });
+}
+
+const queryClient = getQueryClient();
 
 export const createRouter = () => {
   const router = createTanStackRouter({
@@ -45,6 +52,7 @@ export const createRouter = () => {
 };
 
 declare module "@tanstack/react-router" {
+  // biome-ignore lint/nursery/useConsistentTypeDefinitions: boilerplate
   interface Register {
     router: ReturnType<typeof createRouter>;
   }
