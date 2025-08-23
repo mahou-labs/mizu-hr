@@ -16,11 +16,20 @@ export const organizationRouter = {
       return status;
     }),
 
-  getOrgList: protectedProcedure.handler(
-    async ({ context: { headers, db } }) => {
+  getOrgList: protectedProcedure
+    .output(
+      z.array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          slug: z.string(),
+          createdAt: z.date(),
+          logo: z.string().nullable().optional(),
+        })
+      )
+    )
+    .handler(async ({ context: { headers, db } }) => {
       const auth = getAuth(db);
-      const organizations = await auth.api.listOrganizations({ headers });
-      return organizations;
-    }
-  ),
+      return await auth.api.listOrganizations({ headers });
+    }),
 };
