@@ -6,9 +6,13 @@ import { orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/_app")({
   component: RouteComponent,
-  beforeLoad: ({ context, location }) => {
+  beforeLoad: ({ context }) => {
     if (!context.session) {
       throw redirect({ to: "/auth/signin" });
+    }
+
+    if (!context.session.session.activeOrganizationId) {
+      throw redirect({ to: "/onboarding" });
     }
 
     context.queryClient.prefetchQuery(

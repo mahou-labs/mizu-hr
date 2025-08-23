@@ -4,12 +4,13 @@ import { protectedProcedure } from "../utils/orpc";
 
 export const organizationRouter = {
   checkSlugAvailability: protectedProcedure
-    .input(z.object({ slug: z.string().min(1) }))
+    .input(z.string().min(1))
+    .output(z.boolean())
     .handler(async ({ input }) => {
       const auth = getAuth();
       const { status } = await auth.api.checkOrganizationSlug({
         body: {
-          slug: input.slug,
+          slug: input,
         },
       });
 

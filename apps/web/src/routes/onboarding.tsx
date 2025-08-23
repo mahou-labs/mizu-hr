@@ -35,7 +35,7 @@ function OnboardingComponent() {
   const debouncedSlug = useDebounce(organizationSlug, 500);
   const { data: slugAvailable, isLoading: isCheckingSlug } = useQuery(
     orpc.organization.checkSlugAvailability.queryOptions({
-      input: { slug: debouncedSlug },
+      input: debouncedSlug,
       enabled: debouncedSlug.length > 0 && !slugError,
     })
   );

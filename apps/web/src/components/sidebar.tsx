@@ -1,13 +1,5 @@
-import {
-  BarChart3,
-  Calendar,
-  FileText,
-  Home,
-  LayoutDashboard,
-  ListTodo,
-  MessageSquare,
-  Users,
-} from "lucide-react";
+import type { ToOptions } from "@tanstack/react-router";
+import { Home, LayoutDashboard, ListTodo } from "lucide-react";
 import { OrganizationDropdown } from "./organization-dropdown";
 import UserMenu from "./user-menu";
 
@@ -17,11 +9,6 @@ export function Sidebar() {
       <SidebarItem href="/" icon={Home} label="Home" />
       <SidebarItem href="/dashboard" icon={LayoutDashboard} label="Dashboard" />
       <SidebarItem href="/todos" icon={ListTodo} label="Todos" />
-      <SidebarItem href="/team" icon={Users} label="Team" />
-      <SidebarItem href="/calendar" icon={Calendar} label="Calendar" />
-      <SidebarItem href="/messages" icon={MessageSquare} label="Messages" />
-      <SidebarItem href="/documents" icon={FileText} label="Documents" />
-      <SidebarItem href="/analytics" icon={BarChart3} label="Analytics" />
       <OrganizationDropdown />
       <UserMenu />
     </div>
@@ -35,7 +22,7 @@ import { cn } from "@/utils/cn";
 type SidebarItemProps = {
   icon: LucideIcon;
   label: string;
-  href: string;
+  href: ToOptions["to"];
   isActive?: boolean;
   badge?: string | number;
   isCollapsed?: boolean;
