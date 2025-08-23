@@ -9,13 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AppTodosRouteImport } from './routes/_app/todos'
-import { Route as AppOnboardingRouteImport } from './routes/_app/onboarding'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -35,11 +40,6 @@ const AppTodosRoute = AppTodosRouteImport.update({
   path: '/todos',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppOnboardingRoute = AppOnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => AppRouteRoute,
-} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -47,15 +47,15 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/onboarding': typeof OnboardingRoute
   '/dashboard': typeof AppDashboardRoute
-  '/onboarding': typeof AppOnboardingRoute
   '/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
+  '/onboarding': typeof OnboardingRoute
   '/dashboard': typeof AppDashboardRoute
-  '/onboarding': typeof AppOnboardingRoute
   '/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/': typeof AppIndexRoute
@@ -63,22 +63,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
+  '/onboarding': typeof OnboardingRoute
   '/_app/dashboard': typeof AppDashboardRoute
-  '/_app/onboarding': typeof AppOnboardingRoute
   '/_app/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/dashboard' | '/onboarding' | '/todos' | '/auth/signin' | '/'
+  fullPaths: '/onboarding' | '/dashboard' | '/todos' | '/auth/signin' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/dashboard' | '/onboarding' | '/todos' | '/auth/signin' | '/'
+  to: '/onboarding' | '/dashboard' | '/todos' | '/auth/signin' | '/'
   id:
     | '__root__'
     | '/_app'
+    | '/onboarding'
     | '/_app/dashboard'
-    | '/_app/onboarding'
     | '/_app/todos'
     | '/auth/signin'
     | '/_app/'
@@ -86,11 +86,19 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
+  OnboardingRoute: typeof OnboardingRoute
   AuthSigninRoute: typeof AuthSigninRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -119,13 +127,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTodosRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/onboarding': {
-      id: '/_app/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof AppOnboardingRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -138,14 +139,12 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
-  AppOnboardingRoute: typeof AppOnboardingRoute
   AppTodosRoute: typeof AppTodosRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
-  AppOnboardingRoute: AppOnboardingRoute,
   AppTodosRoute: AppTodosRoute,
   AppIndexRoute: AppIndexRoute,
 }
@@ -156,6 +155,7 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
+  OnboardingRoute: OnboardingRoute,
   AuthSigninRoute: AuthSigninRoute,
 }
 export const routeTree = rootRouteImport
