@@ -16,7 +16,6 @@ export function OrganizationDropdown() {
   const { session } = useRouteContext({ from: "__root__" });
   const queryClient = useQueryClient();
 
-  // @ts-expect-error - TODO: fix on orpc server
   const activeOrgId = session?.session.activeOrganizationId;
 
   const { data: organizations, isLoading: orgsLoading } = useQuery(

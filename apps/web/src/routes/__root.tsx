@@ -6,6 +6,7 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
+  redirect,
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
@@ -45,6 +46,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
     const session = await context.queryClient.fetchQuery(
       orpc.user.getUserSession.queryOptions()
     );
+
     return { session };
   },
 });

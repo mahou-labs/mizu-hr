@@ -11,14 +11,6 @@ export const Route = createFileRoute("/_app")({
       throw redirect({ to: "/auth/signin" });
     }
 
-    if (
-      // @ts-expect-error - TODO: fix on orpc server
-      !context.session.session.activeOrganizationId &&
-      location.pathname !== "/onboarding"
-    ) {
-      throw redirect({ to: "/onboarding" });
-    }
-
     context.queryClient.prefetchQuery(
       orpc.organization.getOrgList.queryOptions({
         staleTime: Number.POSITIVE_INFINITY,
