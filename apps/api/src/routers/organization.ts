@@ -1,4 +1,3 @@
-import { ORPCError } from "@orpc/client";
 import z from "zod";
 import { getAuth } from "../utils/auth";
 import { protectedProcedure } from "../utils/orpc";

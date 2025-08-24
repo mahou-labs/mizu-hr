@@ -34,7 +34,7 @@ function RouteComponent() {
     <div className="flex h-full gap-2 overflow-hidden py-2 pr-2">
       <Sidebar />
       <ScrollArea.Root className="h-full flex-1">
-        <ScrollArea.Viewport className="h-full overscroll-contain rounded-md bg-gray-800/50 p-2">
+        <ScrollArea.Viewport className="h-full overscroll-contain rounded-md bg-gray-800/50 p-2 pt-4">
           <Outlet />
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded bg-gray-200 opacity-0 transition-opacity delay-300 data-[hovering]:opacity-100 data-[scrolling]:opacity-100 data-[hovering]:delay-0 data-[scrolling]:delay-0 data-[hovering]:duration-75 data-[scrolling]:duration-75">
