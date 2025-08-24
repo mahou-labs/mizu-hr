@@ -1,3 +1,4 @@
+import { ORPCError } from "@orpc/client";
 import z from "zod";
 import { getAuth } from "../utils/auth";
 import { protectedProcedure } from "../utils/orpc";
@@ -16,6 +17,14 @@ export const organizationRouter = {
 
       return status;
     }),
+
+  getFullOrg: protectedProcedure.handler(
+    async ({ context: { headers, db } }) => {
+      const auth = getAuth(db);
+      const org = await auth.api.getFullOrganization({ headers });
+      return org;
+    }
+  ),
 
   getOrgList: protectedProcedure
     .output(

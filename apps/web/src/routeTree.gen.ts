@@ -14,6 +14,7 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 import { Route as AppTodosRouteImport } from './routes/_app/todos'
+import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -40,6 +41,11 @@ const AppTodosRoute = AppTodosRouteImport.update({
   path: '/todos',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -49,6 +55,7 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
 export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/dashboard': typeof AppDashboardRoute
+  '/settings': typeof AppSettingsRoute
   '/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/': typeof AppIndexRoute
@@ -56,6 +63,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/onboarding': typeof OnboardingRoute
   '/dashboard': typeof AppDashboardRoute
+  '/settings': typeof AppSettingsRoute
   '/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/': typeof AppIndexRoute
@@ -65,20 +73,34 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteRouteWithChildren
   '/onboarding': typeof OnboardingRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/settings': typeof AppSettingsRoute
   '/_app/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/onboarding' | '/dashboard' | '/todos' | '/auth/signin' | '/'
+  fullPaths:
+    | '/onboarding'
+    | '/dashboard'
+    | '/settings'
+    | '/todos'
+    | '/auth/signin'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/onboarding' | '/dashboard' | '/todos' | '/auth/signin' | '/'
+  to:
+    | '/onboarding'
+    | '/dashboard'
+    | '/settings'
+    | '/todos'
+    | '/auth/signin'
+    | '/'
   id:
     | '__root__'
     | '/_app'
     | '/onboarding'
     | '/_app/dashboard'
+    | '/_app/settings'
     | '/_app/todos'
     | '/auth/signin'
     | '/_app/'
@@ -127,6 +149,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTodosRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -139,12 +168,14 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppTodosRoute: typeof AppTodosRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppTodosRoute: AppTodosRoute,
   AppIndexRoute: AppIndexRoute,
 }

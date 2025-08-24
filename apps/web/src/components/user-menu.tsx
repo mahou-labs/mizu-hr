@@ -1,8 +1,11 @@
 import { Avatar } from "@base-ui-components/react/avatar";
-import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { useRouteContext, useRouter } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useNavigate,
+  useRouteContext,
+  useRouter,
+} from "@tanstack/react-router";
 import { ChevronDown } from "lucide-react";
-import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
@@ -21,25 +24,22 @@ function getAvatarInitials(name?: string | null): string {
 }
 
 export function UserMenu() {
-  return (
-    <Suspense fallback={<OrgSwitcherSkeleton />}>
-      <UserMenuComponent />
-    </Suspense>
-  );
-}
-
-function UserMenuComponent() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const router = useRouter();
   const { session } = useRouteContext({ from: "/_app" });
-  const { data: organizations } = useSuspenseQuery(
-    orpc.organization.getOrgList.queryOptions()
-  );
+  const {
+    data: organizations,
+    isPending,
+    isError,
+  } = useQuery(orpc.organization.getOrgList.queryOptions());
 
-  const activeOrgId = session?.session.activeOrganizationId;
+  if (isPending) {
+    return <UserMenuSkeleton />;
+  }
 
-  if (!organizations) {
-    return null;
+  if (isError) {
+    return <div>Error</div>;
   }
 
   const signOut = async () => {
@@ -48,6 +48,7 @@ function UserMenuComponent() {
     router.invalidate();
   };
 
+  const activeOrgId = session?.session.activeOrganizationId;
   const activeOrg = organizations.find((org) => org.id === activeOrgId);
 
   return (
@@ -76,11 +77,9 @@ function UserMenuComponent() {
             {/* <Menu.Arrow className="data-[side=right]:-rotate-90 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=top]:bottom-[-8px] data-[side=right]:left-[-13px] data-[side=left]:rotate-90 data-[side=top]:rotate-180">
                 <ArrowSvg />
               </Menu.Arrow> */}
-            <Menu.Item>Add to Library</Menu.Item>
-            <Menu.Item>Add to Playlist</Menu.Item>
-            <Menu.Separator />
-            <Menu.Item>Play Next</Menu.Item>
-            <Menu.Item>Play Last</Menu.Item>
+            <Menu.Item onClick={() => navigate({ to: "/settings" })}>
+              Settings
+            </Menu.Item>
             <Menu.Separator />
             <Menu.Item>Favorite</Menu.Item>
             <Menu.Item
@@ -96,7 +95,7 @@ function UserMenuComponent() {
   );
 }
 
-function OrgSwitcherSkeleton() {
+function UserMenuSkeleton() {
   return (
     <div className="flex cursor-pointer select-none items-center gap-2 rounded-md">
       {/* Avatar skeleton */}

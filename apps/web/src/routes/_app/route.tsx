@@ -14,11 +14,11 @@ export const Route = createFileRoute("/_app")({
     if (!context.session.session.activeOrganizationId) {
       throw redirect({ to: "/onboarding" });
     }
+  },
 
-    context.queryClient.prefetchQuery(
-      orpc.organization.getOrgList.queryOptions({
-        staleTime: Number.POSITIVE_INFINITY,
-      })
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(
+      orpc.organization.getOrgList.queryOptions()
     );
   },
 });

@@ -15,11 +15,12 @@ export const createRouter = () => {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
+        retry: 1,
       },
     },
     queryCache: new QueryCache({
-      onError: (error: Error) => {
-        console.log({ error });
+      onError: (error, query) => {
+        console.log({ query });
 
         // if (error.code === "UNAUTHORIZED") {
         //   queryClient.invalidateQueries();
@@ -30,8 +31,10 @@ export const createRouter = () => {
           action: {
             label: "retry",
             onClick: () => {
-              queryClient.invalidateQueries();
-              router.invalidate();
+              query.reset();
+              query.fetch();
+              // queryClient.resetQueries({ type: "all" });
+              // router.invalidate();
             },
           },
         });
