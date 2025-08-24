@@ -1,7 +1,6 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import Loader from "./components/loader";
 import "./index.css";
-import type { ORPCError } from "@orpc/client";
 import {
   QueryCache,
   QueryClient,
@@ -19,7 +18,7 @@ export const createRouter = () => {
       },
     },
     queryCache: new QueryCache({
-      onError: (error: ORPCError<string, unknown>) => {
+      onError: (error: Error) => {
         console.log({ error });
 
         // if (error.code === "UNAUTHORIZED") {

@@ -1,18 +1,19 @@
 import { Menu as MenuPrimitive } from "@base-ui-components/react/menu";
+import type { ComponentProps } from "react";
 import { cn } from "@/utils/cn";
 
-function Arrow(props: React.ComponentProps<typeof MenuPrimitive.Arrow>) {
+function Arrow(props: ComponentProps<typeof MenuPrimitive.Arrow>) {
   return <MenuPrimitive.Arrow {...props} className={cn("", props.className)} />;
 }
 
-function Backdrop(props: React.ComponentProps<typeof MenuPrimitive.Backdrop>) {
+function Backdrop(props: ComponentProps<typeof MenuPrimitive.Backdrop>) {
   return (
     <MenuPrimitive.Backdrop {...props} className={cn("", props.className)} />
   );
 }
 
 function CheckboxItem(
-  props: React.ComponentProps<typeof MenuPrimitive.CheckboxItem>
+  props: ComponentProps<typeof MenuPrimitive.CheckboxItem>
 ) {
   return (
     <MenuPrimitive.CheckboxItem
@@ -23,7 +24,7 @@ function CheckboxItem(
 }
 
 function CheckboxItemIndicator(
-  props: React.ComponentProps<typeof MenuPrimitive.CheckboxItemIndicator>
+  props: ComponentProps<typeof MenuPrimitive.CheckboxItemIndicator>
 ) {
   return (
     <MenuPrimitive.CheckboxItemIndicator
@@ -33,19 +34,17 @@ function CheckboxItemIndicator(
   );
 }
 
-function Group(props: React.ComponentProps<typeof MenuPrimitive.Group>) {
+function Group(props: ComponentProps<typeof MenuPrimitive.Group>) {
   return <MenuPrimitive.Group {...props} className={cn("", props.className)} />;
 }
 
-function GroupLabel(
-  props: React.ComponentProps<typeof MenuPrimitive.GroupLabel>
-) {
+function GroupLabel(props: ComponentProps<typeof MenuPrimitive.GroupLabel>) {
   return (
     <MenuPrimitive.GroupLabel {...props} className={cn("", props.className)} />
   );
 }
 
-function Item(props: React.ComponentProps<typeof MenuPrimitive.Item>) {
+function Item(props: ComponentProps<typeof MenuPrimitive.Item>) {
   return (
     <MenuPrimitive.Item
       {...props}
@@ -58,40 +57,34 @@ function Item(props: React.ComponentProps<typeof MenuPrimitive.Item>) {
   );
 }
 
-function Popup(props: React.ComponentProps<typeof MenuPrimitive.Popup>) {
+function Popup(props: ComponentProps<typeof MenuPrimitive.Popup>) {
   return <MenuPrimitive.Popup {...props} className={cn("", props.className)} />;
 }
 
-function Portal(props: React.ComponentProps<typeof MenuPrimitive.Portal>) {
+function Portal(props: ComponentProps<typeof MenuPrimitive.Portal>) {
   return <MenuPrimitive.Portal {...props} />;
 }
 
-function Positioner(
-  props: React.ComponentProps<typeof MenuPrimitive.Positioner>
-) {
+function Positioner(props: ComponentProps<typeof MenuPrimitive.Positioner>) {
   return (
     <MenuPrimitive.Positioner {...props} className={cn("", props.className)} />
   );
 }
 
-function RadioGroup(
-  props: React.ComponentProps<typeof MenuPrimitive.RadioGroup>
-) {
+function RadioGroup(props: ComponentProps<typeof MenuPrimitive.RadioGroup>) {
   return (
     <MenuPrimitive.RadioGroup {...props} className={cn("", props.className)} />
   );
 }
 
-function RadioItem(
-  props: React.ComponentProps<typeof MenuPrimitive.RadioItem>
-) {
+function RadioItem(props: ComponentProps<typeof MenuPrimitive.RadioItem>) {
   return (
     <MenuPrimitive.RadioItem {...props} className={cn("", props.className)} />
   );
 }
 
 function RadioItemIndicator(
-  props: React.ComponentProps<typeof MenuPrimitive.RadioItemIndicator>
+  props: ComponentProps<typeof MenuPrimitive.RadioItemIndicator>
 ) {
   return (
     <MenuPrimitive.RadioItemIndicator
@@ -101,25 +94,21 @@ function RadioItemIndicator(
   );
 }
 
-function Root(props: React.ComponentProps<typeof MenuPrimitive.Root>) {
+function Root(props: ComponentProps<typeof MenuPrimitive.Root>) {
   return <MenuPrimitive.Root {...props} />;
 }
 
-function SubmenuRoot(
-  props: React.ComponentProps<typeof MenuPrimitive.SubmenuRoot>
-) {
+function SubmenuRoot(props: ComponentProps<typeof MenuPrimitive.SubmenuRoot>) {
   return <MenuPrimitive.SubmenuRoot {...props} />;
 }
 
-function Trigger(props: React.ComponentProps<typeof MenuPrimitive.Trigger>) {
+function Trigger(props: ComponentProps<typeof MenuPrimitive.Trigger>) {
   return (
     <MenuPrimitive.Trigger {...props} className={cn("", props.className)} />
   );
 }
 
-function Separator(
-  props: React.ComponentProps<typeof MenuPrimitive.Separator>
-) {
+function Separator(props: ComponentProps<typeof MenuPrimitive.Separator>) {
   return (
     <MenuPrimitive.Separator
       {...props}
@@ -129,7 +118,7 @@ function Separator(
 }
 
 function SubmenuTrigger(
-  props: React.ComponentProps<typeof MenuPrimitive.SubmenuTrigger>
+  props: ComponentProps<typeof MenuPrimitive.SubmenuTrigger>
 ) {
   return (
     <MenuPrimitive.SubmenuTrigger

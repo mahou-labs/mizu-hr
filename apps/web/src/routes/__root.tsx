@@ -9,7 +9,6 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Toaster } from "@/components/ui/sonner";
 import { orpc } from "@/utils/orpc";
-
 import appCss from "../index.css?url";
 
 type RouterAppContext = {
@@ -60,6 +59,7 @@ function RootDocument() {
         <div className="h-svh">
           <Outlet />
         </div>
+
         <Toaster richColors />
         <TanStackRouterDevtools position="bottom-left" />
         <ReactQueryDevtools buttonPosition="bottom-right" position="bottom" />
