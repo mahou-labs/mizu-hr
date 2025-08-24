@@ -1,7 +1,6 @@
 import type { ToOptions } from "@tanstack/react-router";
 import { Home, LayoutDashboard, ListTodo } from "lucide-react";
 import { UserMenu } from "./user-menu";
-import UserMenuOld from "./user-menu-old";
 
 export function Sidebar() {
   return (
@@ -10,7 +9,6 @@ export function Sidebar() {
       <SidebarItem href="/dashboard" icon={LayoutDashboard} label="Dashboard" />
       <SidebarItem href="/todos" icon={ListTodo} label="Todos" />
       <UserMenu />
-      <UserMenuOld />
     </div>
   );
 }

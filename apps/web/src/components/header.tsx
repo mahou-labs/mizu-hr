@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import UserMenuOld from "./user-menu-old";
 
 export default function Header() {
   const links = [
@@ -20,9 +19,7 @@ export default function Header() {
             );
           })}
         </nav>
-        <div className="flex items-center gap-2">
-          <UserMenuOld />
-        </div>
+        <div className="flex items-center gap-2" />
       </div>
       <hr />
     </div>
