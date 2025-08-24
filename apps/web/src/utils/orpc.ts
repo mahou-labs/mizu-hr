@@ -11,11 +11,11 @@ const getIncomingHeaders = createIsomorphicFn()
 
 const link = new RPCLink({
   url: `${import.meta.env.VITE_API_URL}/rpc`,
+  headers: getIncomingHeaders,
   fetch(url, options) {
     return fetch(url, {
       ...options,
       credentials: "include",
-      headers: getIncomingHeaders() as HeadersInit,
     });
   },
 });
