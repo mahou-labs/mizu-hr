@@ -67,7 +67,8 @@
         "noInferrableTypes": "error",
         "noUselessElse": "error",
         "noHeadElement": "off",
-        "noMagicNumbers": "off"
+        "noMagicNumbers": "off",
+        "useBlockStatements": "off"
       }
     }
   },
