@@ -1,6 +1,7 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import Loader from "./components/loader";
 import "./index.css";
+import type { ORPCError } from "@orpc/client";
 import {
   QueryCache,
   QueryClient,
@@ -10,32 +11,35 @@ import { toast } from "sonner";
 import { routeTree } from "./routeTree.gen";
 import { orpc } from "./utils/orpc";
 
-export function getQueryClient(): QueryClient {
-  return new QueryClient({
+export const createRouter = () => {
+  const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
-        staleTime: 60 * 1000 * 5,
       },
     },
     queryCache: new QueryCache({
-      onError: (error) => {
+      onError: (error: ORPCError<string, unknown>) => {
+        console.log({ error });
+
+        // if (error.code === "UNAUTHORIZED") {
+        //   queryClient.invalidateQueries();
+        //   router.invalidate();
+        // }
+
         toast.error(`Error: ${error.message}`, {
           action: {
             label: "retry",
             onClick: () => {
               queryClient.invalidateQueries();
+              router.invalidate();
             },
           },
         });
       },
     }),
   });
-}
 
-const queryClient = getQueryClient();
-
-export const createRouter = () => {
   const router = createTanStackRouter({
     routeTree,
     scrollRestoration: true,
@@ -43,7 +47,6 @@ export const createRouter = () => {
     context: { orpc, queryClient },
     defaultPendingComponent: () => <Loader />,
     defaultNotFoundComponent: () => <div>Not Found</div>,
-    defaultErrorComponent: ({ error }) => <div>{JSON.stringify(error)}</div>,
     Wrap: ({ children }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     ),

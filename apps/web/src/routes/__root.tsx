@@ -1,17 +1,15 @@
 import type { QueryClient } from "@tanstack/react-query";
-
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
 import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
-  redirect,
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Toaster } from "@/components/ui/sonner";
 import { orpc } from "@/utils/orpc";
+
 import appCss from "../index.css?url";
 
 type RouterAppContext = {
@@ -43,7 +41,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
   component: RootDocument,
   beforeLoad: async ({ context }) => {
-    const session = await context.queryClient.fetchQuery(
+    const session = await context.queryClient.ensureQueryData(
       orpc.user.getUserSession.queryOptions()
     );
 

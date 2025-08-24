@@ -1,16 +1,16 @@
 import type { ToOptions } from "@tanstack/react-router";
 import { Home, LayoutDashboard, ListTodo } from "lucide-react";
-import { OrganizationDropdown } from "./organization-dropdown";
-import UserMenu from "./user-menu";
+import { UserMenu } from "./user-menu";
+import UserMenuOld from "./user-menu-old";
 
 export function Sidebar() {
   return (
-    <div className="flex h-full w-56 flex-col gap-2 px-2">
+    <div className="flex h-full w-56 flex-col gap-2 px-4">
       <SidebarItem href="/" icon={Home} label="Home" />
       <SidebarItem href="/dashboard" icon={LayoutDashboard} label="Dashboard" />
       <SidebarItem href="/todos" icon={ListTodo} label="Todos" />
-      <OrganizationDropdown />
       <UserMenu />
+      <UserMenuOld />
     </div>
   );
 }
@@ -41,7 +41,7 @@ function SidebarItem({
   return (
     <Link
       className={cn(
-        "group flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors",
+        "group flex w-full items-center rounded-md px-1.5 py-2 text-sm transition-colors",
         "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
         isActive
           ? "bg-sidebar-primary text-sidebar-primary-foreground"
