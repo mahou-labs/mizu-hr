@@ -8,6 +8,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/utils/auth-client";
+import { cn } from "@/utils/cn";
 import { orpc } from "@/utils/orpc";
 import { Menu } from "./ui/menu";
 
@@ -23,7 +24,11 @@ function getAvatarInitials(name?: string | null): string {
   return name.slice(0, 2).toUpperCase();
 }
 
-export function UserMenu() {
+type UserMenuProps = {
+  isCollapsed?: boolean;
+};
+
+export function UserMenu({ isCollapsed = false }: UserMenuProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -35,7 +40,7 @@ export function UserMenu() {
   } = useQuery(orpc.organization.getOrgList.queryOptions());
 
   if (isPending) {
-    return <UserMenuSkeleton />;
+    return <UserMenuSkeleton isCollapsed={isCollapsed} />;
   }
 
   if (isError) {
@@ -53,23 +58,42 @@ export function UserMenu() {
 
   return (
     <Menu.Root>
-      <Menu.Trigger className="focus-visible:-outline-offset-1 flex cursor-pointer select-none items-center gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-blue-800">
-        <Avatar.Root className="inline-flex size-9 select-none items-center justify-center overflow-hidden rounded-full bg-gray-100 align-middle font-medium text-base text-black">
+      <Menu.Trigger
+        className={cn(
+          "focus-visible:-outline-offset-1 flex w-full cursor-pointer select-none items-center rounded-lg p-2 transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-2 focus-visible:outline-sidebar-ring",
+          isCollapsed ? "justify-center" : "gap-3"
+        )}
+      >
+        <Avatar.Root className="inline-flex size-8 shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-sidebar-accent align-middle font-medium text-sidebar-accent-foreground text-sm">
           <Avatar.Image
             className="size-full object-cover"
-            height="48"
+            height="32"
             src={session?.user.image ?? undefined}
-            width="48"
+            width="32"
           />
-          <Avatar.Fallback className="flex size-full items-center justify-center text-base">
+          <Avatar.Fallback className="flex size-full items-center justify-center text-sm">
             {getAvatarInitials(session?.user.name)}
           </Avatar.Fallback>
         </Avatar.Root>
-        <div className="flex flex-col items-start">
-          <span className="font-medium text-sm">{session?.user.name}</span>
-          <span className="text-gray-500 text-xs">{activeOrg?.name}</span>
+        <div
+          className={cn(
+            "flex flex-col items-start transition-all duration-200",
+            isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
+          )}
+        >
+          <span className="truncate font-medium text-sidebar-foreground text-sm">
+            {session?.user.name}
+          </span>
+          <span className="truncate text-sidebar-foreground/60 text-xs">
+            {activeOrg?.name}
+          </span>
         </div>
-        <ChevronDown className="ml-auto size-4" />{" "}
+        <ChevronDown
+          className={cn(
+            "size-4 transition-all duration-200",
+            isCollapsed ? "w-0 opacity-0" : "ml-auto w-auto opacity-100"
+          )}
+        />
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner className="outline-none" sideOffset={8}>
@@ -95,20 +119,35 @@ export function UserMenu() {
   );
 }
 
-function UserMenuSkeleton() {
+function UserMenuSkeleton({ isCollapsed = false }: { isCollapsed?: boolean }) {
   return (
-    <div className="flex cursor-pointer select-none items-center gap-2 rounded-md">
+    <div
+      className={cn(
+        "flex cursor-pointer select-none items-center rounded-lg p-2",
+        isCollapsed ? "justify-center" : "gap-3"
+      )}
+    >
       {/* Avatar skeleton */}
-      <Skeleton className="size-9 rounded-full" />
+      <Skeleton className="size-8 shrink-0 rounded-full" />
 
       {/* Text content skeleton */}
-      <div className="flex flex-col gap-1">
+      <div
+        className={cn(
+          "flex flex-col gap-1 transition-all duration-200",
+          isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
+        )}
+      >
         <Skeleton className="h-4 w-28" />
         <Skeleton className="h-3 w-16" />
       </div>
 
       {/* Chevron icon skeleton */}
-      <Skeleton className="ml-auto size-4" />
+      <Skeleton
+        className={cn(
+          "size-4 transition-all duration-200",
+          isCollapsed ? "w-0 opacity-0" : "ml-auto w-auto opacity-100"
+        )}
+      />
     </div>
   );
 }
