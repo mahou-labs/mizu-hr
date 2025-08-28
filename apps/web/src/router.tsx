@@ -10,25 +10,38 @@ import { toast } from "sonner";
 import { routeTree } from "./routeTree.gen";
 import { orpc } from "./utils/orpc";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { refetchOnWindowFocus: false },
-  },
-  queryCache: new QueryCache({
-    onError: (error) => {
-      toast.error(`Error: ${error.message}`, {
-        action: {
-          label: "retry",
-          onClick: () => {
-            queryClient.invalidateQueries();
-          },
-        },
-      });
-    },
-  }),
-});
-
 export const createRouter = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: 1,
+      },
+    },
+    queryCache: new QueryCache({
+      onError: (error, query) => {
+        console.log({ query });
+
+        // if (error.code === "UNAUTHORIZED") {
+        //   queryClient.invalidateQueries();
+        //   router.invalidate();
+        // }
+
+        toast.error(`Error: ${error.message}`, {
+          action: {
+            label: "retry",
+            onClick: () => {
+              query.reset();
+              query.fetch();
+              // queryClient.resetQueries({ type: "all" });
+              // router.invalidate();
+            },
+          },
+        });
+      },
+    }),
+  });
+
   const router = createTanStackRouter({
     routeTree,
     scrollRestoration: true,
@@ -36,7 +49,6 @@ export const createRouter = () => {
     context: { orpc, queryClient },
     defaultPendingComponent: () => <Loader />,
     defaultNotFoundComponent: () => <div>Not Found</div>,
-    defaultErrorComponent: ({ error }) => <div>{JSON.stringify(error)}</div>,
     Wrap: ({ children }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     ),
@@ -45,6 +57,7 @@ export const createRouter = () => {
 };
 
 declare module "@tanstack/react-router" {
+  // biome-ignore lint/nursery/useConsistentTypeDefinitions: boilerplate
   interface Register {
     router: ReturnType<typeof createRouter>;
   }

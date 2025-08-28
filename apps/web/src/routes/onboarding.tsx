@@ -16,9 +16,9 @@ import { Label } from "@/components/ui/label";
 import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
 
-export const Route = createFileRoute("/_app/onboarding")({
+export const Route = createFileRoute("/onboarding")({
   component: OnboardingComponent,
-  beforeLoad: async ({ context }) => {
+  beforeLoad: ({ context }) => {
     if (context.session?.session.activeOrganizationId) {
       throw redirect({ to: "/dashboard" });
     }
@@ -33,12 +33,12 @@ function OnboardingComponent() {
   const [isCreating, setIsCreating] = useState(false);
   const [slugError, setSlugError] = useState("");
   const debouncedSlug = useDebounce(organizationSlug, 500);
-  const { data: slugAvailable, isLoading: isCheckingSlug } = useQuery({
-    ...orpc.organization.checkSlugAvailability.queryOptions({
-      input: { slug: debouncedSlug },
-    }),
-    enabled: debouncedSlug.length > 0 && !slugError,
-  });
+  const { data: slugAvailable, isLoading: isCheckingSlug } = useQuery(
+    orpc.organization.checkSlugAvailability.queryOptions({
+      input: debouncedSlug,
+      enabled: debouncedSlug.length > 0 && !slugError,
+    })
+  );
 
   // uKsion, navigate]);
 

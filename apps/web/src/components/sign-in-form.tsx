@@ -1,10 +1,10 @@
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
 import { authClient } from "@/utils/auth-client";
-import { sessionQueryOptions } from "@/utils/session";
+import { orpc } from "@/utils/orpc";
 import Loader from "./loader";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -18,9 +18,6 @@ export default function SignInForm({
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const navigate = useNavigate({
-    from: "/",
-  });
   const { isPending } = authClient.useSession();
 
   const form = useForm({
@@ -37,19 +34,10 @@ export default function SignInForm({
         {
           onSuccess: async () => {
             toast.success("Sign in successful");
-            await queryClient.invalidateQueries({ queryKey: ["session"] });
-            await router.invalidate();
-            // await queryClient.ensureQueryData(sessionQueryOptions);
-            // navigate({ to: "/dashboard" });
-            // if (context.data?.session?.activeOrganizationId) {
-            //   navigate({
-            //     to: "/dashboard",
-            //   });
-            // } else {
-            //   navigate({
-            //     to: "/onboarding",
-            //   });
-            // }
+            await queryClient.refetchQueries(
+              orpc.user.getUserSession.queryOptions()
+            );
+            router.invalidate();
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);

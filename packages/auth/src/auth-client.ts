@@ -5,9 +5,7 @@ type AuthConfig = {
   baseURL: string;
 };
 
-export const createAuthClientInstance = (
-  config: AuthConfig
-): ReturnType<typeof createAuthClient> => {
+export const createAuthClientInstance = (config: AuthConfig) => {
   return createAuthClient({
     baseURL: config.baseURL,
     basePath: "/auth",

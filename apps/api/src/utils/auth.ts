@@ -30,9 +30,7 @@ export const getActiveOrganization = async (
     // For now, return the first organization
     const activeOrg = userOrganizations[0];
 
-    return {
-      id: activeOrg.id,
-    };
+    return activeOrg.id;
   } catch (error) {
     throw new Error(
       `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`

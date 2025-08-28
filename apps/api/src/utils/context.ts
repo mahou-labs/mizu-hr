@@ -11,6 +11,7 @@ export async function createContext(c: HonoContext) {
   });
 
   return {
+    headers: c.req.raw.headers,
     session,
     db,
   };

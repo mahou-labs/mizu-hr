@@ -1,25 +1,20 @@
 import type { QueryClient } from "@tanstack/react-query";
-
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
 import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
-  useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import Loader from "@/components/loader";
 import { Toaster } from "@/components/ui/sonner";
-import type { orpc } from "@/utils/orpc";
-import { sessionQueryOptions } from "@/utils/session";
-import Header from "../components/header";
+import { orpc } from "@/utils/orpc";
 import appCss from "../index.css?url";
-export interface RouterAppContext {
+
+type RouterAppContext = {
   orpc: typeof orpc;
   queryClient: QueryClient;
-}
+};
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
@@ -45,24 +40,26 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
   component: RootDocument,
   beforeLoad: async ({ context }) => {
-    const session = await context.queryClient.fetchQuery(sessionQueryOptions);
+    const session = await context.queryClient.ensureQueryData(
+      orpc.user.getUserSession.queryOptions()
+    );
+
     return { session };
   },
 });
 
 function RootDocument() {
-  const isFetching = useRouterState({ select: (s) => s.isLoading });
-
   return (
     <html className="dark" lang="en">
       <head>
+        <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
         <HeadContent />
       </head>
       <body>
-        <div className="grid h-svh grid-rows-[auto_1fr]">
-          <Header />
-          {isFetching ? <Loader /> : <Outlet />}
+        <div className="h-svh">
+          <Outlet />
         </div>
+
         <Toaster richColors />
         <TanStackRouterDevtools position="bottom-left" />
         <ReactQueryDevtools buttonPosition="bottom-right" position="bottom" />
