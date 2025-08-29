@@ -6,13 +6,13 @@ PORT = "3000"
 nixPkgs = ["bun"]
 
 [phases.install]
-cmds = ["bun install --frozen-lockfile"]
+cmd = "bun install --frozen-lockfile"
 
 [phases.build]
-cmds = ["bun run build"]
+cmd = "bun run build"
 
 [start]
-cmd = "bun run dist/index.js"
+cmd = "bun run start"
 
 [healthcheck]
 path = "/healthcheck"
