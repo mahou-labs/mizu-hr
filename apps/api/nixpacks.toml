@@ -1,34 +1,21 @@
-# nixpacks.toml
-
-# Expose the port for platforms that read metadata (Dockploy will map it)
 [variables]
 PORT = "3000"
 
-# Ensure Bun is present in the image
 [phases.setup]
+# Ensure bun is available
 nixPkgs = ["bun"]
 
-# Install dependencies using Bun's lockfile if present
 [phases.install]
-# If you have a bun.lockb, use --frozen-lockfile to ensure reproducibility
 cmds = ["bun install --frozen-lockfile"]
 
-# Optional: run a build if you have a "build" script
 [phases.build]
-# Comment this out if you chose the "no build" option
 cmds = ["bun run build"]
 
-# Start the server
 [start]
-# Option A (no build):
-# cmd = "bun run src/server.ts"
+cmd = "bun run dist/index.js"
 
-# Option B (with build):
-cmd = "bun run dist/server.js"
-
-# (Optional) Simple health check for container platforms that read it
 [healthcheck]
-path = "/healthz"
+path = "/healthcheck"
 interval = "10s"
-timeout = "2s"
+timeout = "3s"
 retries = 3

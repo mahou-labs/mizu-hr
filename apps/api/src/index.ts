@@ -24,6 +24,15 @@ app.use(
   })
 );
 
+app.get("/healthcheck", (c) => {
+  return c.json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || "development",
+  });
+});
+
 app.on(["POST", "GET"], "/auth/**", (c) => auth.handler(c.req.raw));
 
 app.use("/rpc/*", async (c, next) => {
