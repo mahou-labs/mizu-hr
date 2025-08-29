@@ -1,3 +1,5 @@
+/** biome-ignore-all assist/source/organizeImports: react-scan */
+import { scan } from "react-scan";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -7,6 +9,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { orpc } from "@/utils/orpc";
 import appCss from "../index.css?url";
@@ -49,10 +52,15 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootDocument() {
+  useEffect(() => {
+    scan({
+      enabled: import.meta.env.DEV,
+    });
+  }, []);
+
   return (
     <html className="dark" lang="en">
       <head>
-        <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
         <HeadContent />
       </head>
       <body>
