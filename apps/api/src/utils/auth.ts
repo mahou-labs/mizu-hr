@@ -27,7 +27,7 @@ export const getActiveOrganization = async (userId: string) => {
     // For now, return the first organization
     const activeOrg = userOrganizations[0];
 
-    return activeOrg.id;
+    return activeOrg?.id;
   } catch (error) {
     throw new Error(
       `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`
@@ -45,7 +45,7 @@ export const auth = betterAuth({
     enabled: true,
   },
   secret: env.BETTER_AUTH_SECRET,
-  baseURL: env.BETTER_AUTH_URL,
+  // baseURL: env.BETTER_AUTH_URL,
   basePath: "/auth",
   advanced: {
     crossSubDomainCookies: {
