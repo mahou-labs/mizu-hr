@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { appRouter } from "./routers/index";
-import { getAuth } from "./utils/auth";
+import { auth } from "./utils/auth";
 import { createContext } from "./utils/context";
 import { ALLOWED_ORIGINS } from "./utils/origins";
 
@@ -24,7 +24,7 @@ app.use(
   })
 );
 
-app.on(["POST", "GET"], "/auth/**", (c) => getAuth().handler(c.req.raw));
+app.on(["POST", "GET"], "/auth/**", (c) => auth.handler(c.req.raw));
 
 app.use("/rpc/*", async (c, next) => {
   const context = await createContext(c);

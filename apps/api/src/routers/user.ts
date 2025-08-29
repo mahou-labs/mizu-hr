@@ -1,5 +1,5 @@
 import z from "zod";
-import { getAuth } from "../utils/auth";
+import { auth } from "../utils/auth";
 import { publicProcedure } from "../utils/orpc";
 
 export const userRouter = {
@@ -30,8 +30,7 @@ export const userRouter = {
         })
         .nullable()
     )
-    .handler(async ({ context: { headers, db } }) => {
-      const auth = getAuth(db);
+    .handler(async ({ context: { headers } }) => {
       return await auth.api.getSession({ headers });
     }),
 };
