@@ -1,4 +1,4 @@
-import { env as bunEnv } from "bun";
+/** biome-ignore-all lint/correctness/noUndeclaredVariables: biome shenanigans */
 import { z } from "zod";
 
 const envSchema = z.object({
@@ -14,11 +14,11 @@ const envSchema = z.object({
 export type Environment = z.infer<typeof envSchema>;
 
 export const env: Environment = envSchema.parse({
-  DATABASE_URL: bunEnv.DATABASE_URL,
-  CORS_ORIGIN: bunEnv.CORS_ORIGIN,
-  BETTER_AUTH_SECRET: bunEnv.BETTER_AUTH_SECRET,
-  BETTER_AUTH_URL: bunEnv.BETTER_AUTH_URL,
-  SUCCESS_URL: bunEnv.SUCCESS_URL,
-  POLAR_ACCESS_TOKEN: bunEnv.POLAR_ACCESS_TOKEN,
-  POLAR_WEBHOOK_SECRET: bunEnv.POLAR_WEBHOOK_SECRET,
+  DATABASE_URL: Bun.env.DATABASE_URL,
+  CORS_ORIGIN: Bun.env.CORS_ORIGIN,
+  BETTER_AUTH_SECRET: Bun.env.BETTER_AUTH_SECRET,
+  BETTER_AUTH_URL: Bun.env.BETTER_AUTH_URL,
+  SUCCESS_URL: Bun.env.SUCCESS_URL,
+  POLAR_ACCESS_TOKEN: Bun.env.POLAR_ACCESS_TOKEN,
+  POLAR_WEBHOOK_SECRET: Bun.env.POLAR_WEBHOOK_SECRET,
 });
