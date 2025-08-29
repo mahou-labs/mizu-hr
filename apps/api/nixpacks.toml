@@ -1,0 +1,21 @@
+[variables]
+PORT = "3000"
+
+[phases.setup]
+# Ensure bun is available
+nixPkgs = ["bun"]
+
+[phases.install]
+cmds = ["bun install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["bun run build"]
+
+[start]
+cmd = "bun run dist/index.js"
+
+[healthcheck]
+path = "/healthcheck"
+interval = "10s"
+timeout = "3s"
+retries = 3

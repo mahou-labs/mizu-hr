@@ -1,13 +1,10 @@
-import { env } from "cloudflare:workers";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
+import { env } from "./env";
 
-export function getDb() {
-  const pool = new Pool({
-    connectionString: env.HYPERDRIVE.connectionString,
+export const db = drizzle(
+  new Pool({
+    connectionString: env.DATABASE_URL,
     max: 5,
-  });
-
-  return drizzle(pool);
-}
-// export const getDb = () => drizzle(env.DATABASE_URL || "");
+  })
+);
