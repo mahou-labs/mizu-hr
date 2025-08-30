@@ -49,7 +49,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
 
   const signOut = async () => {
     await authClient.signOut();
-    queryClient.invalidateQueries();
+    queryClient.clear();
     router.invalidate();
   };
 
@@ -111,6 +111,15 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
               onClick={signOut}
             >
               Sign Out
+            </Menu.Item>
+            <Menu.Item
+              onClick={() =>
+                queryClient.invalidateQueries({
+                  queryKey: orpc.organization.getOrgList.queryKey(),
+                })
+              }
+            >
+              Revalidate Query
             </Menu.Item>
           </Menu.Popup>
         </Menu.Positioner>

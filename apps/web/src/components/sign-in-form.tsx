@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
 import { authClient } from "@/utils/auth-client";
@@ -17,6 +17,7 @@ export default function SignInForm({
 }) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const navigate = useNavigate();
 
   const { isPending } = authClient.useSession();
 
@@ -35,9 +36,10 @@ export default function SignInForm({
           onSuccess: async () => {
             toast.success("Sign in successful");
             await queryClient.refetchQueries(
-              orpc.user.getUserSession.queryOptions()
+              orpc.user.getSession.queryOptions()
             );
-            router.invalidate();
+            await router.invalidate();
+            await navigate({ to: "/dashboard" });
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);

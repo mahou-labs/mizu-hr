@@ -15,7 +15,6 @@ export const Route = createFileRoute("/_app")({
       throw redirect({ to: "/onboarding" });
     }
   },
-
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(
       orpc.organization.getOrgList.queryOptions()
