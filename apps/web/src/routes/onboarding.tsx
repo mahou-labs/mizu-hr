@@ -96,24 +96,23 @@ function OnboardingComponent() {
     setIsCreating(true);
 
     try {
-      const result = await authClient.organization.create({
+      const { data: org, error } = await authClient.organization.create({
         name: organizationName.trim(),
         slug: organizationSlug.trim(),
       });
 
-      if (result.error) {
-        toast.error(result.error.message || "Failed to create organization");
-        return;
+      if (error) {
+        toast.error(error.message || "Failed to create organization");
+      } else {
+        toast.success("Organization created successfully!");
+
+        await authClient.organization.setActive({
+          organizationId: org.id,
+        });
+
+        await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+        router.invalidate();
       }
-
-      toast.success("Organization created successfully!");
-
-      await authClient.organization.setActive({
-        organizationId: result.data.id,
-      });
-
-      await queryClient.invalidateQueries({ queryKey: ["session"] });
-      await router.invalidate();
     } catch (error) {
       console.error("Error creating organization:", error);
       toast.error("Failed to create organization");

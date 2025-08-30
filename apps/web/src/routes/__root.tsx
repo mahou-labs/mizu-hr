@@ -44,7 +44,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   component: RootDocument,
   beforeLoad: async ({ context }) => {
     const session = await context.queryClient.ensureQueryData(
-      orpc.user.getUserSession.queryOptions()
+      orpc.user.getSession.queryOptions()
     );
 
     return { session };

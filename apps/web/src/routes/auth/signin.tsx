@@ -5,7 +5,7 @@ import SignUpForm from "@/components/sign-up-form";
 
 export const Route = createFileRoute("/auth/signin")({
   component: RouteComponent,
-  beforeLoad: async ({ context }) => {
+  beforeLoad: ({ context }) => {
     if (context.session) {
       throw redirect({ to: "/dashboard" });
     }

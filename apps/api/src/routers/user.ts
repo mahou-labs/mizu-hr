@@ -3,7 +3,7 @@ import { auth } from "../utils/auth";
 import { publicProcedure } from "../utils/orpc";
 
 export const userRouter = {
-  getUserSession: publicProcedure
+  getSession: publicProcedure
     .output(
       z
         .object({
