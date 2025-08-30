@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/onboarding")({
 
 function OnboardingComponent() {
   const queryClient = useQueryClient();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [organizationName, setOrganizationName] = useState("");
   const [organizationSlug, setOrganizationSlug] = useState("");
   const [isCreating, setIsCreating] = useState(false);
@@ -111,7 +111,7 @@ function OnboardingComponent() {
         });
 
         await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
-        router.invalidate();
+        navigate({ to: "/dashboard" });
       }
     } catch (error) {
       console.error("Error creating organization:", error);
