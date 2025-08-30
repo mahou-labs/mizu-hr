@@ -19,16 +19,17 @@
     "db:down": "docker compose down"
   },
   "dependencies": {
-    "@orpc/client": "^1.8.1",
-    "@orpc/server": "^1.8.1",
+    "@orpc/client": "^1.8.5",
+    "@orpc/server": "^1.8.5",
     "@polar-sh/better-auth": "^1.1.0",
-    "@polar-sh/sdk": "^0.34.11",
+    "@polar-sh/sdk": "^0.34.14",
     "better-auth": "^1.3.7",
     "dotenv": "^17.2.1",
-    "drizzle-orm": "^0.44.4",
-    "hono": "^4.9.2",
+    "drizzle-orm": "^0.44.5",
+    "hono": "^4.9.5",
     "pg": "^8.16.3",
-    "zod": "^4.0.17"
+    "resend": "^6.0.2",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
     "@types/bun": "^1.2.21",

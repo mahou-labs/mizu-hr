@@ -9,16 +9,16 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.4",
+    "@astrojs/cloudflare": "^12.6.7",
     "@astrojs/react": "^4.3.0",
     "@mizu-hr/auth": "workspace:*",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "astro": "^5.13.2",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "astro": "^5.13.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "wrangler": "^4.31.0"
+    "wrangler": "^4.33.1"
   }
 }

@@ -4,7 +4,7 @@
     "@biomejs/biome": "https://pkg.pr.new/@biomejs/biome@7248dda",
     "@total-typescript/ts-reset": "^0.6.1",
     "turbo": "^2.5.6",
-    "ultracite": "^5.2.5"
+    "ultracite": "^5.2.10"
   },
   "packageManager": "bun@1.2.19",
   "private": true,
