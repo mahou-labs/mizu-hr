@@ -11,6 +11,7 @@
   "scripts": {
     "check": "biome check --write .",
     "dev": "turbo dev db:studio --parallel",
+    "dev:email": "turbo dev email db:studio --parallel",
     "build": "turbo build",
     "check-types": "turbo check-types",
     "dev:native": "turbo -F native dev",

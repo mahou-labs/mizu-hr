@@ -36,4 +36,33 @@ export const organizationRouter = {
     .handler(async ({ context: { headers } }) => {
       return await auth.api.listOrganizations({ headers });
     }),
+
+  getMembers: protectedProcedure.handler(async ({ context: { headers } }) => {
+    return await auth.api.listMembers({ headers });
+  }),
+
+  getInvites: protectedProcedure.handler(async ({ context: { headers } }) => {
+    return await auth.api.listInvitations({ headers });
+  }),
+
+  inviteMember: protectedProcedure
+    .input(
+      z.object({
+        email: z.email(),
+        role: z.union([
+          z.enum(["admin", "member", "owner"]),
+          z.array(z.enum(["admin", "member", "owner"])),
+        ]),
+      })
+    )
+    .handler(async ({ context: { headers }, input }) => {
+      await auth.api.createInvitation({
+        headers,
+        body: {
+          email: input.email,
+          role: input.role,
+          resend: true,
+        },
+      });
+    }),
 };
