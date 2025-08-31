@@ -62,6 +62,12 @@ function RootDocument() {
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: dark mode script
+          dangerouslySetInnerHTML={{
+            __html: `;(()=>{try{var s=localStorage.getItem('theme');var q=window.matchMedia('(prefers-color-scheme: dark)');var d=s?s==='dark':q.matches;var r=document.documentElement;r.classList.toggle('dark',d);var m=document.createElement('meta');m.name='color-scheme';m.content=d?'dark light':'light dark';document.head.appendChild(m);if(!s&&q.addEventListener){q.addEventListener('change',e=>{r.classList.toggle('dark',e.matches)})}}catch(e){}})();`,
+          }}
+        />
       </head>
       <body>
         <div className="h-svh bg-sidebar">

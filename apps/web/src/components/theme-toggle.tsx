@@ -12,7 +12,6 @@ export function ThemeToggle({
   const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
-    // Get initial theme from HTML class
     const isDark = document.documentElement.classList.contains("dark");
     setTheme(isDark ? "dark" : "light");
   }, []);
@@ -21,33 +20,14 @@ export function ThemeToggle({
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
 
-    // Update HTML class
     if (newTheme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
 
-    // Store preference in localStorage
     localStorage.setItem("theme", newTheme);
   };
-
-  // Initialize theme from localStorage or system preference on mount
-  useEffect(() => {
-    const stored = localStorage.getItem("theme") as Theme | null;
-    const systemPrefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-
-    const initialTheme = stored || (systemPrefersDark ? "dark" : "light");
-
-    setTheme(initialTheme);
-    if (initialTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, []);
 
   return (
     <Button
