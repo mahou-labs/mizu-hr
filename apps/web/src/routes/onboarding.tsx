@@ -164,17 +164,17 @@ function OnboardingComponent() {
               />
 
               {/* Slug validation messages */}
-              {slugError && <p className="text-red-600 text-sm">{slugError}</p>}
+              {slugError && <p className="text-destructive text-sm">{slugError}</p>}
 
               {!slugError && organizationSlug && (
                 <>
                   {isCheckingSlug ? (
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       Checking availability...
                     </p>
                   ) : (
                     <p
-                      className={`text-sm ${slugAvailable ? "text-green-600" : "text-red-600"}`}
+                      className={`text-sm ${slugAvailable ? "text-chart-2" : "text-destructive"}`}
                     >
                       {slugAvailable
                         ? "✓ This slug is available"
@@ -184,7 +184,7 @@ function OnboardingComponent() {
                 </>
               )}
 
-              <p className="text-gray-500 text-xs">
+              <p className="text-muted-foreground text-xs">
                 This will be used in your organization URL. Only lowercase
                 letters, numbers, and hyphens allowed.
               </p>

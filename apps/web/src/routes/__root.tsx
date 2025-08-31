@@ -59,7 +59,7 @@ function RootDocument() {
   }, []);
 
   return (
-    <html className="dark" lang="en">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>

@@ -11,10 +11,14 @@ function RouteComponent() {
   const privateData = useQuery(orpc.privateData.queryOptions());
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome {session?.user.name}</p>
-      <p>privateData: {privateData.data?.message}</p>
+    <div className="container mx-auto max-w-4xl p-6">
+      <h1 className="mb-6 text-2xl font-semibold text-foreground">Dashboard</h1>
+      <div className="grid gap-6">
+        <div className="rounded-lg border border-border bg-card p-6">
+          <p className="text-lg text-card-foreground">Welcome {session?.user.name}</p>
+          <p className="mt-2 text-sm text-muted-foreground">privateData: {privateData.data?.message}</p>
+        </div>
+      </div>
     </div>
   );
 }

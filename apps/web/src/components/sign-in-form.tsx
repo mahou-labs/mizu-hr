@@ -61,7 +61,7 @@ export default function SignInForm({
 
   return (
     <div className="mx-auto mt-10 w-full max-w-md p-6">
-      <h1 className="mb-6 text-center font-bold text-3xl">Welcome Back</h1>
+      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">Welcome Back</h1>
 
       <form
         className="space-y-4"
@@ -85,7 +85,7 @@ export default function SignInForm({
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <p className="text-red-500" key={error?.message}>
+                  <p className="text-destructive" key={error?.message}>
                     {error?.message}
                   </p>
                 ))}
@@ -108,7 +108,7 @@ export default function SignInForm({
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <p className="text-red-500" key={error?.message}>
+                  <p className="text-destructive" key={error?.message}>
                     {error?.message}
                   </p>
                 ))}
@@ -132,7 +132,6 @@ export default function SignInForm({
 
       <div className="mt-4 text-center">
         <Button
-          className="text-indigo-600 hover:text-indigo-800"
           onClick={onSwitchToSignUp}
           variant="link"
         >

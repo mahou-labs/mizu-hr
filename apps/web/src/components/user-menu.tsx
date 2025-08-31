@@ -97,7 +97,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner className="outline-none" sideOffset={8}>
-          <Menu.Popup className="dark:-outline-offset-1 origin-[var(--transform-origin)] rounded-md bg-[canvas] py-1 text-gray-900 shadow-gray-200 shadow-lg outline-1 outline-gray-200 transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:shadow-none dark:outline-gray-300">
+          <Menu.Popup className="origin-[var(--transform-origin)] rounded-md bg-popover border border-border py-1 text-popover-foreground shadow-lg transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0">
             {/* <Menu.Arrow className="data-[side=right]:-rotate-90 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=top]:bottom-[-8px] data-[side=right]:left-[-13px] data-[side=left]:rotate-90 data-[side=top]:rotate-180">
                 <ArrowSvg />
               </Menu.Arrow> */}
@@ -107,7 +107,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
             <Menu.Separator />
             <Menu.Item>Favorite</Menu.Item>
             <Menu.Item
-              className="text-red-500 data-[highlighted]:before:bg-red-500"
+              className="text-destructive data-[highlighted]:before:bg-destructive"
               onClick={signOut}
             >
               Sign Out

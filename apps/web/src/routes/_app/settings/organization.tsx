@@ -39,28 +39,28 @@ function RouteComponent() {
   return (
     <div className="p-6">
       <div className="mb-4 flex items-center gap-3">
-        <Building2 className="size-5 text-gray-600" />
-        <h2 className="font-semibold text-gray-900 text-xl">
+        <Building2 className="size-5 text-muted-foreground" />
+        <h2 className="font-semibold text-foreground text-xl">
           Organization Settings
         </h2>
       </div>
-      <p className="text-gray-600">
+      <p className="text-muted-foreground">
         Configure your organization settings and manage team preferences.
       </p>
 
       <div className="mt-8">
-        <h3 className="mb-4 font-medium text-gray-900 text-lg">Team Members</h3>
+        <h3 className="mb-4 font-medium text-foreground text-lg">Team Members</h3>
 
         <div className="mb-6 flex gap-2">
           <input
-            className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="flex-1 rounded-md border border-input bg-input px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter email address"
             type="email"
             value={email}
           />
           <button
-            className="rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="rounded-md bg-primary px-4 py-2 font-medium text-sm text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
             onClick={handleInvite}
             type="button"
           >

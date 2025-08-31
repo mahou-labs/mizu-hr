@@ -8,12 +8,16 @@ export default function Header() {
   ];
 
   return (
-    <div>
-      <div className="flex flex-row items-center justify-between px-2 py-1">
-        <nav className="flex gap-4 text-lg">
+    <div className="bg-card border-b border-border">
+      <div className="flex flex-row items-center justify-between px-4 py-3">
+        <nav className="flex gap-6 text-lg">
           {links.map(({ to, label }) => {
             return (
-              <Link key={to} to={to}>
+              <Link 
+                key={to} 
+                to={to}
+                className="text-card-foreground hover:text-primary transition-colors"
+              >
                 {label}
               </Link>
             );
@@ -21,7 +25,6 @@ export default function Header() {
         </nav>
         <div className="flex items-center gap-2" />
       </div>
-      <hr />
     </div>
   );
 }

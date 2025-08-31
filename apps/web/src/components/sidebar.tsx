@@ -8,6 +8,7 @@ import {
   PanelLeftOpen,
 } from "lucide-react";
 import { useState } from "react";
+import { ThemeToggle } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
 
 export function Sidebar() {
@@ -76,6 +77,11 @@ export function Sidebar() {
           label="Todos"
         />
       </nav>
+
+      {/* Theme Toggle */}
+      <div className="px-3 pb-2">
+        <ThemeToggle isCollapsed={isCollapsed} />
+      </div>
 
       {/* User Menu */}
       <div className="p-3">
