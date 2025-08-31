@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Building2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Member, type MemberRole } from "@/components/member";
 import { orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/_app/settings/organization")({
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/_app/settings/organization")({
 function RouteComponent() {
   const [email, setEmail] = useState("");
 
-  const { data: members } = useQuery(
+  const { data: orgMembers } = useQuery(
     orpc.organization.getMembers.queryOptions()
   );
 
@@ -47,17 +48,49 @@ function RouteComponent() {
         Configure your organization settings and manage team preferences.
       </p>
 
-      <input
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        type="email"
-        value={email}
-      />
-      <button onClick={handleInvite} type="button">
-        Invite
-      </button>
-      <pre>{JSON.stringify(members, null, 2)}</pre>
-      <pre>{JSON.stringify(invites, null, 2)}</pre>
+      <div className="mt-8">
+        <h3 className="mb-4 font-medium text-gray-900 text-lg">Team Members</h3>
+
+        <div className="mb-6 flex gap-2">
+          <input
+            className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter email address"
+            type="email"
+            value={email}
+          />
+          <button
+            className="rounded-md bg-blue-600 px-4 py-2 font-medium text-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            onClick={handleInvite}
+            type="button"
+          >
+            Send Invite
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          {/* Current Members */}
+          {orgMembers?.members?.map((member) => (
+            <Member
+              email={member.user.email}
+              key={member.id}
+              name={member.user.name || member.user.email}
+              role={member.role as MemberRole}
+            />
+          ))}
+
+          {/* Pending Invites */}
+          {invites?.map((invite) => (
+            <Member
+              email={invite.email}
+              isPending={true}
+              key={invite.id}
+              name={invite.email.split("@")[0]}
+              role={invite.role}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
