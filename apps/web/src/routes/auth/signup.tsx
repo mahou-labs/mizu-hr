@@ -1,20 +1,26 @@
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { authClient } from "@/utils/auth-client";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+import { orpc } from "@/utils/orpc";
 
-export default function SignUpForm({
-  onSwitchToSignIn,
-}: {
-  onSwitchToSignIn: () => void;
-}) {
-  const router = useRouter();
+export const Route = createFileRoute("/auth/signup")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { redirect } = useSearch({ from: "/auth" });
 
   const form = useForm({
     defaultValues: {
@@ -23,23 +29,16 @@ export default function SignUpForm({
       name: "",
     },
     onSubmit: async ({ value }) => {
-      await authClient.signUp.email(
-        {
-          email: value.email,
-          password: value.password,
-          name: value.name,
+      await authClient.signUp.email(value, {
+        onSuccess: async () => {
+          toast.success("Sign up successful");
+          await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+          await navigate({ to: redirect ?? "/dashboard" });
         },
-        {
-          onSuccess: async () => {
-            toast.success("Sign up successful");
-            await queryClient.invalidateQueries({ queryKey: ["session"] });
-            await router.invalidate();
-          },
-          onError: (error) => {
-            toast.error(error.error.message || error.error.statusText);
-          },
-        }
-      );
+        onError: (error) => {
+          toast.error(error.error.message || error.error.statusText);
+        },
+      });
     },
     validators: {
       onSubmit: z.object({
@@ -52,7 +51,9 @@ export default function SignUpForm({
 
   return (
     <div className="mx-auto mt-10 w-full max-w-md p-6">
-      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">Create Account</h1>
+      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">
+        Create Account
+      </h1>
 
       <form
         className="space-y-4"
@@ -145,7 +146,7 @@ export default function SignUpForm({
 
       <div className="mt-4 text-center">
         <Button
-          onClick={onSwitchToSignIn}
+          onClick={() => navigate({ to: "/auth/signin", search: { redirect } })}
           variant="link"
         >
           Already have an account? Sign In

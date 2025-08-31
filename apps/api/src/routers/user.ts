@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 import { auth } from "../utils/auth";
 import { publicProcedure } from "../utils/orpc";
 
