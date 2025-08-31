@@ -24,6 +24,7 @@ export const sendOrgInvite = async ({
     react: (
       <OrgInviteEmail
         invitedBy={invitedByUsername}
+        invitedByEmail={invitedByEmail}
         inviteLink={inviteLink}
         name={email}
         organization={teamName}
