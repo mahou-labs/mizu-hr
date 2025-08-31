@@ -64,7 +64,7 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
-        <div className="h-svh">
+        <div className="h-svh bg-sidebar">
           <Outlet />
         </div>
 

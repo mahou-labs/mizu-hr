@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import { Slot as SlotPrimitive } from "radix-ui";
-import type * as React from "react";
+import type { ComponentProps } from "react";
+import { cloneElement, isValidElement } from "react";
 
 import { cn } from "@/utils/cn";
 
@@ -17,8 +17,7 @@ const buttonVariants = cva(
           "border border-border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
@@ -40,19 +39,32 @@ function Button({
   variant,
   size,
   asChild = false,
+  children,
   ...props
-}: React.ComponentProps<"button"> &
+}: ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
   }) {
-  const Comp = asChild ? SlotPrimitive.Slot : "button";
+  if (asChild && isValidElement(children)) {
+    return cloneElement(children, {
+      className: cn(
+        buttonVariants({ variant, size }),
+        className,
+        children.props.className
+      ),
+      "data-slot": "button",
+      ...props,
+    });
+  }
 
   return (
-    <Comp
+    <button
       className={cn(buttonVariants({ variant, size, className }))}
       data-slot="button"
       {...props}
-    />
+    >
+      {children}
+    </button>
   );
 }
 
