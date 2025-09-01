@@ -1,10 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  createFileRoute,
-  redirect,
-  useNavigate,
-  useRouter,
-} from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -31,7 +26,6 @@ export const Route = createFileRoute("/invite")({
 function RouteComponent() {
   const { id } = Route.useSearch();
   const queryClient = useQueryClient();
-  const router = useRouter();
   const navigate = useNavigate();
 
   const { mutateAsync: acceptInvitation, isPending } = useMutation(
