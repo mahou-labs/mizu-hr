@@ -70,7 +70,7 @@ function RootDocument() {
             __html: `
             let theme = localStorage.getItem('theme')
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-            if(theme === 'system' && prefersDark) {
+            if((theme === 'system' || theme === null) && prefersDark) {
               theme = 'dark'
             }
             document.documentElement.classList.add(theme === 'dark' ? 'dark' : 'light');
