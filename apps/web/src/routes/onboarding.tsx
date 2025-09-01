@@ -1,8 +1,9 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useForm, useStore } from "@tanstack/react-form";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
-import { useCallback, useState } from "react";
 import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,8 +14,22 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
+
+const onboardingSchema = z.object({
+  name: z.string().min(1, "Organization name is required"),
+  slug: z
+    .string()
+    .trim() // ignore accidental leading/trailing spaces
+    .min(4, "Slug must be at least 4 characters.")
+    .regex(/^[a-z0-9-]+$/, "Use only lowercase letters, numbers, and hyphens.")
+    .refine((s) => !(s.startsWith("-") || s.endsWith("-")), {
+      message: "Slug cannot start or end with a hyphen.",
+    })
+    .refine((s) => !s.includes("--"), {
+      message: "Slug cannot contain consecutive hyphens.",
+    }),
+});
 
 export const Route = createFileRoute("/onboarding")({
   component: OnboardingComponent,
@@ -28,104 +43,40 @@ export const Route = createFileRoute("/onboarding")({
 function OnboardingComponent() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [organizationName, setOrganizationName] = useState("");
-  const [organizationSlug, setOrganizationSlug] = useState("");
-  const [isCreating, setIsCreating] = useState(false);
-  const [slugError, setSlugError] = useState("");
-  const debouncedSlug = useDebounce(organizationSlug, 500);
-  const { data: slugAvailable, isLoading: isCheckingSlug } = useQuery(
-    orpc.organization.checkSlugAvailability.queryOptions({
-      input: debouncedSlug,
-      enabled: debouncedSlug.length > 0 && !slugError,
-    })
+
+  const { mutateAsync: createOrg } = useMutation(
+    orpc.organization.createOrg.mutationOptions()
   );
 
-  // uKsion, navigate]);
-
-  // Validate slug format
-  const validateSlug = useCallback((slug: string) => {
-    if (!slug) return "";
-    if (!/^[a-z0-9-]+$/.test(slug)) {
-      return "Slug can only contain lowercase letters, numbers, and hyphens";
-    }
-    if (slug.startsWith("-") || slug.endsWith("-")) {
-      return "Slug cannot start or end with a hyphen";
-    }
-    if (slug.includes("--")) {
-      return "Slug cannot contain consecutive hyphens";
-    }
-    if (slug.length < 3) {
-      return "Slug must be at least 3 characters";
-    }
-    return "";
-  }, []);
-
-  // Handle slug input with automatic formatting
-  const handleSlugChange = (value: string) => {
-    const formatted = value
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-");
-    setOrganizationSlug(formatted);
-    setSlugError(validateSlug(formatted));
-  };
-
-  const handleCreateOrganization = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!organizationName.trim()) {
-      toast.error("Organization name is required");
-      return;
-    }
-
-    if (!organizationSlug.trim()) {
-      toast.error("Organization slug is required");
-      return;
-    }
-
-    if (slugError) {
-      toast.error("Please fix slug errors before continuing");
-      return;
-    }
-
-    if (!slugAvailable) {
-      toast.error("This slug is already taken");
-      return;
-    }
-
-    setIsCreating(true);
-
-    try {
-      const { data: org, error } = await authClient.organization.create({
-        name: organizationName.trim(),
-        slug: organizationSlug.trim(),
+  const form = useForm({
+    defaultValues: { name: "", slug: "" },
+    validators: { onSubmit: onboardingSchema },
+    onSubmit: async ({ value }) => {
+      const org = await createOrg({
+        name: value.name.trim(),
+        slug: value.slug.trim(),
       });
 
-      if (error) {
-        toast.error(error.message || "Failed to create organization");
-      } else {
+      if (org) {
         toast.success("Organization created successfully!");
-
-        await authClient.organization.setActive({
-          organizationId: org.id,
-        });
-
         await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
         navigate({ to: "/dashboard" });
+      } else {
+        toast.error("Failed to create organization");
       }
-    } catch (error) {
-      console.error("Error creating organization:", error);
-      toast.error("Failed to create organization");
-    } finally {
-      setIsCreating(false);
-    }
-  };
+    },
+  });
 
-  // if (isPending) {
-  //   return (
-  //     <div className="flex h-full items-center justify-center">Loading...</div>
-  //   );
-  // }
+  const slug = useStore(form.store, (state) => state.values.slug);
+  const isSlugValid = onboardingSchema.shape.slug.safeParse(slug).success;
+  const debouncedSlug = useDebounce(isSlugValid ? slug : "", 500);
+
+  const { data: slugAvailable, isLoading } = useQuery(
+    orpc.organization.checkSlugAvailability.queryOptions({
+      input: debouncedSlug,
+      enabled: isSlugValid && slug === debouncedSlug,
+    })
+  );
 
   return (
     <div className="flex h-full items-center justify-center p-4">
@@ -137,72 +88,88 @@ function OnboardingComponent() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4" onSubmit={handleCreateOrganization}>
-            <div className="space-y-2">
-              <Label htmlFor="organizationName">Organization Name</Label>
-              <Input
-                disabled={isCreating}
-                id="organizationName"
-                onChange={(e) => setOrganizationName(e.target.value)}
-                placeholder="Enter your organization name"
-                required
-                type="text"
-                value={organizationName}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="organizationSlug">Organization Slug</Label>
-              <Input
-                disabled={isCreating}
-                id="organizationSlug"
-                onChange={(e) => handleSlugChange(e.target.value)}
-                placeholder="your-organization-slug"
-                required
-                type="text"
-                value={organizationSlug}
-              />
-
-              {/* Slug validation messages */}
-              {slugError && <p className="text-destructive text-sm">{slugError}</p>}
-
-              {!slugError && organizationSlug && (
-                <>
-                  {isCheckingSlug ? (
-                    <p className="text-muted-foreground text-sm">
-                      Checking availability...
-                    </p>
-                  ) : (
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit();
+            }}
+          >
+            <form.Field name="name">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label>Organization Name</Label>
+                  <Input
+                    disabled={form.state.isSubmitting}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="Enter your organization name"
+                    value={field.state.value}
+                  />
+                  {field.state.meta.errors.map((error) => (
                     <p
-                      className={`text-sm ${slugAvailable ? "text-chart-2" : "text-destructive"}`}
+                      className="text-destructive text-sm"
+                      key={error?.message}
                     >
-                      {slugAvailable
-                        ? "✓ This slug is available"
-                        : "✗ This slug is already taken"}
+                      {error?.message}
                     </p>
-                  )}
-                </>
+                  ))}
+                </div>
               )}
+            </form.Field>
 
-              <p className="text-muted-foreground text-xs">
-                This will be used in your organization URL. Only lowercase
-                letters, numbers, and hyphens allowed.
-              </p>
-            </div>
+            <form.Field
+              name="slug"
+              validators={{
+                onChange: onboardingSchema.shape.slug,
+              }}
+            >
+              {(field) => {
+                const isTyping = field.state.value !== debouncedSlug;
+
+                return (
+                  <div className="space-y-2">
+                    <Label>Organization Slug</Label>
+                    <Input
+                      disabled={form.state.isSubmitting}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="your-organization-slug"
+                      value={field.state.value}
+                    />
+                    {field.state.meta.errors.map((error) => (
+                      <p
+                        className="text-destructive text-sm"
+                        key={error?.message}
+                      >
+                        {error?.message}
+                      </p>
+                    ))}
+                    {field.state.meta.errors.length === 0 &&
+                      field.state.value && (
+                        <p className="text-muted-foreground text-sm">
+                          {isTyping || isLoading
+                            ? "Checking availability..."
+                            : slugAvailable
+                              ? "✓ Available"
+                              : "✗ Taken"}
+                        </p>
+                      )}
+                  </div>
+                );
+              }}
+            </form.Field>
 
             <Button
               className="w-full"
               disabled={
-                isCreating ||
-                !organizationName.trim() ||
-                !organizationSlug.trim() ||
-                !!slugError ||
-                !slugAvailable ||
-                isCheckingSlug
+                !form.state.canSubmit ||
+                form.state.isSubmitting ||
+                slug !== debouncedSlug ||
+                (debouncedSlug.length >= 4 && isLoading) ||
+                !slugAvailable
               }
               type="submit"
             >
-              {isCreating ? "Creating..." : "Create Organization"}
+              {form.state.isSubmitting ? "Creating..." : "Create Organization"}
             </Button>
           </form>
         </CardContent>

@@ -69,7 +69,8 @@
         "noUselessElse": "error",
         "noHeadElement": "off",
         "noMagicNumbers": "off",
-        "useBlockStatements": "off"
+        "useBlockStatements": "off",
+        "noNestedTernary": "off"
       }
     }
   },

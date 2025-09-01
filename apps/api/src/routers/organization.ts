@@ -3,6 +3,28 @@ import { auth } from "../utils/auth";
 import { protectedProcedure } from "../utils/orpc";
 
 export const organizationRouter = {
+  createOrg: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        slug: z.string().min(1),
+      })
+    )
+    .handler(async ({ context: { headers }, input }) => {
+      const data = await auth.api.createOrganization({
+        headers,
+        body: input,
+      });
+
+      await auth.api.setActiveOrganization({
+        headers,
+        body: {
+          organizationId: data?.id,
+        },
+      });
+      return data;
+    }),
+
   checkSlugAvailability: protectedProcedure
     .input(z.string().min(1))
     .output(z.boolean())
@@ -82,14 +104,13 @@ export const organizationRouter = {
       });
     }),
 
-  changeOrg: protectedProcedure
+  setActive: protectedProcedure
     .input(z.object({ organizationId: z.string() }))
     .handler(async ({ context: { headers }, input }) => {
       await auth.api.setActiveOrganization({
         headers,
         body: {
           organizationId: input.organizationId,
-          organizationSlug: 'mahou-labs'
         },
       });
     }),
