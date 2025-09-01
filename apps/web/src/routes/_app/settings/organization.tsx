@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Building2 } from "lucide-react";
 import { useState } from "react";
@@ -11,6 +11,8 @@ export const Route = createFileRoute("/_app/settings/organization")({
 });
 
 function RouteComponent() {
+  const queryClient = useQueryClient();
+
   const [email, setEmail] = useState("");
 
   const { data: orgMembers } = useQuery(
@@ -28,7 +30,9 @@ function RouteComponent() {
   const handleInvite = async () => {
     try {
       await inviteMember({ email, role: "member" });
-      // setEmail("");
+      await queryClient.invalidateQueries(
+        orpc.organization.getInvites.queryOptions()
+      );
       toast.success("Invitation sent");
     } catch (error) {
       console.error(error);
@@ -49,18 +53,20 @@ function RouteComponent() {
       </p>
 
       <div className="mt-8">
-        <h3 className="mb-4 font-medium text-foreground text-lg">Team Members</h3>
+        <h3 className="mb-4 font-medium text-foreground text-lg">
+          Team Members
+        </h3>
 
         <div className="mb-6 flex gap-2">
           <input
-            className="flex-1 rounded-md border border-input bg-input px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+            className="flex-1 rounded-md border border-input bg-input px-3 py-2 text-foreground text-sm placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter email address"
             type="email"
             value={email}
           />
           <button
-            className="rounded-md bg-primary px-4 py-2 font-medium text-sm text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground text-sm hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
             onClick={handleInvite}
             type="button"
           >
@@ -80,15 +86,17 @@ function RouteComponent() {
           ))}
 
           {/* Pending Invites */}
-          {invites?.map((invite) => (
-            <Member
-              email={invite.email}
-              isPending={true}
-              key={invite.id}
-              name={invite.email.split("@")[0]}
-              role={invite.role}
-            />
-          ))}
+          {invites
+            ?.filter((invite) => invite.status === "pending")
+            .map((invite) => (
+              <Member
+                email={invite.email}
+                isPending={true}
+                key={invite.id}
+                name={invite.email.split("@")[0]}
+                role={invite.role}
+              />
+            ))}
         </div>
       </div>
     </div>

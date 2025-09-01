@@ -61,7 +61,7 @@ export const auth = betterAuth({
   },
   session: {
     cookieCache: {
-      enabled: true,
+      enabled: false,
       maxAge: 5 * 60, // 5 minutes
     },
   },
@@ -70,7 +70,7 @@ export const auth = betterAuth({
       allowUserToCreateOrganization: true,
       allowUserToJoinOrganization: true,
       async sendInvitationEmail(data) {
-        const inviteLink = `http://localhost:3001/dashboard/${data.id}`;
+        const inviteLink = `http://localhost:3001/invite?id=${data.id}`;
         await sendOrgInvite({
           email: data.email,
           invitedByUsername: data.inviter.user.name,

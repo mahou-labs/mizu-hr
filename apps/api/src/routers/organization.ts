@@ -65,4 +65,32 @@ export const organizationRouter = {
         },
       });
     }),
+
+  acceptInvitation: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .handler(async ({ context: { headers }, input }) => {
+      const data = await auth.api.acceptInvitation({
+        headers,
+        body: { invitationId: input.id },
+      });
+
+      await auth.api.setActiveOrganization({
+        headers,
+        body: {
+          organizationId: data?.invitation.organizationId,
+        },
+      });
+    }),
+
+  changeOrg: protectedProcedure
+    .input(z.object({ organizationId: z.string() }))
+    .handler(async ({ context: { headers }, input }) => {
+      await auth.api.setActiveOrganization({
+        headers,
+        body: {
+          organizationId: input.organizationId,
+          organizationSlug: 'mahou-labs'
+        },
+      });
+    }),
 };
