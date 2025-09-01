@@ -10,13 +10,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.4",
+    "@astrojs/cloudflare": "^12.6.7",
     "@astrojs/starlight": "^0.35.2",
-    "astro": "^5.13.2",
+    "astro": "^5.13.5",
     "sharp": "^0.34.3",
     "starlight-theme-rapide": "^0.5.1"
   },
   "devDependencies": {
-    "wrangler": "^4.31.0"
+    "wrangler": "^4.33.1"
   }
 }

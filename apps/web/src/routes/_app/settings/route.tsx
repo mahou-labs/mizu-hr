@@ -47,19 +47,19 @@ function RouteComponent() {
   return (
     <div className="mx-auto flex max-w-[850px] flex-col gap-5">
       <div className="flex flex-col">
-        <h1 className="font-semibold text-xl">Settings</h1>
-        <p className="text-gray-500 text-sm">
+        <h1 className="font-semibold text-foreground text-xl">Settings</h1>
+        <p className="text-muted-foreground text-sm">
           Manage your account and organization settings.
         </p>
       </div>
       <Tabs.Root className="" onValueChange={handleTabChange} value={activeTab}>
-        <Tabs.List className="relative z-0 flex gap-2 px-1 shadow-[inset_0_-1px_0_0_rgb(243_244_246)]">
+        <Tabs.List className="relative z-0 flex gap-2 px-1 border-b border-border">
           {tabs.map((tab) => (
-            <Tabs.Tab className="p-1" key={tab.id} value={tab.id}>
+            <Tabs.Tab className="p-1 text-muted-foreground hover:text-foreground data-[selected]:text-foreground" key={tab.id} value={tab.id}>
               {tab.label}
             </Tabs.Tab>
           ))}
-          <Tabs.Indicator className="-translate-y-1/2 absolute top-1/2 left-0 z-[-1] h-6 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] rounded-sm bg-gray-800" />
+          <Tabs.Indicator className="-translate-y-1/2 absolute top-1/2 left-0 z-[-1] h-6 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] rounded-sm bg-primary" />
         </Tabs.List>
 
         <Tabs.Panel value={activeTab}>

@@ -6,6 +6,7 @@ import { organization } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import * as schema from "../schema/auth";
 import { db } from "./db";
+import { sendOrgInvite } from "./email";
 import { env } from "./env";
 import { ALLOWED_ORIGINS } from "./origins";
 
@@ -60,7 +61,7 @@ export const auth = betterAuth({
   },
   session: {
     cookieCache: {
-      enabled: true,
+      enabled: false,
       maxAge: 5 * 60, // 5 minutes
     },
   },
@@ -68,6 +69,16 @@ export const auth = betterAuth({
     organization({
       allowUserToCreateOrganization: true,
       allowUserToJoinOrganization: true,
+      async sendInvitationEmail(data) {
+        const inviteLink = `http://localhost:3001/invite?id=${data.id}`;
+        await sendOrgInvite({
+          email: data.email,
+          invitedByUsername: data.inviter.user.name,
+          invitedByEmail: data.inviter.user.email,
+          teamName: data.organization.name,
+          inviteLink,
+        });
+      },
     }),
     // polar({
     //   client: new Polar({

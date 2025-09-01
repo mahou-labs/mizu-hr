@@ -92,27 +92,29 @@ function TodosRoute() {
 
           {todos.isLoading ? (
             <div className="flex justify-center py-4">
-              <Loader2 className="h-6 w-6 animate-spin" />
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
           ) : todos.data?.length === 0 ? (
-            <p className="py-4 text-center">No todos yet. Add one above!</p>
+            <p className="py-4 text-center text-muted-foreground">No todos yet. Add one above!</p>
           ) : (
             <ul className="space-y-2">
               {todos.data?.map((todo) => (
                 <li
-                  className="flex items-center justify-between rounded-md border p-2"
+                  className="flex items-center justify-between rounded-md border border-border bg-card/50 p-2"
                   key={todo.id}
                 >
                   <div className="flex items-center space-x-2">
-                    <Checkbox
+                    <Checkbox.Root
                       checked={todo.completed}
                       id={`todo-${todo.id}`}
                       onCheckedChange={() =>
                         handleToggleTodo(todo.id, todo.completed)
                       }
-                    />
+                    >
+                      <Checkbox.Indicator />
+                    </Checkbox.Root>
                     <label
-                      className={`${todo.completed ? "line-through" : ""}`}
+                      className={`text-card-foreground ${todo.completed ? "line-through opacity-60" : ""}`}
                       htmlFor={`todo-${todo.id}`}
                     >
                       {todo.text}

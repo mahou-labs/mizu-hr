@@ -1,67 +1,59 @@
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
-import Loader from "./loader";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 
-export default function SignInForm({
-  onSwitchToSignUp,
-}: {
-  onSwitchToSignUp: () => void;
-}) {
+export const Route = createFileRoute("/auth/signup")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const navigate = useNavigate();
-
-  const { isPending } = authClient.useSession();
+  const { redirect } = useSearch({ from: "/auth" });
 
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
+      name: "",
     },
     onSubmit: async ({ value }) => {
-      await authClient.signIn.email(
-        {
-          email: value.email,
-          password: value.password,
+      await authClient.signUp.email(value, {
+        onSuccess: async () => {
+          toast.success("Sign up successful");
+          await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+          await navigate({ to: redirect ?? "/dashboard" });
         },
-        {
-          onSuccess: async () => {
-            toast.success("Sign in successful");
-            await queryClient.refetchQueries(
-              orpc.user.getSession.queryOptions()
-            );
-            await router.invalidate();
-            await navigate({ to: "/dashboard" });
-          },
-          onError: (error) => {
-            toast.error(error.error.message || error.error.statusText);
-          },
-        }
-      );
+        onError: (error) => {
+          toast.error(error.error.message || error.error.statusText);
+        },
+      });
     },
     validators: {
       onSubmit: z.object({
+        name: z.string().min(2, "Name must be at least 2 characters"),
         email: z.email("Invalid email address"),
         password: z.string().min(8, "Password must be at least 8 characters"),
       }),
     },
   });
 
-  if (isPending) {
-    return <Loader />;
-  }
-
   return (
     <div className="mx-auto mt-10 w-full max-w-md p-6">
-      <h1 className="mb-6 text-center font-bold text-3xl">Welcome Back</h1>
+      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">
+        Create Account
+      </h1>
 
       <form
         className="space-y-4"
@@ -71,6 +63,28 @@ export default function SignInForm({
           form.handleSubmit();
         }}
       >
+        <div>
+          <form.Field name="name">
+            {(field) => (
+              <div className="space-y-2">
+                <Label htmlFor={field.name}>Name</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  value={field.state.value}
+                />
+                {field.state.meta.errors.map((error) => (
+                  <p className="text-destructive" key={error?.message}>
+                    {error?.message}
+                  </p>
+                ))}
+              </div>
+            )}
+          </form.Field>
+        </div>
+
         <div>
           <form.Field name="email">
             {(field) => (
@@ -85,7 +99,7 @@ export default function SignInForm({
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <p className="text-red-500" key={error?.message}>
+                  <p className="text-destructive" key={error?.message}>
                     {error?.message}
                   </p>
                 ))}
@@ -108,7 +122,7 @@ export default function SignInForm({
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <p className="text-red-500" key={error?.message}>
+                  <p className="text-destructive" key={error?.message}>
                     {error?.message}
                   </p>
                 ))}
@@ -124,7 +138,7 @@ export default function SignInForm({
               disabled={!state.canSubmit || state.isSubmitting}
               type="submit"
             >
-              {state.isSubmitting ? "Submitting..." : "Sign In"}
+              {state.isSubmitting ? "Submitting..." : "Sign Up"}
             </Button>
           )}
         </form.Subscribe>
@@ -132,11 +146,10 @@ export default function SignInForm({
 
       <div className="mt-4 text-center">
         <Button
-          className="text-indigo-600 hover:text-indigo-800"
-          onClick={onSwitchToSignUp}
+          onClick={() => navigate({ to: "/auth/signin", search: { redirect } })}
           variant="link"
         >
-          Need an account? Sign Up
+          Already have an account? Sign In
         </Button>
       </div>
     </div>
