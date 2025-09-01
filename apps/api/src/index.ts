@@ -49,6 +49,11 @@ app.use("/rpc/*", async (c, next) => {
   await next();
 });
 
+app.onError((err, c) => {
+  console.error(err);
+  return err;
+});
+
 export default {
   port: 3000,
   fetch: app.fetch,
