@@ -70,14 +70,18 @@ export const auth = betterAuth({
       allowUserToCreateOrganization: true,
       allowUserToJoinOrganization: true,
       async sendInvitationEmail(data) {
-        const inviteLink = `http://localhost:3001/invite?id=${data.id}`;
-        await sendOrgInvite({
-          email: data.email,
-          invitedByUsername: data.inviter.user.name,
-          invitedByEmail: data.inviter.user.email,
-          teamName: data.organization.name,
-          inviteLink,
-        });
+        const inviteLink = `https://app.mizuhr.com/invite?id=${data.id}`;
+        try {
+          await sendOrgInvite({
+            email: data.email,
+            invitedByUsername: data.inviter.user.name,
+            invitedByEmail: data.inviter.user.email,
+            teamName: data.organization.name,
+            inviteLink,
+          });
+        } catch (error) {
+          console.error(error);
+        }
       },
     }),
     // polar({
