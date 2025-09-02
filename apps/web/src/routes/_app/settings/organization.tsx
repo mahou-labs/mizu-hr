@@ -1,15 +1,17 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { UserPlus } from "lucide-react";
+import { User, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Member, type MemberRole } from "@/components/member";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/utils/cn";
 import { orpc } from "@/utils/orpc";
 
 const inviteSchema = z.object({
@@ -24,12 +26,8 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data: orgMembers } = useQuery(
+  const { data, isPending } = useQuery(
     orpc.organization.getMembers.queryOptions()
-  );
-
-  const { data: invites } = useQuery(
-    orpc.organization.getInvites.queryOptions()
   );
 
   const { mutateAsync: inviteMember } = useMutation(
@@ -59,27 +57,33 @@ function RouteComponent() {
     <div className="pt-4">
       <h3 className="mb-4 font-medium text-foreground text-lg">Members</h3>
 
-      <div className="space-y-3">
-        {orgMembers?.members?.map((member) => (
-          <Member
-            email={member.user.email}
-            key={member.id}
-            name={member.user.name || member.user.email}
-            role={member.role as MemberRole}
-          />
-        ))}
+      <div className="flex flex-col gap-3">
+        {isPending ? (
+          <MemberSkeleton />
+        ) : (
+          <>
+            {data?.members?.members.map((member) => (
+              <Member
+                email={member.user.email}
+                key={member.id}
+                name={member.user.name || member.user.email}
+                role={member.role as MemberRole}
+              />
+            ))}
 
-        {invites
-          ?.filter((invite) => invite.status === "pending")
-          .map((invite) => (
-            <Member
-              email={invite.email}
-              isPending={true}
-              key={invite.id}
-              name={invite.email.split("@")[0]}
-              role={invite.role}
-            />
-          ))}
+            {data?.invites
+              ?.filter((invite) => invite.status === "pending")
+              .map((invite) => (
+                <Member
+                  email={invite.email}
+                  isPending={true}
+                  key={invite.id}
+                  name={invite.email.split("@")[0]}
+                  role={invite.role}
+                />
+              ))}
+          </>
+        )}
       </div>
 
       <Button
@@ -151,6 +155,118 @@ function RouteComponent() {
           </Dialog.Popup>
         </Dialog.Portal>
       </Dialog.Root>
+    </div>
+  );
+}
+
+type MemberRole = "owner" | "admin" | "member";
+
+type MemberProps = {
+  name: string;
+  email: string;
+  role: MemberRole;
+  isPending?: boolean;
+  avatarUrl?: string;
+  className?: string;
+};
+
+const roleColors = {
+  owner: "bg-primary text-primary-foreground border-primary",
+  admin: "bg-chart-1 text-primary-foreground border-chart-1",
+  member: "bg-muted text-muted-foreground border-border",
+} as const;
+
+const roleLabels = {
+  owner: "Owner",
+  admin: "Admin",
+  member: "Member",
+} as const;
+
+function Member({
+  name,
+  email,
+  role,
+  isPending = false,
+  avatarUrl,
+  className,
+}: MemberProps) {
+  const initials = name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  return (
+    <div
+      className={cn(
+        "flex h-20 flex-col gap-3 rounded-lg border border-border bg-card p-4 shadow-sm transition-colors sm:flex-row sm:items-center sm:justify-between sm:gap-0",
+        className
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <div className="relative">
+          <Avatar.Root>
+            <Avatar.Image alt={`${name}'s avatar`} src={avatarUrl} />
+            <Avatar.Fallback>
+              {initials || <User className="size-5" />}
+            </Avatar.Fallback>
+          </Avatar.Root>
+
+          {isPending && (
+            <div className="-bottom-1 -right-1 absolute size-4 rounded-full border-2 border-card bg-chart-4" />
+          )}
+        </div>
+
+        <div className="flex min-w-0 flex-1 flex-col sm:flex-1">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+            <span className="truncate font-medium text-card-foreground">
+              {name}
+            </span>
+            {isPending && (
+              <span className="inline-flex w-fit items-center rounded-full border border-chart-4 bg-chart-4/10 px-2 py-0.5 font-medium text-chart-4 text-xs">
+                Pending
+              </span>
+            )}
+          </div>
+          <span className="truncate text-muted-foreground text-sm">
+            {email}
+          </span>
+        </div>
+      </div>
+
+      {/* Role Badge */}
+      <div className="flex shrink-0 items-center justify-start gap-2 sm:justify-end">
+        <span
+          className={cn(
+            "inline-flex items-center rounded-full border px-2.5 py-0.5 font-medium text-xs",
+            roleColors[role]
+          )}
+        >
+          {roleLabels[role]}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function MemberSkeleton() {
+  return (
+    <div className="flex h-20 flex-col gap-3 rounded-lg border border-border bg-card p-4 shadow-sm transition-colors sm:flex-row sm:items-center sm:justify-between sm:gap-0">
+      <div className="flex items-center gap-3">
+        <div className="relative">
+          <Skeleton className="size-10 rounded-full" />
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-1">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+            <Skeleton className="h-4 w-24" />
+          </div>
+          <Skeleton className="h-3 w-32" />
+        </div>
+      </div>
+      <div className="flex shrink-0 items-center justify-start gap-2 sm:justify-end">
+        <Skeleton className="h-6 w-16 rounded-full" />
+      </div>
     </div>
   );
 }
