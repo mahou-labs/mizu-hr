@@ -14,6 +14,17 @@ import { Toaster } from "@/components/ui/sonner";
 import { orpc } from "@/utils/orpc";
 import appCss from "../index.css?url";
 
+const Posthog = () => {
+  useEffect(() => {
+    import("posthog-js").then(({ default: posthog }) => {
+      // biome-ignore lint/style/noNonNullAssertion: posthog-js
+      posthog.init(import.meta.env.VITE_POSTHOG_API_KEY!);
+    });
+  }, []);
+
+  return null;
+};
+
 type RouterAppContext = {
   orpc: typeof orpc;
   queryClient: QueryClient;
@@ -85,6 +96,7 @@ function RootDocument() {
         <TanStackRouterDevtools position="bottom-left" />
         <ReactQueryDevtools buttonPosition="bottom-right" position="bottom" />
         <Scripts />
+        <Posthog />
       </body>
     </html>
   );
