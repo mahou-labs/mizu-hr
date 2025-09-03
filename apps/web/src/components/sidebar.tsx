@@ -6,6 +6,7 @@ import {
   ListTodo,
   PanelLeftClose,
   PanelLeftOpen,
+  Settings,
 } from "lucide-react";
 import { useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
@@ -54,7 +55,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-3">
+      <nav className="flex flex-1 flex-col gap-1 p-3">
         <SidebarItem
           href="/"
           icon={Home}
@@ -76,6 +77,14 @@ export function Sidebar() {
           isCollapsed={isCollapsed}
           label="Todos"
         />
+        <Separator className="mt-auto h-px w-full" orientation="horizontal" />
+        <SidebarItem
+          href="/settings"
+          icon={Settings}
+          isActive={location.pathname === "/todos"}
+          isCollapsed={isCollapsed}
+          label="Settings"
+        />
       </nav>
 
       {/* Theme Toggle */}
@@ -94,6 +103,7 @@ export function Sidebar() {
 import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/utils/cn";
+import { Separator } from "./ui/separator";
 
 type SidebarItemProps = {
   icon: LucideIcon;

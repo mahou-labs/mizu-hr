@@ -97,7 +97,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner className="outline-none" sideOffset={8}>
-          <Menu.Popup className="origin-[var(--transform-origin)] rounded-md bg-popover border border-border py-1 text-popover-foreground shadow-lg transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0">
+          <Menu.Popup className="origin-[var(--transform-origin)] rounded-md border border-border bg-popover py-1 text-popover-foreground shadow-lg transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0">
             {/* <Menu.Arrow className="data-[side=right]:-rotate-90 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=top]:bottom-[-8px] data-[side=right]:left-[-13px] data-[side=left]:rotate-90 data-[side=top]:rotate-180">
                 <ArrowSvg />
               </Menu.Arrow> */}
@@ -111,15 +111,6 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
               onClick={signOut}
             >
               Sign Out
-            </Menu.Item>
-            <Menu.Item
-              onClick={() =>
-                queryClient.invalidateQueries({
-                  queryKey: orpc.organization.getOrgList.queryKey(),
-                })
-              }
-            >
-              Revalidate Query
             </Menu.Item>
           </Menu.Popup>
         </Menu.Positioner>
