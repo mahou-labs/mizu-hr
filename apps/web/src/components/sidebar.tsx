@@ -1,6 +1,7 @@
 import type { ToOptions } from "@tanstack/react-router";
 import { useLocation } from "@tanstack/react-router";
 import {
+  Briefcase,
   Home,
   LayoutDashboard,
   ListTodo,
@@ -62,6 +63,13 @@ export function Sidebar() {
           isActive={location.pathname === "/"}
           isCollapsed={isCollapsed}
           label="Home"
+        />
+        <SidebarItem
+          href="/jobs"
+          icon={Briefcase}
+          isActive={location.pathname === "/jobs"}
+          isCollapsed={isCollapsed}
+          label="Jobs"
         />
         <SidebarItem
           href="/dashboard"
