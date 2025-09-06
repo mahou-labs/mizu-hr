@@ -32,7 +32,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { session } = useRouteContext({ from: "/_app" });
+  const { session, user } = useRouteContext({ from: "/_app" });
   const {
     data: organizations,
     isPending,
@@ -53,7 +53,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
     router.invalidate();
   };
 
-  const activeOrgId = session?.session.activeOrganizationId;
+  const activeOrgId = session?.activeOrganizationId;
   const activeOrg = organizations.find((org) => org.id === activeOrgId);
 
   return (
@@ -66,13 +66,14 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
       >
         <Avatar.Root className="inline-flex size-8 shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-sidebar-accent align-middle font-medium text-sidebar-accent-foreground text-sm">
           <Avatar.Image
+            alt={user?.name ?? ""}
             className="size-full object-cover"
             height="32"
-            src={session?.user.image ?? undefined}
+            src={user?.image ?? undefined}
             width="32"
           />
           <Avatar.Fallback className="flex size-full items-center justify-center text-sm">
-            {getAvatarInitials(session?.user.name)}
+            {getAvatarInitials(user?.name)}
           </Avatar.Fallback>
         </Avatar.Root>
         <div
@@ -82,7 +83,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
           )}
         >
           <span className="truncate font-medium text-sidebar-foreground text-sm">
-            {session?.user.name}
+            {user?.name}
           </span>
           <span className="truncate text-sidebar-foreground/60 text-xs">
             {activeOrg?.name}

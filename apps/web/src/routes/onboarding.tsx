@@ -34,7 +34,7 @@ const onboardingSchema = z.object({
 export const Route = createFileRoute("/onboarding")({
   component: OnboardingComponent,
   beforeLoad: ({ context }) => {
-    if (context.session?.session.activeOrganizationId) {
+    if (context.session?.activeOrganizationId) {
       throw redirect({ to: "/dashboard" });
     }
   },

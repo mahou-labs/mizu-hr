@@ -95,7 +95,9 @@ function TodosRoute() {
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
           ) : todos.data?.length === 0 ? (
-            <p className="py-4 text-center text-muted-foreground">No todos yet. Add one above!</p>
+            <p className="py-4 text-center text-muted-foreground">
+              No todos yet. Add one above!
+            </p>
           ) : (
             <ul className="space-y-2">
               {todos.data?.map((todo) => (

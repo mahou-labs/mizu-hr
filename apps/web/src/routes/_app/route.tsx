@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_app")({
       throw redirect({ to: "/auth/signin" });
     }
 
-    if (!context.session.session.activeOrganizationId) {
+    if (!context.session.activeOrganizationId) {
       throw redirect({ to: "/onboarding" });
     }
   },

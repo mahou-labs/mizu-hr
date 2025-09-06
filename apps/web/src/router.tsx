@@ -20,7 +20,7 @@ export const createRouter = () => {
     },
     queryCache: new QueryCache({
       onError: (error, query) => {
-        console.log({ query });
+        // console.log({ query });
 
         // if (error.code === "UNAUTHORIZED") {
         //   queryClient.invalidateQueries();

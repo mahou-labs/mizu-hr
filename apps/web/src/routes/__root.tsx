@@ -57,11 +57,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
   component: RootDocument,
   beforeLoad: async ({ context }) => {
-    const session = await context.queryClient.ensureQueryData(
+    const authSession = await context.queryClient.ensureQueryData(
       orpc.user.getSession.queryOptions()
     );
 
-    return { session };
+    return { session: authSession?.session, user: authSession?.user };
   },
 });
 

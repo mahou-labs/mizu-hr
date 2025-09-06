@@ -34,7 +34,9 @@ function HomeComponent() {
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-2">
-      <pre className="overflow-x-auto font-mono text-sm text-foreground">{TITLE_TEXT}</pre>
+      <pre className="overflow-x-auto font-mono text-foreground text-sm">
+        {TITLE_TEXT}
+      </pre>
       <div className="grid gap-6">
         <section className="rounded-lg border border-border bg-card p-4">
           <h2 className="mb-2 font-medium text-card-foreground">API Status</h2>
