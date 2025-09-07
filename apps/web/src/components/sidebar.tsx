@@ -26,7 +26,7 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col gap-3 bg-sidebar py-3 pr-2 pl-4.5 transition-[width] duration-300 ease-in-out motion-reduce:transition-none",
+        "relative flex h-full flex-col gap-3 bg-sidebar py-3 pr-2.5 pl-4.5 transition-[width] duration-300 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
@@ -142,11 +142,9 @@ function SidebarItem({
     <Link
       className={cn(
         "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2.5 py-2 font-medium text-sm",
-        "transition-[width] duration-300",
         "hover:bg-muted hover:outline hover:outline-border",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2",
-        isActive && "bg-muted outline outline-border",
-        isCollapsed && "w-[36px]"
+        isActive && "bg-muted outline outline-border"
       )}
       onClick={onClick}
       title={isCollapsed ? label : undefined}
