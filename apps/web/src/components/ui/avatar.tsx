@@ -7,7 +7,7 @@ function Root(props: ComponentProps<typeof AvatarPrimitive.Root>) {
     <AvatarPrimitive.Root
       {...props}
       className={cn(
-        "relative inline-flex size-10 shrink-0 overflow-hidden rounded-full",
+        "relative inline-flex size-9 shrink-0 overflow-hidden rounded-full",
         props.className
       )}
     />
@@ -31,7 +31,7 @@ function Fallback(props: ComponentProps<typeof AvatarPrimitive.Fallback>) {
     <AvatarPrimitive.Fallback
       {...props}
       className={cn(
-        "flex h-full w-full items-center justify-center rounded-full bg-muted font-medium text-muted-foreground text-sm",
+        "flex h-full w-full items-center justify-center bg-muted font-medium text-muted-foreground text-sm",
         props.className
       )}
     />

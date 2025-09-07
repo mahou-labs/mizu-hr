@@ -82,10 +82,10 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
             isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
           )}
         >
-          <span className="truncate font-medium text-sidebar-foreground text-sm">
+          <span className="truncate font-medium text-foreground text-sm">
             {user?.name}
           </span>
-          <span className="truncate text-sidebar-foreground/60 text-xs">
+          <span className="truncate text-foreground/60 text-xs">
             {activeOrg?.name}
           </span>
         </div>

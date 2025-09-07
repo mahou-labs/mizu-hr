@@ -1,5 +1,6 @@
 import type { ToOptions } from "@tanstack/react-router";
-import { useLocation } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
+import type { LucideIcon } from "lucide-react";
 import {
   Briefcase,
   Home,
@@ -7,10 +8,15 @@ import {
   ListTodo,
   PanelLeftClose,
   PanelLeftOpen,
+  // PanelLeftClose,
+  // PanelLeftOpen,
   Settings,
 } from "lucide-react";
 import { useState } from "react";
+import { cn } from "@/utils/cn";
+import { OrgMenu } from "./org-menu";
 import { ThemeToggle } from "./theme-toggle";
+import { Separator } from "./ui/separator";
 import { UserMenu } from "./user-menu";
 
 export function Sidebar() {
@@ -20,20 +26,20 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col bg-sidebar transition-all duration-300 ease-in-out",
+        "relative flex h-full flex-col gap-3 bg-sidebar py-3 pr-2 pl-4.5 transition-[width] duration-300 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
       {/* Header */}
-      <div
+      {/* <div
         className={cn(
-          "flex items-center p-4",
+          "flex items-center py-4",
           isCollapsed ? "justify-center" : "justify-between"
         )}
       >
         <div
           className={cn(
-            "transition-opacity duration-200",
+            "transition-opacity duration-300",
             isCollapsed ? "pointer-events-none opacity-0" : "opacity-100"
           )}
         >
@@ -53,10 +59,10 @@ export function Sidebar() {
             <PanelLeftClose className="h-4 w-4" />
           )}
         </button>
-      </div>
-
+      </div> */}
+      <OrgMenu isCollapsed={isCollapsed} />
       {/* Navigation */}
-      <nav className="flex flex-1 flex-col gap-1 p-3">
+      <nav className="flex flex-1 flex-col gap-1">
         <SidebarItem
           href="/"
           icon={Home}
@@ -85,33 +91,33 @@ export function Sidebar() {
           isCollapsed={isCollapsed}
           label="Todos"
         />
+
         <Separator className="mt-auto h-px w-full" orientation="horizontal" />
         <SidebarItem
           href="/settings"
           icon={Settings}
-          isActive={location.pathname === "/todos"}
+          isActive={location.pathname.startsWith("/settings")}
           isCollapsed={isCollapsed}
           label="Settings"
         />
       </nav>
-
-      {/* Theme Toggle */}
-      <div className="px-3 pb-2">
-        <ThemeToggle isCollapsed={isCollapsed} />
-      </div>
-
-      {/* User Menu */}
-      <div className="p-3">
-        <UserMenu isCollapsed={isCollapsed} />
-      </div>
+      <button
+        className="flex h-8 w-8 items-center justify-center rounded-md bg-sidebar text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        type="button"
+      >
+        {isCollapsed ? (
+          <PanelLeftOpen className="h-4 w-4" />
+        ) : (
+          <PanelLeftClose className="h-4 w-4" />
+        )}
+      </button>
+      <ThemeToggle isCollapsed={isCollapsed} />
+      <UserMenu isCollapsed={isCollapsed} />
     </div>
   );
 }
-
-import { Link } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
-import { cn } from "@/utils/cn";
-import { Separator } from "./ui/separator";
 
 type SidebarItemProps = {
   icon: LucideIcon;
@@ -135,27 +141,22 @@ function SidebarItem({
   return (
     <Link
       className={cn(
-        "group relative flex w-full items-center rounded-lg px-3 py-2.5 font-medium text-sm transition-all duration-200",
-        "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+        "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2.5 py-2 font-medium text-sm",
+        "transition-[width] duration-300",
+        "hover:bg-muted hover:outline hover:outline-border",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2",
-        isActive
-          ? "bg-sidebar-primary text-sidebar-primary-foreground"
-          : "text-sidebar-foreground",
-        isCollapsed ? "justify-center px-2" : "gap-3"
+        isActive && "bg-muted outline outline-border",
+        isCollapsed && "w-[36px]"
       )}
       onClick={onClick}
       title={isCollapsed ? label : undefined}
       to={href}
     >
-      <Icon
-        className={cn(
-          "shrink-0 transition-all duration-200",
-          isCollapsed ? "h-5 w-5" : "h-4 w-4"
-        )}
-      />
+      <Icon className="size-4 shrink-0 text-muted-foreground" />
+
       <div
         className={cn(
-          "flex flex-1 items-center justify-between transition-all duration-200",
+          "flex flex-1 items-center justify-between transition-opacity duration-300",
           isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
         )}
       >
@@ -169,7 +170,14 @@ function SidebarItem({
 
       {/* Tooltip for collapsed state */}
       {isCollapsed && (
-        <div className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-full z-50 ml-2 whitespace-nowrap rounded-md bg-sidebar-primary px-2 py-1 text-sidebar-primary-foreground text-xs opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+        <div
+          className={cn(
+            "-translate-y-1/2 pointer-events-none absolute top-1/2 left-full z-50",
+            "ml-2 whitespace-nowrap rounded-md px-2 py-1",
+            "bg-sidebar-primary text-sidebar-primary-foreground text-xs",
+            "opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          )}
+        >
           {label}
           <div className="-translate-y-1/2 absolute top-1/2 right-full border-4 border-transparent border-r-sidebar-primary" />
         </div>
