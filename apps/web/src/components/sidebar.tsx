@@ -13,6 +13,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useState } from "react";
+import { useKeyPress } from "@/hooks/useKeyPress";
 import { cn } from "@/utils/cn";
 import { OrgMenu } from "./org-menu";
 import { ThemeToggle } from "./theme-toggle";
@@ -22,11 +23,12 @@ import { UserMenu } from "./user-menu";
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
+  useKeyPress("s", () => setIsCollapsed((prev) => !prev));
 
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col gap-3 bg-sidebar py-3 pr-2.5 pl-4.5 transition-[width] duration-300 ease-in-out motion-reduce:transition-none",
+        "relative flex h-full flex-col gap-3 bg-sidebar py-3 pr-2.5 pl-4.5 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
@@ -39,7 +41,7 @@ export function Sidebar() {
       >
         <div
           className={cn(
-            "transition-opacity duration-300",
+            "transition-opacity duration-200",
             isCollapsed ? "pointer-events-none opacity-0" : "opacity-100"
           )}
         >
@@ -154,8 +156,8 @@ function SidebarItem({
 
       <div
         className={cn(
-          "flex flex-1 items-center justify-between transition-opacity duration-300",
-          isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
+          "flex flex-1 items-center justify-between transition-opacity duration-200",
+          isCollapsed ? "opacity-0" : "w-auto opacity-100"
         )}
       >
         <span className="truncate">{label}</span>
@@ -173,7 +175,7 @@ function SidebarItem({
             "-translate-y-1/2 pointer-events-none absolute top-1/2 left-full z-50",
             "ml-2 whitespace-nowrap rounded-md px-2 py-1",
             "bg-sidebar-primary text-sidebar-primary-foreground text-xs",
-            "opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            "opacity-0 transition-opacity duration-200 group-hover:opacity-100"
           )}
         >
           {label}
