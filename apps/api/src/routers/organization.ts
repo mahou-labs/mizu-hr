@@ -29,13 +29,17 @@ export const organizationRouter = {
     .input(z.string().min(1))
     .output(z.boolean())
     .handler(async ({ input }) => {
-      const { status } = await auth.api.checkOrganizationSlug({
-        body: {
-          slug: input,
-        },
-      });
+      try {
+        const { status } = await auth.api.checkOrganizationSlug({
+          body: {
+            slug: input,
+          },
+        });
 
-      return status;
+        return status;
+      } catch {
+        return false;
+      }
     }),
 
   getFullOrg: protectedProcedure.handler(async ({ context: { headers } }) => {

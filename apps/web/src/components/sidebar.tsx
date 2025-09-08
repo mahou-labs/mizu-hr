@@ -64,7 +64,7 @@ export function Sidebar() {
       </div> */}
       <OrgMenu isCollapsed={isCollapsed} />
       {/* Navigation */}
-      <nav className="flex flex-1 flex-col gap-1">
+      <nav className="mt-6 flex flex-1 flex-col gap-1">
         <SidebarItem
           href="/"
           icon={Home}

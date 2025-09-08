@@ -53,13 +53,17 @@ function RouteComponent() {
         </p>
       </div>
       <Tabs.Root className="" onValueChange={handleTabChange} value={activeTab}>
-        <Tabs.List className="relative z-0 flex gap-2 px-1 border-b border-border">
+        <Tabs.List className="relative z-0 flex gap-2 border-border border-b px-1">
           {tabs.map((tab) => (
-            <Tabs.Tab className="p-1 text-muted-foreground hover:text-foreground data-[selected]:text-foreground" key={tab.id} value={tab.id}>
+            <Tabs.Tab
+              className="p-1 text-muted-foreground hover:text-foreground data-[selected]:text-foreground"
+              key={tab.id}
+              value={tab.id}
+            >
               {tab.label}
             </Tabs.Tab>
           ))}
-          <Tabs.Indicator className="-translate-y-1/2 absolute top-1/2 left-0 z-[-1] h-6 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] rounded-sm bg-primary" />
+          <Tabs.Indicator className="-translate-y-1/2 absolute top-1/2 left-0 z-[-1] h-6 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] rounded-sm bg-muted" />
         </Tabs.List>
 
         <Tabs.Panel value={activeTab}>
