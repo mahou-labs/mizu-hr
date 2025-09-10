@@ -112,7 +112,7 @@ export const auth = betterAuth({
               slug: "growth-yearly",
             },
           ],
-          successUrl: process.env.POLAR_SUCCESS_URL,
+          successUrl: "/success?checkout_id={CHECKOUT_ID}",
           authenticatedUsersOnly: true,
         }),
       ],

@@ -1,6 +1,7 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import Loader from "./components/loader";
 import "./index.css";
+import { ORPCError } from "@orpc/client";
 import {
   QueryCache,
   QueryClient,
@@ -19,25 +20,31 @@ export const createRouter = () => {
       },
     },
     queryCache: new QueryCache({
-      onError: (error, query) => {
-        // console.log({ query });
-
-        // if (error.code === "UNAUTHORIZED") {
-        //   queryClient.invalidateQueries();
-        //   router.invalidate();
-        // }
-
-        toast.error(`Error: ${error.message}`, {
-          action: {
-            label: "retry",
-            onClick: () => {
-              query.reset();
-              query.fetch();
-              // queryClient.resetQueries({ type: "all" });
-              // router.invalidate();
+      onError: async (error, query) => {
+        if (error instanceof ORPCError) {
+          if ("invalidSession" in error.data && error.data.invalidSession) {
+            const currentLocation = router.state.location.pathname;
+            await queryClient.refetchQueries(
+              orpc.user.getSession.queryOptions()
+            );
+            await router.navigate({
+              to: "/auth/signin",
+              search: { redirect: currentLocation },
+            });
+          }
+        } else {
+          toast.error(`Error: ${error.message}`, {
+            action: {
+              label: "retry",
+              onClick: () => {
+                query.reset();
+                query.fetch();
+                // queryClient.resetQueries({ type: "all" });
+                // router.invalidate();
+              },
             },
-          },
-        });
+          });
+        }
       },
     }),
   });

@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_app/dashboard")({
 
 function RouteComponent() {
   const { user } = useRouteContext({ from: "/_app" });
-  const privateData = useQuery(orpc.privateData.queryOptions());
+  const { data: privateData } = useQuery(orpc.privateData.queryOptions());
 
   return (
     <div className="container mx-auto max-w-4xl p-6">
@@ -17,7 +17,7 @@ function RouteComponent() {
         <div className="rounded-lg border border-border bg-card p-6">
           <p className="text-card-foreground text-lg">Welcome {user?.name}</p>
           <p className="mt-2 text-muted-foreground text-sm">
-            privateData: {privateData.data?.message}
+            privateData: {privateData?.message}
           </p>
         </div>
       </div>
