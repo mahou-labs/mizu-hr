@@ -5,7 +5,7 @@ import { logger } from "hono/logger";
 import { appRouter } from "./routers/index";
 import { auth } from "./utils/auth";
 import { createContext } from "./utils/context";
-import { ALLOWED_ORIGINS } from "./utils/origins";
+import { env } from "./utils/env";
 
 const app = new Hono();
 const handler = new RPCHandler(appRouter);
@@ -14,10 +14,7 @@ app.use(logger());
 app.use(
   "/*",
   cors({
-    origin: (origin) => {
-      if (!origin) return null;
-      return ALLOWED_ORIGINS.has(origin) ? origin : null;
-    },
+    origin: env.APP_URL,
     allowMethods: ["GET", "POST", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
     credentials: true,

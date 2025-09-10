@@ -1,9 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  useNavigate,
-  useRouteContext,
-  useRouter,
-} from "@tanstack/react-router";
+import { useRouteContext, useRouter } from "@tanstack/react-router";
 import { Building2, Check, ChevronDown, Plus } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
@@ -88,6 +84,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
       </Menu.Portal>
 
       <CreateOrgDialog
+        allowClosing
         isOpen={isCreateOrgDialogOpen}
         onOpenChange={setIsCreateOrgDialogOpen}
         onSuccess={() => {

@@ -1,12 +1,11 @@
 import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
 import { toast } from "sonner";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc";
 import { Button } from "./ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Dialog } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -63,6 +62,7 @@ export function CreateOrgDialog({
         );
         await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
         await router.invalidate();
+        form.reset();
         onSuccess();
       } else {
         toast.error("Failed to create organization");
@@ -82,7 +82,11 @@ export function CreateOrgDialog({
   );
 
   return (
-    <Dialog.Root onOpenChange={onOpenChange} open={isOpen}>
+    <Dialog.Root
+      dismissible={allowClosing}
+      onOpenChange={onOpenChange}
+      open={isOpen}
+    >
       <Dialog.Portal>
         <Dialog.Backdrop />
         <Dialog.Popup>
