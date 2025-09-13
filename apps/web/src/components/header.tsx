@@ -8,15 +8,15 @@ export default function Header() {
   ];
 
   return (
-    <div className="bg-card border-b border-border">
+    <div className="border-border border-b bg-card">
       <div className="flex flex-row items-center justify-between px-4 py-3">
         <nav className="flex gap-6 text-lg">
           {links.map(({ to, label }) => {
             return (
-              <Link 
-                key={to} 
+              <Link
+                className="text-card-foreground transition-colors hover:text-primary"
+                key={to}
                 to={to}
-                className="text-card-foreground hover:text-primary transition-colors"
               >
                 {label}
               </Link>

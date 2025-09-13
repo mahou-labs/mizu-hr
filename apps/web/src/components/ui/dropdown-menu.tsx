@@ -12,12 +12,7 @@ function Portal(props: ComponentProps<typeof MenuPrimitive.Portal>) {
 }
 
 function Trigger(props: ComponentProps<typeof MenuPrimitive.Trigger>) {
-  return (
-    <MenuPrimitive.Trigger
-      {...props}
-      data-slot="dropdown-menu-trigger"
-    />
-  );
+  return <MenuPrimitive.Trigger {...props} data-slot="dropdown-menu-trigger" />;
 }
 
 function Positioner(props: ComponentProps<typeof MenuPrimitive.Positioner>) {
@@ -39,8 +34,8 @@ function Popup({
       {...props}
       className={cn(
         "z-50 min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md",
-        "data-[starting-style]:opacity-0 data-[ending-style]:opacity-0",
-        "data-[starting-style]:scale-90 data-[ending-style]:scale-90",
+        "data-[ending-style]:opacity-0 data-[starting-style]:opacity-0",
+        "data-[ending-style]:scale-90 data-[starting-style]:scale-90",
         "transition-[transform,scale,opacity]",
         className
       )}
@@ -71,7 +66,8 @@ function Item({
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
         inset && "pl-8",
-        variant === "destructive" && "text-destructive data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive",
+        variant === "destructive" &&
+          "text-destructive data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive",
         className
       )}
       data-slot="dropdown-menu-item"
@@ -170,10 +166,7 @@ function Separator({
   );
 }
 
-function Shortcut({
-  className,
-  ...props
-}: ComponentProps<"span">) {
+function Shortcut({ className, ...props }: ComponentProps<"span">) {
   return (
     <span
       {...props}
@@ -225,21 +218,4 @@ export const DropdownMenu = {
   Separator,
   Shortcut,
   SubMenuTrigger,
-};
-
-// Legacy named exports for backward compatibility
-export {
-  Root as DropdownMenu,
-  Portal as DropdownMenuPortal,
-  Trigger as DropdownMenuTrigger,
-  Popup as DropdownMenuContent,
-  Group as DropdownMenuGroup,
-  GroupLabel as DropdownMenuLabel,
-  Item as DropdownMenuItem,
-  CheckboxItem as DropdownMenuCheckboxItem,
-  RadioGroup as DropdownMenuRadioGroup,
-  RadioItem as DropdownMenuRadioItem,
-  Separator as DropdownMenuSeparator,
-  Shortcut as DropdownMenuShortcut,
-  SubMenuTrigger as DropdownMenuSubTrigger,
 };
