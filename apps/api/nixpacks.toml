@@ -1,5 +1,5 @@
 [variables]
-PORT = "3000"
+PORT = "3001"
 
 [phases.setup]
 # Ensure bun is available
