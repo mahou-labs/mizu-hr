@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouteContext } from "@tanstack/react-router";
+import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/_app/")({
@@ -24,6 +25,7 @@ const TITLE_TEXT = `
 
 function HomeComponent() {
   const healthCheck = useQuery(orpc.healthCheck.queryOptions());
+  const { session } = useRouteContext({ from: "/_app" });
 
   const getStatusText = () => {
     if (healthCheck.isLoading) {
@@ -51,15 +53,23 @@ function HomeComponent() {
         </section>
       </div>
 
-      {/* <button
+      <button
         className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
-        onClick={() => authClient.checkout({ slug: "hiring-test-product" })}
+        onClick={() =>
+          authClient.subscription.upgrade({
+            plan: "starter",
+            successUrl: "/dashboard",
+            cancelUrl: "/",
+            annual: false, // Optional: upgrade to an annual plan
+            referenceId: session?.activeOrganizationId, // Optional: defaults to the current logged in user ID
+          })
+        }
         type="button"
       >
         Checkout
       </button>
 
-      <button
+      {/*   <button
         className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
         onClick={() => authClient.customer.portal()}
         type="button"
