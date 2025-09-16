@@ -49,7 +49,7 @@ export const auth = betterAuth({
     enabled: true,
   },
   secret: env.BETTER_AUTH_SECRET,
-  // baseURL: env.BETTER_AUTH_URL,
+  baseURL: env.BETTER_AUTH_URL,
   basePath: "/auth",
   advanced: {
     crossSubDomainCookies: {
@@ -62,10 +62,19 @@ export const auth = betterAuth({
       domain: env.NODE_ENV === "production" ? ".mizuhr.com" : undefined,
     },
   },
-  session: {
-    cookieCache: {
-      enabled: false,
-      maxAge: 5 * 60, // 5 minutes
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          const orgId = await getActiveOrganization(session.userId);
+          return {
+            data: {
+              ...session,
+              activeOrganizationId: orgId,
+            },
+          };
+        },
+      },
     },
   },
   plugins: [
@@ -73,7 +82,7 @@ export const auth = betterAuth({
       allowUserToCreateOrganization: true,
       allowUserToJoinOrganization: true,
       async sendInvitationEmail(data) {
-        const inviteLink = `https://app.mizuhr.com/invite?id=${data.id}`;
+        const inviteLink = `${env.APP_URL}/invite?id=${data.id}`;
         await sendOrgInvite({
           email: data.email,
           invitedByUsername: data.inviter.user.name,
@@ -87,6 +96,9 @@ export const auth = betterAuth({
       stripeClient,
       stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,
       createCustomerOnSignUp: true,
+      onEvent: (event) => {
+        console.dir({ event }, { depth: null });
+      },
       subscription: {
         enabled: true,
         plans: [
@@ -112,19 +124,4 @@ export const auth = betterAuth({
       },
     }),
   ],
-  databaseHooks: {
-    session: {
-      create: {
-        before: async (session) => {
-          const orgId = await getActiveOrganization(session.userId);
-          return {
-            data: {
-              ...session,
-              activeOrganizationId: orgId,
-            },
-          };
-        },
-      },
-    },
-  },
 });
