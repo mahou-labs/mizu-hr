@@ -96,9 +96,6 @@ export const auth = betterAuth({
       stripeClient,
       stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,
       createCustomerOnSignUp: true,
-      onEvent: (event) => {
-        console.dir({ event }, { depth: null });
-      },
       subscription: {
         enabled: true,
         plans: [

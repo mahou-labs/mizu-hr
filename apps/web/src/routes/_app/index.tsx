@@ -61,7 +61,7 @@ function HomeComponent() {
             successUrl: "/dashboard",
             cancelUrl: "/",
             annual: false, // Optional: upgrade to an annual plan
-            referenceId: session?.activeOrganizationId, // Optional: defaults to the current logged in user ID
+            referenceId: session?.activeOrganizationId ?? undefined, // Optional: defaults to the current logged in user ID
           })
         }
         type="button"
@@ -69,13 +69,19 @@ function HomeComponent() {
         Checkout
       </button>
 
-      {/*   <button
+      <button
         className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
-        onClick={() => authClient.customer.portal()}
+        onClick={async () => {
+          const { data } = await authClient.subscription.billingPortal({
+            referenceId: session?.activeOrganizationId ?? undefined,
+          });
+
+          if (data?.url) window.open(data?.url, "_blank");
+        }}
         type="button"
       >
         Portal
-      </button> */}
+      </button>
     </div>
   );
 }

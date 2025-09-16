@@ -32,6 +32,10 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
     (org) => org.id === session?.activeOrganizationId
   );
 
+  const { data: subscription } = useQuery(
+    orpc.organization.getSubscription.queryOptions()
+  );
+
   const handleOrgChange = async (id: string) => {
     await setActiveOrganization({ organizationId: id });
   };
@@ -53,7 +57,11 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
           <span className="truncate font-semibold text-foreground text-sm">
             {activeOrg?.name}
           </span>
-          <span className="truncate text-foreground/60 text-xs">Pro plan</span>
+          <span className="truncate text-foreground/60 text-xs">
+            {subscription?.[0]?.plan
+              ? `${subscription[0].plan} plan`
+              : "Free plan"}
+          </span>
         </div>
 
         <ChevronDown className="ml-auto size-4" />

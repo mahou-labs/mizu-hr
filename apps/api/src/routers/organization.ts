@@ -47,21 +47,9 @@ export const organizationRouter = {
     return org;
   }),
 
-  getOrgList: protectedProcedure
-    .output(
-      z.array(
-        z.object({
-          id: z.string(),
-          name: z.string(),
-          slug: z.string(),
-          createdAt: z.date(),
-          logo: z.string().nullable().optional(),
-        })
-      )
-    )
-    .handler(async ({ context: { headers } }) => {
-      return await auth.api.listOrganizations({ headers });
-    }),
+  getOrgList: protectedProcedure.handler(async ({ context: { headers } }) => {
+    return await auth.api.listOrganizations({ headers });
+  }),
 
   getMembers: protectedProcedure.handler(async ({ context: { headers } }) => {
     const [members, invites] = await Promise.all([
@@ -123,4 +111,15 @@ export const organizationRouter = {
         },
       });
     }),
+
+  getSubscription: protectedProcedure.handler(
+    async ({ context: { headers, session } }) => {
+      return await auth.api.listActiveSubscriptions({
+        query: {
+          referenceId: session?.activeOrganizationId ?? undefined,
+        },
+        headers,
+      });
+    }
+  ),
 };

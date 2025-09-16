@@ -47,6 +47,6 @@ app.use("/rpc/*", async (c, next) => {
 });
 
 export default {
-  port: 3001,
+  port: 3000,
   fetch: app.fetch,
 };
