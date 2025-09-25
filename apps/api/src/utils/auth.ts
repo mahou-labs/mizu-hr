@@ -1,16 +1,26 @@
-import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
-import { and, eq } from "drizzle-orm";
-import Stripe from "stripe";
 import * as schema from "../schema/auth";
-import { db } from "./db";
-import { sendOrgInvite } from "./email";
+import { and, eq } from "drizzle-orm";
 import { env } from "./env";
+import { Polar } from "@polar-sh/sdk";
+import { sendOrgInvite } from "./email";
+import { db } from "./db";
+import {
+  polar,
+  checkout,
+  portal,
+  usage,
+  webhooks,
+} from "@polar-sh/better-auth";
 
-const stripeClient = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-08-27.basil",
+const polarClient = new Polar({
+  accessToken: env.POLAR_ACCESS_TOKEN,
+  // Use 'sandbox' if you're using the Polar Sandbox environment
+  // Remember that access tokens, products, etc. are completely separated between environments.
+  // Access tokens obtained in Production are for instance not usable in the Sandbox environment.
+  server: "sandbox",
 });
 
 export const getActiveOrganization = async (userId: string) => {
@@ -92,33 +102,30 @@ export const auth = betterAuth({
         });
       },
     }),
-    stripe({
-      stripeClient,
-      stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,
+    polar({
+      client: polarClient,
       createCustomerOnSignUp: true,
-      subscription: {
-        enabled: true,
-        plans: [
-          {
-            name: "starter",
-            priceId: "price_1S5oh140kyaaroEs4Z6yITRA",
-          },
-        ],
-        authorizeReference: async ({ user, referenceId }) => {
-          const member = await db
-            .select()
-            .from(schema.member)
-            .where(
-              and(
-                eq(schema.member.userId, user.id),
-                eq(schema.member.organizationId, referenceId)
-              )
-            )
-            .then((res) => res[0]);
-
-          return member?.role === "owner" || member?.role === "admin";
-        },
-      },
+      use: [
+        checkout({
+          products: [
+            {
+              productId: "123-456-789", // ID of Product from Polar Dashboard
+              slug: "pro", // Custom slug for easy reference in Checkout URL, e.g. /checkout/pro
+            },
+          ],
+          successUrl: "/success?checkout_id={CHECKOUT_ID}",
+          authenticatedUsersOnly: true,
+        }),
+        portal(),
+        usage(),
+        webhooks({
+          secret: env.POLAR_WEBHOOK_SECRET,
+          onCustomerStateChanged: async (payload) => console.log(payload), // Triggered when anything regarding a customer changes
+          onOrderPaid: async (payload) => console.log(payload), // Triggered when an order was paid (purchase, subscription renewal, etc.)
+          // Over 25 granular webhook handlers
+          onPayload: async (payload) => console.log(payload), // Catch-all for all events
+        }),
+      ],
     }),
   ],
 });
