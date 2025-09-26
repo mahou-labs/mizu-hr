@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/correctness/noUndeclaredVariables: biome shenanigans */
 import { z } from "zod";
 
 const envSchema = z.object({

@@ -1,4 +1,4 @@
-import { createRouter as createTanStackRouter } from "@tanstack/react-router";
+import { createRouter } from "@tanstack/react-router";
 import Loader from "./components/loader";
 import "./index.css";
 import { ORPCError } from "@orpc/client";
@@ -7,11 +7,12 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { toast } from "sonner";
 import { routeTree } from "./routeTree.gen";
 import { orpc } from "./utils/orpc";
 
-export const createRouter = () => {
+export const getRouter = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -49,17 +50,25 @@ export const createRouter = () => {
     }),
   });
 
-  const router = createTanStackRouter({
+  const router = createRouter({
     routeTree,
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
-    context: { orpc, queryClient },
     defaultPendingComponent: () => <Loader />,
     defaultNotFoundComponent: () => <div>Not Found</div>,
-    Wrap: ({ children }) => (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    ),
+    context: { orpc, queryClient },
+    defaultPreload: "intent",
+    Wrap: (props: { children: React.ReactNode }) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          {props.children}
+        </QueryClientProvider>
+      );
+    },
   });
+
+  setupRouterSsrQueryIntegration({ router, queryClient });
+
   return router;
 };
 

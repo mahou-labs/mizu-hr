@@ -114,7 +114,7 @@ export const organizationRouter = {
 
   getSubscription: protectedProcedure.handler(
     async ({ context: { headers, session } }) => {
-      return await auth.api.listActiveSubscriptions({
+      return await auth.api.subscriptions({
         query: {
           referenceId: session?.activeOrganizationId ?? undefined,
         },

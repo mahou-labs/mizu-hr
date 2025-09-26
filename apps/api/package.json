@@ -8,7 +8,7 @@
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "bun run --hot src/index.ts",
     "email": "email dev -d src/emails -p 5000",
-    "start": "bun run --bun db:push && bun run --bun dist/index.js",
+    "start": "bun run db:push && bun run dist/index.js",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:generate": "drizzle-kit generate",

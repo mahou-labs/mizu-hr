@@ -1,13 +1,6 @@
-// import { randomUUIDv7 } from "bun";
-
-import {
-  boolean,
-  integer,
-  pgTable,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { v7 as uuidv7 } from "uuid";
+// import { randomUUIDv7 } from "bun";
 
 export const user = pgTable("user", {
   id: text("id")
@@ -20,9 +13,8 @@ export const user = pgTable("user", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .$onUpdate(() => new Date())
     .notNull(),
-  stripeCustomerId: text("stripe_customer_id"),
 });
 
 export const session = pgTable("session", {
@@ -33,7 +25,7 @@ export const session = pgTable("session", {
   token: text("token").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
-    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .$onUpdate(() => new Date())
     .notNull(),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
@@ -61,7 +53,7 @@ export const account = pgTable("account", {
   password: text("password"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
-    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .$onUpdate(() => new Date())
     .notNull(),
 });
 
@@ -75,7 +67,7 @@ export const verification = pgTable("verification", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .$onUpdate(() => new Date())
     .notNull(),
 });
 
@@ -118,21 +110,4 @@ export const invitation = pgTable("invitation", {
   inviterId: text("inviter_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-});
-
-export const subscription = pgTable("subscription", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => uuidv7()),
-  plan: text("plan").notNull(),
-  referenceId: text("reference_id").notNull(),
-  stripeCustomerId: text("stripe_customer_id"),
-  stripeSubscriptionId: text("stripe_subscription_id"),
-  status: text("status").default("incomplete"),
-  periodStart: timestamp("period_start"),
-  periodEnd: timestamp("period_end"),
-  trialStart: timestamp("trial_start"),
-  trialEnd: timestamp("trial_end"),
-  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false),
-  seats: integer("seats"),
 });
