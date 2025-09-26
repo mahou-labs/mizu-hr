@@ -41,6 +41,7 @@
     "zod": "^4.2.0-canary.20250921T171445"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.13.6",
     "@tanstack/react-query-devtools": "^5.90.2",
     "@tanstack/react-router-devtools": "^1.132.7",
     "@testing-library/dom": "^10.4.1",
