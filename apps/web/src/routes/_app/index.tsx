@@ -56,11 +56,12 @@ function HomeComponent() {
       <button
         className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
         onClick={() =>
-          authClient.subscription.upgrade({
-            plan: "starter",
-            successUrl: "/dashboard",
-            cancelUrl: "/",
-            annual: false, // Optional: upgrade to an annual plan
+          authClient.checkout({
+            products: ["starter"],
+            slug: "pro",
+            // successUrl: "/dashboard",
+            // cancelUrl: "/",
+            // annual: false, // Optional: upgrade to an annual plan
             referenceId: session?.activeOrganizationId ?? undefined, // Optional: defaults to the current logged in user ID
           })
         }
@@ -72,8 +73,10 @@ function HomeComponent() {
       <button
         className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
         onClick={async () => {
-          const { data } = await authClient.subscription.billingPortal({
-            referenceId: session?.activeOrganizationId ?? undefined,
+          const { data } = await authClient.customer.portal({
+            query: {
+              referenceId: session?.activeOrganizationId ?? undefined,
+            }
           });
 
           if (data?.url) window.open(data?.url, "_blank");
