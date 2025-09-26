@@ -9,7 +9,7 @@
   "packageManager": "bun@1.2.19",
   "private": true,
   "scripts": {
-    "check": "biome check --write .",
+    "check": "biome format --write . && biome lint --write .",
     "dev": "turbo dev db:studio --parallel",
     "dev:email": "turbo dev email db:studio --parallel",
     "build": "turbo build",
