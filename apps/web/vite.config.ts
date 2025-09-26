@@ -6,11 +6,16 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      external: ["cloudflare:workers"],
+    },
+  },
   plugins: [
     tsconfigPaths(),
     tailwindcss(),
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
     tanstackStart(),
-    cloudflare(),
     viteReact({ babel: { plugins: ["babel-plugin-react-compiler"] } }),
   ],
 });
