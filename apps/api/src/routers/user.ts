@@ -5,6 +5,7 @@ export const userRouter = {
   getSession: publicProcedure.handler(async ({ context: { headers } }) => {
     return await auth.api.getSession({
       headers,
+      query: { disableCookieCache: true },
     });
   }),
 };

@@ -1,3 +1,5 @@
+// import { randomUUIDv7 } from "bun";
+
 import {
   boolean,
   integer,
@@ -5,9 +7,12 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { v7 as uuidv7 } from "uuid";
 
 export const user = pgTable("user", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
@@ -21,7 +26,9 @@ export const user = pgTable("user", {
 });
 
 export const session = pgTable("session", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -37,7 +44,9 @@ export const session = pgTable("session", {
 });
 
 export const account = pgTable("account", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
   userId: text("user_id")
@@ -57,7 +66,9 @@ export const account = pgTable("account", {
 });
 
 export const verification = pgTable("verification", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
@@ -69,7 +80,9 @@ export const verification = pgTable("verification", {
 });
 
 export const organization = pgTable("organization", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
   name: text("name").notNull(),
   slug: text("slug").unique(),
   logo: text("logo"),
@@ -78,7 +91,9 @@ export const organization = pgTable("organization", {
 });
 
 export const member = pgTable("member", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
   organizationId: text("organization_id")
     .notNull()
     .references(() => organization.id, { onDelete: "cascade" }),
@@ -90,7 +105,9 @@ export const member = pgTable("member", {
 });
 
 export const invitation = pgTable("invitation", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
   organizationId: text("organization_id")
     .notNull()
     .references(() => organization.id, { onDelete: "cascade" }),
@@ -104,7 +121,9 @@ export const invitation = pgTable("invitation", {
 });
 
 export const subscription = pgTable("subscription", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
   plan: text("plan").notNull(),
   referenceId: text("reference_id").notNull(),
   stripeCustomerId: text("stripe_customer_id"),

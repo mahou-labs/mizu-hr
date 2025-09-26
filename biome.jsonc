@@ -48,6 +48,7 @@
         "noUnusedVariables": "info"
       },
       "nursery": {
+        "useConsistentArrowReturn": "off",
         "useSortedClasses": {
           "level": "warn",
           "fix": "safe",
@@ -70,7 +71,8 @@
         "noHeadElement": "off",
         "noMagicNumbers": "off",
         "useBlockStatements": "off",
-        "noNestedTernary": "off"
+        "noNestedTernary": "off",
+        "useNamingConvention": "off"
       }
     }
   },

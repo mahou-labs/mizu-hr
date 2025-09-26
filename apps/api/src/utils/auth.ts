@@ -1,19 +1,19 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { organization } from "better-auth/plugins";
-import * as schema from "../schema/auth";
-import { and, eq } from "drizzle-orm";
-import { env } from "./env";
-import { Polar } from "@polar-sh/sdk";
-import { sendOrgInvite } from "./email";
-import { db } from "./db";
 import {
-  polar,
   checkout,
+  polar,
   portal,
   usage,
   webhooks,
 } from "@polar-sh/better-auth";
+import { Polar } from "@polar-sh/sdk";
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { organization } from "better-auth/plugins";
+import { eq } from "drizzle-orm";
+import * as schema from "../schema/auth";
+import { db } from "./db";
+import { sendOrgInvite } from "./email";
+import { env } from "./env";
 
 const polarClient = new Polar({
   accessToken: env.POLAR_ACCESS_TOKEN,
@@ -57,11 +57,26 @@ export const auth = betterAuth({
   trustedOrigins: [env.APP_URL],
   emailAndPassword: {
     enabled: true,
+    autoSignIn: true,
+    password: {
+      hash: (password) => Bun.password.hash(password),
+      verify: ({ hash, password }) => Bun.password.verify(password, hash),
+    },
   },
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   basePath: "/auth",
+  session: {
+    expiresIn: 60 * 60 * 24 * 7,
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 5,
+    },
+  },
   advanced: {
+    database: {
+      generateId: false,
+    },
     crossSubDomainCookies: {
       enabled: true,
     },

@@ -76,7 +76,7 @@ function HomeComponent() {
           const { data } = await authClient.customer.portal({
             query: {
               referenceId: session?.activeOrganizationId ?? undefined,
-            }
+            },
           });
 
           if (data?.url) window.open(data?.url, "_blank");
