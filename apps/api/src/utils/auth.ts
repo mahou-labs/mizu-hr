@@ -9,7 +9,6 @@ import { Polar } from "@polar-sh/sdk";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
-import { redis } from "bun";
 import { eq } from "drizzle-orm";
 import * as schema from "../schema/auth";
 import { db } from "./db";
@@ -89,6 +88,62 @@ export const auth = betterAuth({
     },
   },
   databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          try {
+            // Check if a Polar customer already exists with this email
+            const { result: existingCustomers } =
+              await polarClient.customers.list({
+                email: user.email,
+              });
+
+            const existingCustomer = existingCustomers.items[0];
+
+            if (existingCustomer?.externalId) {
+              // Use the existing external ID as the user ID
+              return {
+                data: {
+                  ...user,
+                  id: existingCustomer.externalId,
+                },
+              };
+            }
+          } catch (error) {
+            // Continue with normal user creation if check fails
+          }
+
+          // No existing customer, proceed with normal user creation
+          return {
+            data: user,
+          };
+        },
+        after: async (user) => {
+          try {
+            // Check if customer already exists
+            const { result: existingCustomers } =
+              await polarClient.customers.list({
+                email: user.email,
+              });
+
+            const existingCustomer = existingCustomers.items[0];
+
+            if (existingCustomer) {
+              return;
+            }
+
+            // Create new customer
+            await polarClient.customers.create({
+              email: user.email,
+              name: user.name,
+              externalId: user.id,
+            });
+          } catch (error) {
+            // Don't throw - we don't want to fail user creation if Polar fails
+          }
+        },
+      },
+    },
     session: {
       create: {
         before: async (session) => {
@@ -120,56 +175,8 @@ export const auth = betterAuth({
     }),
     polar({
       client: polarClient,
-      createCustomerOnSignUp: true,
+      createCustomerOnSignUp: false, // We handle customer creation manually in databaseHooks
       enableCustomerPortal: true,
-      getCustomerCreateParams: async ({ user: newUser }) => {
-        console.log("🚀 getCustomerCreateParams called for user:", newUser.id);
-
-        try {
-          // Look for existing customer by email
-          const { result: existingCustomers } =
-            await polarClient.customers.list({
-              email: newUser.email,
-            });
-
-          const existingCustomer = existingCustomers.items[0];
-
-          if (
-            existingCustomer?.externalId &&
-            existingCustomer.externalId !== newUser.id
-          ) {
-            console.log(
-              `🔗 Found existing customer ${existingCustomer.id} with external ID ${existingCustomer.externalId}`
-            );
-            console.log(
-              `🔄 Updating user ID from ${newUser.id} to ${existingCustomer.externalId}`
-            );
-
-            // Update the user's ID in database to match the existing external ID
-            if (newUser.id) {
-              await db
-                .update(schema.user)
-                .set({ id: existingCustomer.externalId })
-                .where(eq(schema.user.id, newUser.id));
-            } else {
-              console.error(
-                "Missing newUser.id; skipping user ID update to existing external ID"
-              );
-            }
-
-            console.log(
-              `✅ Updated user ID to match existing external ID: ${existingCustomer.externalId}`
-            );
-          }
-
-          return {
-            metadata: existingCustomer?.metadata,
-          };
-        } catch (error) {
-          console.error("💥 Error in getCustomerCreateParams:", error);
-          return {};
-        }
-      },
       use: [
         checkout({
           products: [
