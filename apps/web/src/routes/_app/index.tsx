@@ -53,38 +53,59 @@ function HomeComponent() {
         </section>
       </div>
 
-      <button
-        className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
-        onClick={() =>
-          authClient.checkout({
-            products: ["starter"],
-            slug: "pro",
-            // successUrl: "/dashboard",
-            // cancelUrl: "/",
-            // annual: false, // Optional: upgrade to an annual plan
-            referenceId: session?.activeOrganizationId ?? undefined, // Optional: defaults to the current logged in user ID
-          })
-        }
-        type="button"
-      >
-        Checkout
-      </button>
+      <div className="flex gap-2">
+        <button
+          className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
+          onClick={() => {
+            if (!session?.activeOrganizationId) return;
 
-      <button
-        className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
-        onClick={async () => {
-          const { data } = await authClient.customer.portal({
-            query: {
-              referenceId: session?.activeOrganizationId ?? undefined,
-            },
-          });
+            authClient.checkout({
+              products: [
+                "542964f0-f9e4-4863-aa5a-9c787317ae54",
+                "68c79948-d014-4c70-9e83-baa37b76e7cb",
+              ],
+              referenceId: session.activeOrganizationId,
+            });
+          }}
+          type="button"
+        >
+          Checkout - Starter
+        </button>
+        <button
+          className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
+          onClick={() => {
+            if (!session?.activeOrganizationId) return;
 
-          if (data?.url) window.open(data?.url, "_blank");
-        }}
-        type="button"
-      >
-        Portal
-      </button>
+            authClient.checkout({
+              products: [
+                "899737cc-96c5-4d17-bc43-e3455434cc01",
+                "f7e2348d-101d-4762-9a46-e5dd6b1adf27",
+              ],
+              // slug: "pro",
+              referenceId: session.activeOrganizationId,
+            });
+          }}
+          type="button"
+        >
+          Checkout - Growth
+        </button>
+
+        <button
+          className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
+          onClick={async () => {
+            if (!session?.activeOrganizationId) return;
+
+            const { data } = await authClient.customer.portal({
+              query: { referenceId: session.activeOrganizationId },
+            });
+
+            if (data?.url) window.open(data?.url, "_blank");
+          }}
+          type="button"
+        >
+          Portal
+        </button>
+      </div>
     </div>
   );
 }
