@@ -10,18 +10,25 @@ export const organizationRouter = {
         slug: z.string().min(1),
       })
     )
-    .handler(async ({ context: { headers }, input }) => {
+    .handler(async ({ context: { headers, resHeaders }, input }) => {
       const data = await auth.api.createOrganization({
         headers,
         body: input,
       });
 
-      await auth.api.setActiveOrganization({
+      const { headers: sessionHeaders } = await auth.api.setActiveOrganization({
         headers,
+        returnHeaders: true,
         body: {
           organizationId: data?.id,
         },
       });
+
+      const cookies = sessionHeaders.getSetCookie();
+      for (const cookie of cookies) {
+        resHeaders?.append("set-cookie", cookie);
+      }
+
       return data;
     }),
 
@@ -60,10 +67,6 @@ export const organizationRouter = {
     return { members, invites };
   }),
 
-  getInvites: protectedProcedure.handler(async ({ context: { headers } }) => {
-    return await auth.api.listInvitations({ headers });
-  }),
-
   inviteMember: protectedProcedure
     .input(
       z.object({
@@ -87,29 +90,41 @@ export const organizationRouter = {
 
   acceptInvitation: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .handler(async ({ context: { headers }, input }) => {
+    .handler(async ({ context: { headers, resHeaders }, input }) => {
       const data = await auth.api.acceptInvitation({
         headers,
         body: { invitationId: input.id },
       });
 
-      await auth.api.setActiveOrganization({
+      const { headers: sessionHeaders } = await auth.api.setActiveOrganization({
         headers,
+        returnHeaders: true,
         body: {
           organizationId: data?.invitation.organizationId,
         },
       });
+
+      const cookies = sessionHeaders.getSetCookie();
+      for (const cookie of cookies) {
+        resHeaders?.append("set-cookie", cookie);
+      }
     }),
 
   setActive: protectedProcedure
     .input(z.object({ organizationId: z.string() }))
-    .handler(async ({ context: { headers }, input }) => {
-      await auth.api.setActiveOrganization({
+    .handler(async ({ context: { headers, resHeaders }, input }) => {
+      const { headers: sessionHeaders } = await auth.api.setActiveOrganization({
         headers,
+        returnHeaders: true,
         body: {
           organizationId: input.organizationId,
         },
       });
+
+      const cookies = sessionHeaders.getSetCookie();
+      for (const cookie of cookies) {
+        resHeaders?.append("set-cookie", cookie);
+      }
     }),
 
   getSubscription: protectedProcedure.handler(
