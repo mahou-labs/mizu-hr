@@ -9,6 +9,7 @@ import { Polar } from "@polar-sh/sdk";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
+import { redis } from "bun";
 import { eq } from "drizzle-orm";
 import * as schema from "../schema/auth";
 import { db } from "./db";
@@ -120,15 +121,76 @@ export const auth = betterAuth({
     polar({
       client: polarClient,
       createCustomerOnSignUp: false,
+      enableCustomerPortal: true,
+      getCustomerCreateParams: async ({ user: newUser }) => {
+        console.log("🚀 getCustomerCreateParams called for user:", newUser.id);
+
+        try {
+          // Look for existing customer by email
+          const { result: existingCustomers } =
+            await polarClient.customers.list({
+              email: newUser.email,
+            });
+
+          const existingCustomer = existingCustomers.items[0];
+
+          if (
+            existingCustomer?.externalId &&
+            existingCustomer.externalId !== newUser.id
+          ) {
+            console.log(
+              `🔗 Found existing customer ${existingCustomer.id} with external ID ${existingCustomer.externalId}`
+            );
+            console.log(
+              `🔄 Updating user ID from ${newUser.id} to ${existingCustomer.externalId}`
+            );
+
+            // Update the user's ID in database to match the existing external ID
+            if (newUser.id) {
+              await db
+                .update(schema.user)
+                .set({ id: existingCustomer.externalId })
+                .where(eq(schema.user.id, newUser.id));
+            } else {
+              console.error(
+                "Missing newUser.id; skipping user ID update to existing external ID"
+              );
+            }
+
+            console.log(
+              `✅ Updated user ID to match existing external ID: ${existingCustomer.externalId}`
+            );
+          }
+
+          return {
+            metadata: existingCustomer?.metadata,
+          };
+        } catch (error) {
+          console.error("💥 Error in getCustomerCreateParams:", error);
+          return {};
+        }
+      },
       use: [
         checkout({
           products: [
             {
-              productId: "123-456-789", // ID of Product from Polar Dashboard
-              slug: "pro", // Custom slug for easy reference in Checkout URL, e.g. /checkout/pro
+              productId: "542964f0-f9e4-4863-aa5a-9c787317ae54",
+              slug: "starter-monthly",
+            },
+            {
+              productId: "68c79948-d014-4c70-9e83-baa37b76e7cb",
+              slug: "starter-yearly",
+            },
+            {
+              productId: "899737cc-96c5-4d17-bc43-e3455434cc01",
+              slug: "growth-monthly",
+            },
+            {
+              productId: "f7e2348d-101d-4762-9a46-e5dd6b1adf27",
+              slug: "growth-yearly",
             },
           ],
-          successUrl: "/success?checkout_id={CHECKOUT_ID}",
+          successUrl: `${env.APP_URL}/success?checkout_id={CHECKOUT_ID}`,
           authenticatedUsersOnly: true,
         }),
         portal(),
@@ -138,6 +200,7 @@ export const auth = betterAuth({
           onCustomerStateChanged: async (payload) => console.log(payload), // Triggered when anything regarding a customer changes
           onOrderPaid: async (payload) => console.log(payload), // Triggered when an order was paid (purchase, subscription renewal, etc.)
           // Over 25 granular webhook handlers
+          onOrganizationUpdated: async (payload) => console.log(payload),
           onPayload: async (payload) => console.log(payload), // Catch-all for all events
         }),
       ],
