@@ -33,7 +33,7 @@ function Popup({
     <MenuPrimitive.Popup
       {...props}
       className={cn(
-        "z-50 min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md",
+        "z-50 min-w-[8rem] overflow-y-auto overflow-x-hidden rounded-md border border-border bg-light p-1 text-foreground shadow-md",
         "data-[ending-style]:opacity-0 data-[starting-style]:opacity-0",
         "data-[ending-style]:scale-90 data-[starting-style]:scale-90",
         "transition-[transform,scale,opacity]",
@@ -62,9 +62,9 @@ function Item({
       {...props}
       className={cn(
         "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden",
-        "hover:bg-accent hover:text-accent-foreground",
+        "hover:bg-default",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-        "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-foreground-muted [&_svg]:pointer-events-none [&_svg]:shrink-0",
         inset && "pl-8",
         variant === "destructive" &&
           "text-destructive data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive",
@@ -85,7 +85,7 @@ function CheckboxItem({
     <MenuPrimitive.CheckboxItem
       {...props}
       className={cn(
-        "relative flex cursor-default select-none items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative flex cursor-default select-none items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden hover:bg-default data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
       data-slot="dropdown-menu-checkbox-item"
@@ -118,7 +118,7 @@ function RadioItem({
     <MenuPrimitive.RadioItem
       {...props}
       className={cn(
-        "relative flex cursor-default select-none items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "relative flex cursor-default select-none items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden hover:bg-default data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
       data-slot="dropdown-menu-radio-item"
@@ -171,7 +171,7 @@ function Shortcut({ className, ...props }: ComponentProps<"span">) {
     <span
       {...props}
       className={cn(
-        "ml-auto text-muted-foreground text-xs tracking-widest",
+        "ml-auto text-foreground-muted text-xs tracking-widest",
         className
       )}
       data-slot="dropdown-menu-shortcut"
@@ -191,7 +191,7 @@ function SubMenuTrigger({
     <MenuPrimitive.SubmenuTrigger
       {...props}
       className={cn(
-        "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
+        "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-hidden hover:bg-default data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
         inset && "pl-8",
         className
       )}

@@ -21,164 +21,81 @@ body {
   /* Global border radius for rounded corners */
   --radius: 0.5rem;
 
-  /* Main application background and text colors */
-  --background: oklch(1 0 0); /* Primary app background */
-  --foreground: oklch(0.2411 0.0097 248.23); /* Primary text color */
+  /* Simplified background system - three shades for depth */
+  --bg-default: oklch(0.97 0 0); /* Default - base background */
+  --bg-light: oklch(0.99 0 0); /* Lightest - for elevated elements */
+  --bg-dark: oklch(0.94 0 0); /* Darker - recedes into background */
 
-  /* Card component colors */
-  --card: oklch(1 10 1); /* Card background */
-  --card-foreground: oklch(1 10 1); /* Card text color */
+  /* Text colors */
+  --foreground: oklch(0.2 0.01 250); /* Primary text */
+  --foreground-muted: oklch(0.5 0.02 250); /* Secondary text */
 
-  /* Popover/dropdown menu colors */
-  --popover: oklch(1 10 1); /* Popover background */
-  --popover-foreground: oklch(0.15 0.018 194.72); /* Popover text color */
+  /* Primary brand colors */
+  --primary: oklch(0.55 0.12 194.72);
+  --primary-foreground: oklch(0.99 0.004 194.72);
 
-  /* Primary brand colors for buttons and key actions */
-  --primary: oklch(0.55 0.12 194.72); /* Primary button background */
-  --primary-foreground: oklch(0.99 0.004 194.72); /* Primary button text */
+  /* Border and input */
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.97 0 0);
+  --ring: oklch(0.55 0.12 194.72);
 
-  /* Secondary colors for less prominent elements */
-  --secondary: oklch(0.92 0.014 194.72); /* Secondary button background */
-  --secondary-foreground: oklch(0.28 0.022 194.72); /* Secondary button text */
-
-  /* Muted colors for subdued elements */
-  --muted: oklch(0.9737 0.0026 286.35); /* Muted background */
-  --muted-foreground: oklch(0.48 0.018 194.72); /* Muted text color */
-
-  /* Accent colors for highlights and hover states */
-  --accent: oklch(0.88 0.018 194.72); /* Accent background */
-  --accent-foreground: oklch(0.3 0.024 194.72); /* Accent text color */
-
-  /* Destructive colors for errors and delete actions */
-  --destructive: oklch(0.58 0.18 15.75); /* Error/danger background */
-  --destructive-foreground: oklch(0.99 0.004 194.72); /* Error/danger text */
-
-  /* Border and input colors */
-  --border: oklch(0.9219 0 0); /* Default border color */
-  --input: oklch(0.87 0.02 194.72); /* Input field background */
-  --ring: oklch(0.55 0.12 194.72); /* Focus ring color */
-
-  /* Chart colors for data visualization */
-  --chart-1: oklch(0.6 0.14 194.72); /* First chart color */
-  --chart-2: oklch(0.65 0.16 172.42); /* Second chart color */
-  --chart-3: oklch(0.5 0.12 218.96); /* Third chart color */
-  --chart-4: oklch(0.75 0.18 15.75); /* Fourth chart color */
-  --chart-5: oklch(0.68 0.22 42.18); /* Fifth chart color */
-
-  /* Sidebar navigation colors */
-  --sidebar: oklch(0.988 0 0); /* Sidebar background */
-  /* --sidebar-foreground: oklch(0.18 0.02 194.72); Sidebar text */
-  --sidebar-primary: oklch(0.55 0.12 194.72); /* Sidebar primary elements */
-  --sidebar-primary-foreground: oklch(
-    0.99 0.004 194.72
-  ); /* Sidebar primary text */
-  --sidebar-accent: oklch(0.96 0.008 194.72); /* Sidebar accent background */
-  --sidebar-accent-foreground: oklch(
-    0.26 0.02 194.72
-  ); /* Sidebar accent text */
-  --sidebar-border: oklch(0.92 0.012 194.72); /* Sidebar borders */
-  --sidebar-ring: oklch(0.55 0.12 194.72); /* Sidebar focus rings */
+  /* Destructive/error colors */
+  --destructive: oklch(0.58 0.18 15.75);
+  --destructive-foreground: oklch(0.99 0.004 194.72);
 }
 
 .dark {
-  /* Dark mode: Main application background and text colors */
-  --background: oklch(0.1448 0 0); /* Dark app background */
-  --foreground: oklch(0.9489 0.0029 264.54); /* Light text on dark background */
+  /* Dark mode: Simplified background system */
+  --bg-default: oklch(0.16 0.005 250); /* Default - base background */
+  --bg-light: oklch(0.2 0.005 250); /* Lightest - for elevated elements */
+  --bg-dark: oklch(0.12 0.005 250); /* Darker - recedes into background */
 
-  /* Dark mode: Card component colors */
-  --card: oklch(0.12 0.012 194.72); /* Dark card background */
-  --card-foreground: oklch(0.88 0.012 194.72); /* Light card text */
-
-  /* Dark mode: Popover/dropdown menu colors */
-  --popover: oklch(0.1 0.01 194.72); /* Dark popover background */
-  --popover-foreground: oklch(0.9 0.01 194.72); /* Light popover text */
+  /* Dark mode: Text colors */
+  --foreground: oklch(0.95 0.005 250); /* Primary text */
+  --foreground-muted: oklch(0.6 0.01 250); /* Secondary text */
 
   /* Dark mode: Primary brand colors */
-  --primary: oklch(0.68 0.16 194.72); /* Brighter primary for dark mode */
-  --primary-foreground: oklch(0.08 0.008 194.72); /* Dark text on primary */
+  --primary: oklch(0.68 0.16 194.72);
+  --primary-foreground: oklch(0.08 0.008 194.72);
 
-  /* Dark mode: Secondary colors */
-  --secondary: oklch(0.14 0.012 194.72); /* Dark secondary background */
-  --secondary-foreground: oklch(0.85 0.012 194.72); /* Light secondary text */
+  /* Dark mode: Border and input */
+  --border: oklch(0.27 0.005 250);
+  --input: oklch(0.2 0.005 250);
+  --ring: oklch(0.68 0.16 194.72);
 
-  /* Dark mode: Muted colors */
-  --muted: oklch(0.1995 0.0025 247.95); /* Dark muted background */
-  --muted-foreground: oklch(0.65 0.018 194.72); /* Medium muted text */
-
-  /* Dark mode: Accent colors */
-  --accent: oklch(0.2 0.016 194.72); /* Dark accent background */
-  --accent-foreground: oklch(0.88 0.012 194.72); /* Light accent text */
-
-  /* Dark mode: Destructive colors */
-  --destructive: oklch(0.65 0.22 15.75); /* Brighter red for dark mode */
-  --destructive-foreground: oklch(
-    0.92 0.01 194.72
-  ); /* Light destructive text */
-
-  /* Dark mode: Border and input colors */
-  --border: oklch(0.2686 0 0); /* Lighter border for dark mode */
-  --input: oklch(0.28 0.02 194.72); /* Dark input background */
-  --ring: oklch(0.68 0.16 194.72); /* Bright focus ring */
-
-  /* Dark mode: Chart colors */
-  --chart-1: oklch(0.7 0.18 194.72); /* Brighter chart colors for dark mode */
-  --chart-2: oklch(0.62 0.16 172.42);
-  --chart-3: oklch(0.58 0.14 218.96);
-  --chart-4: oklch(0.7 0.22 15.75);
-  --chart-5: oklch(0.75 0.24 42.18);
-
-  /* Dark mode: Sidebar colors */
-  --sidebar: oklch(0.1642 0.0021 286.17); /* Dark sidebar background */
-  /* --sidebar-foreground: oklch(0.85 0.012 194.72); Light sidebar text */
-  --sidebar-primary: oklch(0.68 0.16 194.72); /* Bright sidebar primary */
-  --sidebar-primary-foreground: oklch(
-    0.08 0.008 194.72
-  ); /* Dark sidebar primary text */
-  --sidebar-accent: oklch(0.22 0.016 194.72); /* Dark sidebar accent */
-  --sidebar-accent-foreground: oklch(
-    0.82 0.014 194.72
-  ); /* Light sidebar accent text */
-  --sidebar-border: oklch(0.28 0.02 194.72); /* Dark sidebar borders */
-  --sidebar-ring: oklch(0.68 0.16 194.72); /* Bright sidebar focus rings */
+  /* Dark mode: Destructive/error colors */
+  --destructive: oklch(0.65 0.22 15.75);
+  --destructive-foreground: oklch(0.92 0.01 194.72);
 }
 
 @theme inline {
+  /* Radius tokens */
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
+
+  /* Background colors - registered as bg-default, bg-light, bg-dark */
+  --color-default: var(--bg-default);
+  --color-light: var(--bg-light);
+  --color-dark: var(--bg-dark);
+
+  /* Text colors */
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-foreground-muted: var(--foreground-muted);
+
+  /* Primary brand colors */
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
+
+  /* Border and input */
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  /* --color-sidebar-foreground: var(--sidebar-foreground); */
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Destructive/error colors */
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 }
 
 @layer base {
@@ -186,7 +103,7 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-sidebar text-foreground font-sans antialiased;
+    @apply bg-dark text-foreground font-sans antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 

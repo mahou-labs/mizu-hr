@@ -91,7 +91,7 @@ function RootDocument() {
           `,
           }}
         />
-        <div className="h-svh bg-sidebar">
+        <div className="h-svh bg-dark">
           <Outlet />
         </div>
 
