@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+  REDIS_URL: z.string().min(1, "REDIS_URL is required"),
   APP_URL: z.string().min(1, "APP_URL is required"),
   BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
   BETTER_AUTH_URL: z.string().min(1, "BETTER_AUTH_URL is required"),
@@ -15,6 +16,7 @@ export type Environment = z.infer<typeof envSchema>;
 
 export const env: Environment = envSchema.parse({
   DATABASE_URL: Bun.env.DATABASE_URL,
+  REDIS_URL: Bun.env.REDIS_URL,
   APP_URL: Bun.env.APP_URL,
   BETTER_AUTH_SECRET: Bun.env.BETTER_AUTH_SECRET,
   BETTER_AUTH_URL: Bun.env.BETTER_AUTH_URL,
