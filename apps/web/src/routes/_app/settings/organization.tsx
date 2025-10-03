@@ -41,7 +41,7 @@ function RouteComponent() {
       try {
         await inviteMember({ email: value.email, role: "member" });
         await queryClient.invalidateQueries(
-          orpc.organization.getInvites.queryOptions()
+          orpc.organization.getMembers.queryOptions()
         );
         toast.success("Invitation sent");
         setIsDialogOpen(false);
