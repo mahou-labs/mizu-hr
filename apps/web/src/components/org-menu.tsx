@@ -22,7 +22,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
   const { mutateAsync: setActiveOrganization } = useMutation(
     orpc.organization.setActive.mutationOptions({
       onSuccess: async () => {
-        await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+        await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         await router.invalidate();
       },
     })

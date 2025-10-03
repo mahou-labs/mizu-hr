@@ -35,7 +35,7 @@ function RouteComponent() {
   const handleInvitationAccept = async () => {
     await acceptInvitation({ id });
     toast.success("Invitation accepted");
-    await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+    await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
     await navigate({ to: "/dashboard" });
   };
 

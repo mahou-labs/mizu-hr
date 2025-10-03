@@ -1,6 +1,6 @@
 /** biome-ignore-all assist/source/organizeImports: react-scan */
 import { scan } from "react-scan";
-import { useQuery, type QueryClient } from "@tanstack/react-query";
+import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
@@ -66,7 +66,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootDocument() {
-  useQuery(orpc.user.getSession.queryOptions());
   useEffect(() => {
     scan({
       enabled: import.meta.env.DEV,

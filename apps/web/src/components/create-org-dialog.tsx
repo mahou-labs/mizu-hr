@@ -57,10 +57,10 @@ export function CreateOrgDialog({
       if (org) {
         toast.success("Organization created successfully!");
 
-        await queryClient.refetchQueries(
+        await queryClient.invalidateQueries(
           orpc.organization.getOrgList.queryOptions()
         );
-        await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+        await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         await router.invalidate();
         form.reset();
         onSuccess();

@@ -25,9 +25,7 @@ export const getRouter = () => {
         if (error instanceof ORPCError) {
           if ("invalidSession" in error.data && error.data.invalidSession) {
             const currentLocation = router.state.location.pathname;
-            await queryClient.refetchQueries(
-              orpc.user.getSession.queryOptions()
-            );
+            await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
             await router.navigate({
               to: "/auth/signin",
               search: { redirect: currentLocation },

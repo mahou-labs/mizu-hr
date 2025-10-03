@@ -34,7 +34,7 @@ function RouteComponent() {
       await authClient.signIn.email(value, {
         onSuccess: async () => {
           toast.success("Sign in successful");
-          await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+          await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
           await navigate({ to: redirect ?? "/dashboard" });
         },
         onError: (error) => {

@@ -120,7 +120,7 @@ export const auth = betterAuth({
     }),
     polar({
       client: polarClient,
-      createCustomerOnSignUp: false,
+      createCustomerOnSignUp: true,
       enableCustomerPortal: true,
       getCustomerCreateParams: async ({ user: newUser }) => {
         console.log("🚀 getCustomerCreateParams called for user:", newUser.id);

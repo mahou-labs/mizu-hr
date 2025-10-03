@@ -59,7 +59,7 @@ function OnboardingComponent() {
 
       if (org) {
         toast.success("Organization created successfully!");
-        await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+        await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         navigate({ to: "/dashboard" });
       } else {
         toast.error("Failed to create organization");
