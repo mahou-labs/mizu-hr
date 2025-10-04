@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 
 const onboardingSchema = z.object({
   name: z.string().min(1, "Organization name is required"),

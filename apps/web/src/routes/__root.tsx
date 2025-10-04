@@ -12,7 +12,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 import appCss from "../index.css?url";
 
 const Posthog = () => {

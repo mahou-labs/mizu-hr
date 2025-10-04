@@ -10,7 +10,7 @@ import {
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { toast } from "sonner";
 import { routeTree } from "./routeTree.gen";
-import { orpc } from "./utils/orpc";
+import { orpc } from "./utils/orpc-client";
 
 export const getRouter = () => {
   const queryClient = new QueryClient({

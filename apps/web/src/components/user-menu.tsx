@@ -9,7 +9,7 @@ import { ChevronDown } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 import { Menu } from "./ui/menu";
 
 const WHITESPACE_REGEX = /\s+/;

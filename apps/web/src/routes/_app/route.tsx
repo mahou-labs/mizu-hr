@@ -2,7 +2,7 @@ import { ScrollArea } from "@base-ui-components/react/scroll-area";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { Sidebar } from "@/components/sidebar";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 
 export const Route = createFileRoute("/_app")({
   component: RouteComponent,

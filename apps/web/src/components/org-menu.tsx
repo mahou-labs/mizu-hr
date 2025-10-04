@@ -3,7 +3,7 @@ import { useRouteContext, useRouter } from "@tanstack/react-router";
 import { Building2, Check, ChevronDown, Plus } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 import { CreateOrgDialog } from "./create-org-dialog";
 import { Avatar } from "./ui/avatar";
 import { Menu } from "./ui/menu";

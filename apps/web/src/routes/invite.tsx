@@ -4,7 +4,7 @@ import { zodValidator } from "@tanstack/zod-adapter";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 
 const inviteSearchSchema = z.object({
   id: z.string(),
