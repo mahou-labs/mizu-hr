@@ -3,6 +3,7 @@ import { protectedProcedure, publicProcedure } from "../utils/orpc";
 import { organizationRouter } from "./organization";
 import { todoRouter } from "./todo";
 import { userRouter } from "./user";
+import { waitlistRouter } from "./waitlist";
 
 export const appRouter = {
   healthCheck: publicProcedure.handler(() => {
@@ -17,6 +18,7 @@ export const appRouter = {
   todo: todoRouter,
   organization: organizationRouter,
   user: userRouter,
+  waitlist: waitlistRouter,
 };
 
 export type AppRouterClient = RouterClient<typeof appRouter>;
