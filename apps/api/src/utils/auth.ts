@@ -110,7 +110,7 @@ export const auth = betterAuth({
               };
             }
           } catch (error) {
-            // Continue with normal user creation if check fails
+            console.error(error);
           }
 
           // No existing customer, proceed with normal user creation

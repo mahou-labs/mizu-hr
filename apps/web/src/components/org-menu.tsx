@@ -7,6 +7,7 @@ import { orpc } from "@/utils/orpc";
 import { CreateOrgDialog } from "./create-org-dialog";
 import { Avatar } from "./ui/avatar";
 import { Menu } from "./ui/menu";
+import { Skeleton } from "./ui/skeleton";
 
 type OrgMenuProps = {
   isCollapsed?: boolean;
@@ -32,13 +33,38 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
     (org) => org.id === session?.activeOrganizationId
   );
 
-  const { data: subscription } = useQuery(
+  const { data: subscription, isPending } = useQuery(
     orpc.organization.getSubscription.queryOptions()
   );
 
   const handleOrgChange = async (id: string) => {
     await setActiveOrganization({ organizationId: id });
   };
+
+  const plan = subscription?.plan.toLowerCase();
+  const subscriptionLabel = plan?.includes("starter")
+    ? "Starter Plan"
+    : plan?.includes("growth")
+      ? "Growth Plan"
+      : "Free Trial";
+
+  if (isPending) {
+    return (
+      <div className="flex items-center gap-2">
+        <Skeleton className="size-10 rounded-md" />
+        <div
+          className={cn(
+            "flex flex-col gap-1.5 transition-opacity duration-300",
+            isCollapsed && "opacity-0"
+          )}
+        >
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-3 w-16" />
+        </div>
+        <Skeleton className="ml-auto size-4" />
+      </div>
+    );
+  }
 
   return (
     <Menu.Root>
@@ -58,9 +84,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
             {activeOrg?.name}
           </span>
           <span className="truncate text-foreground/60 text-xs">
-            {subscription?.[0]?.plan
-              ? `${subscription[0].plan} plan`
-              : "Free plan"}
+            {subscriptionLabel}
           </span>
         </div>
 

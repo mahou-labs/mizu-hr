@@ -1,6 +1,7 @@
+import { redis } from "bun";
 import z from "zod";
 import { auth } from "../utils/auth";
-import { protectedProcedure } from "../utils/orpc";
+import { type CachedSubscriptionData, protectedProcedure } from "../utils/orpc";
 
 export const organizationRouter = {
   createOrg: protectedProcedure
@@ -128,13 +129,13 @@ export const organizationRouter = {
     }),
 
   getSubscription: protectedProcedure.handler(
-    async ({ context: { headers, session } }) => {
-      return await auth.api.subscriptions({
-        query: {
-          referenceId: session?.activeOrganizationId ?? undefined,
-        },
-        headers,
-      });
+    async ({ context: { session } }) => {
+      const subscription = await redis.get(session?.activeOrganizationId);
+      const parsedSubscription = subscription
+        ? (JSON.parse(subscription) as CachedSubscriptionData)
+        : null;
+
+      return parsedSubscription;
     }
   ),
 };
