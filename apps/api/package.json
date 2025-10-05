@@ -28,6 +28,7 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.6",
     "hono": "^4.9.9",
+    "hono-rate-limiter": "^0.4.2",
     "pg": "^8.16.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
