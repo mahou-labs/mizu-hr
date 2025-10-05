@@ -5,6 +5,6 @@ export const waitlist = pgTable("waitlist", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => uuidv7()),
-  email: text("email").notNull(),
+  email: text("email").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
