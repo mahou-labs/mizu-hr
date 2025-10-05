@@ -56,10 +56,10 @@ export const getRouter = () => {
     defaultNotFoundComponent: () => <div>Not Found</div>,
     context: { orpc, queryClient },
     defaultPreload: "intent",
-    Wrap: (props: { children: React.ReactNode }) => {
+    Wrap: ({ children }) => {
       return (
         <QueryClientProvider client={queryClient}>
-          {props.children}
+          {children}
         </QueryClientProvider>
       );
     },

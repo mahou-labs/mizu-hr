@@ -41,7 +41,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
     await setActiveOrganization({ organizationId: id });
   };
 
-  const plan = subscription?.plan.toLowerCase();
+  const plan = subscription?.plan?.toLowerCase();
   const subscriptionLabel = plan?.includes("starter")
     ? "Starter Plan"
     : plan?.includes("growth")

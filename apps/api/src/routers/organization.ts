@@ -130,12 +130,22 @@ export const organizationRouter = {
 
   getSubscription: protectedProcedure.handler(
     async ({ context: { session } }) => {
-      const subscription = await redis.get(session?.activeOrganizationId);
-      const parsedSubscription = subscription
-        ? (JSON.parse(subscription) as CachedSubscriptionData)
-        : null;
+      if (!session?.activeOrganizationId) {
+        return null;
+      }
 
-      return parsedSubscription;
+      try {
+        const subscription = await redis.get(session.activeOrganizationId);
+        const parsedSubscription = subscription
+          ? (JSON.parse(subscription) as CachedSubscriptionData)
+          : null;
+
+        return parsedSubscription;
+      } catch (error) {
+        // Log error and return null instead of letting exception bubble up
+        console.error("Failed to get subscription from Redis:", error);
+        return null;
+      }
     }
   ),
 };
