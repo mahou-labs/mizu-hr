@@ -76,9 +76,9 @@ function Item(props: ComponentProps<typeof MenuPrimitive.Item>) {
       className={cn(
         "flex cursor-pointer select-none outline-none",
         "py-2 pr-8 pl-4",
-        "text-popover-foreground text-sm leading-4",
-        "data-[highlighted]:relative data-[highlighted]:z-0 data-[highlighted]:text-accent-foreground",
-        "data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-accent",
+        "text-foreground text-sm leading-4",
+        "data-[highlighted]:relative data-[highlighted]:z-0",
+        "data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-default",
         props.className
       )}
     />
@@ -91,8 +91,8 @@ function Popup(props: ComponentProps<typeof MenuPrimitive.Popup>) {
       {...props}
       className={cn(
         "origin-[var(--transform-origin)]",
-        "rounded-md bg-popover py-1 text-popover-foreground",
-        "shadow-lg shadow-muted outline outline-border",
+        "rounded-md bg-light py-1 text-foreground",
+        "shadow-bg shadow-lg outline outline-border",
         "dark:-outline-offset-1 dark:shadow-none dark:outline-border",
         "transition-[transform,scale,opacity]",
         "data-[ending-style]:scale-90 data-[starting-style]:scale-90",

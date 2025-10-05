@@ -31,7 +31,7 @@ function Fallback(props: ComponentProps<typeof AvatarPrimitive.Fallback>) {
     <AvatarPrimitive.Fallback
       {...props}
       className={cn(
-        "flex h-full w-full items-center justify-center bg-muted font-medium text-muted-foreground text-sm",
+        "flex h-full w-full items-center justify-center bg-default font-medium text-foreground-muted text-sm",
         props.className
       )}
     />

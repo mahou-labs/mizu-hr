@@ -11,24 +11,63 @@ import Layout from "../layouts/Layout.astro";
 				The future of hiring is open source
 			</h1>
 			
-			<form class="mt-8" method="POST" action="/api/subscribe">
-				<div class="flex flex-col sm:flex-row gap-3 mb-4 sm:items-center">
-					<input 
-						type="email" 
-						name="email" 
-						placeholder="Enter your email" 
-						required 
-						class="flex-1 px-4 py-3.5 sm:px-5 sm:py-4 text-base sm:text-lg rounded-xl border-2 border-gray-300 bg-gray-50 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 transition-all outline-none focus:border-blue-600 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.1)]"
-						aria-label="Email address"
-					/>
-					<button type="submit" class="px-4 py-3.5 sm:px-8 sm:py-4 text-base sm:text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl border-none cursor-pointer transition-all outline-none hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(59,130,246,0.3)] focus:shadow-[0_0_0_3px_rgba(59,130,246,0.3)] sm:flex-shrink-0">
-						Get Notified
-					</button>
+			<div id="waitlist-container">
+				<form id="waitlist-form" class="mt-8">
+					<div class="flex flex-col sm:flex-row gap-3 mb-4 sm:items-center">
+						<input 
+							type="email" 
+							id="email-input"
+							name="email" 
+							placeholder="Enter your email" 
+							required 
+							class="flex-1 px-4 py-3.5 sm:px-5 sm:py-4 text-base sm:text-lg rounded-xl border-2 border-gray-300 bg-gray-50 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 transition-all outline-none focus:border-blue-600 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
+							aria-label="Email address"
+						/>
+						<button type="submit" id="submit-button" class="px-4 py-3.5 sm:px-8 sm:py-4 text-base sm:text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl border-none cursor-pointer transition-all outline-none hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(59,130,246,0.3)] focus:shadow-[0_0_0_3px_rgba(59,130,246,0.3)] sm:flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
+							Get Notified
+						</button>
+					</div>
+					<p class="mt-4 text-sm opacity-70 leading-relaxed">
+						Be the first to know when Mizu HR launches. No spam, just updates.
+					</p>
+				</form>
+				<div id="success-message" class="hidden mt-8">
+					<div class="px-6 py-4 text-base sm:text-lg rounded-xl bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-2 border-green-200 dark:border-green-800">
+						<p class="font-medium mb-1">✓ You're on the list!</p>
+						<p class="text-sm opacity-80">We'll notify you when Mizu HR launches.</p>
+					</div>
 				</div>
-				<p class="mt-4 text-sm opacity-70 leading-relaxed">
-					Be the first to know when Mizu HR launches. No spam, just updates.
-				</p>
-			</form>
+			</div>
 		</div>
 	</main>
 </Layout>
+
+<script>
+	import { orpc } from "../utils/orpc-client";
+
+	const form = document.getElementById("waitlist-form") as HTMLFormElement;
+	const emailInput = document.getElementById("email-input") as HTMLInputElement;
+	const submitButton = document.getElementById("submit-button") as HTMLButtonElement;
+	const successMessage = document.getElementById("success-message") as HTMLDivElement;
+
+	form.addEventListener("submit", async (e) => {
+		e.preventDefault();
+
+		const email = emailInput.value;
+		submitButton.disabled = true;
+		emailInput.disabled = true;
+		submitButton.textContent = "Submitting...";
+
+		try {
+			await orpc.waitlist.addEmail({ email });
+			form.classList.add("hidden");
+			successMessage.classList.remove("hidden");
+		} catch (error) {
+			console.error("Failed to add email to waitlist:", error);
+			submitButton.disabled = false;
+			emailInput.disabled = false;
+			submitButton.textContent = "Get Notified";
+			alert("Something went wrong, please try again later.");
+		}
+	});
+</script>

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuccessRouteImport } from './routes/success'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as InviteRouteImport } from './routes/invite'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
@@ -24,6 +25,11 @@ import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/ind
 import { Route as AppSettingsOrganizationRouteImport } from './routes/_app/settings/organization'
 import { Route as AppSettingsAccountRouteImport } from './routes/_app/settings/account'
 
+const SuccessRoute = SuccessRouteImport.update({
+  id: '/success',
+  path: '/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/invite': typeof InviteRoute
   '/onboarding': typeof OnboardingRoute
+  '/success': typeof SuccessRoute
   '/settings': typeof AppSettingsRouteRouteWithChildren
   '/dashboard': typeof AppDashboardRoute
   '/jobs': typeof AppJobsRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/invite': typeof InviteRoute
   '/onboarding': typeof OnboardingRoute
+  '/success': typeof SuccessRoute
   '/dashboard': typeof AppDashboardRoute
   '/jobs': typeof AppJobsRoute
   '/todos': typeof AppTodosRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/invite': typeof InviteRoute
   '/onboarding': typeof OnboardingRoute
+  '/success': typeof SuccessRoute
   '/_app/settings': typeof AppSettingsRouteRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/jobs': typeof AppJobsRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/invite'
     | '/onboarding'
+    | '/success'
     | '/settings'
     | '/dashboard'
     | '/jobs'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/invite'
     | '/onboarding'
+    | '/success'
     | '/dashboard'
     | '/jobs'
     | '/todos'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/invite'
     | '/onboarding'
+    | '/success'
     | '/_app/settings'
     | '/_app/dashboard'
     | '/_app/jobs'
@@ -193,10 +205,18 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   InviteRoute: typeof InviteRoute
   OnboardingRoute: typeof OnboardingRoute
+  SuccessRoute: typeof SuccessRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/success': {
+      id: '/success'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof SuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -352,7 +372,17 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   InviteRoute: InviteRoute,
   OnboardingRoute: OnboardingRoute,
+  SuccessRoute: SuccessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

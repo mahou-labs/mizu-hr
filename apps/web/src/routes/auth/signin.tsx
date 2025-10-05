@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/utils/auth-client";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 
 export const Route = createFileRoute("/auth/signin")({
   component: RouteComponent,
@@ -34,7 +34,7 @@ function RouteComponent() {
       await authClient.signIn.email(value, {
         onSuccess: async () => {
           toast.success("Sign in successful");
-          await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+          await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
           await navigate({ to: redirect ?? "/dashboard" });
         },
         onError: (error) => {

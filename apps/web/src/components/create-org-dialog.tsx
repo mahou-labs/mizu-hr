@@ -4,7 +4,7 @@ import { useRouter } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
 import { toast } from "sonner";
 import { z } from "zod";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 import { Button } from "./ui/button";
 import { Dialog } from "./ui/dialog";
 import { Input } from "./ui/input";
@@ -57,10 +57,10 @@ export function CreateOrgDialog({
       if (org) {
         toast.success("Organization created successfully!");
 
-        await queryClient.refetchQueries(
+        await queryClient.invalidateQueries(
           orpc.organization.getOrgList.queryOptions()
         );
-        await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+        await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         await router.invalidate();
         form.reset();
         onSuccess();

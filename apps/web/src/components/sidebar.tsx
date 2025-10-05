@@ -28,7 +28,7 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col gap-3 bg-sidebar py-3 pr-2.5 pl-4.5 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
+        "relative flex h-full flex-col gap-3 bg-dark py-3 pr-2.5 pl-4.5 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
@@ -50,7 +50,7 @@ export function Sidebar() {
           </h1>
         </div>
         <button
-          className="flex h-8 w-8 items-center justify-center rounded-md bg-sidebar text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          className="flex h-8 w-8 items-center justify-center rounded-md bg-dark text-foreground transition-all hover:bg-default"
           onClick={() => setIsCollapsed(!isCollapsed)}
           title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           type="button"
@@ -104,7 +104,7 @@ export function Sidebar() {
         />
       </nav>
       <button
-        className="flex h-8 w-8 items-center justify-center rounded-md bg-sidebar text-sidebar-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+        className="flex h-8 w-8 items-center justify-center rounded-md bg-dark text-foreground transition-all hover:bg-default"
         onClick={() => setIsCollapsed(!isCollapsed)}
         title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         type="button"
@@ -144,15 +144,15 @@ function SidebarItem({
     <Link
       className={cn(
         "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2.5 py-2 font-medium text-sm",
-        "hover:bg-muted hover:outline hover:outline-border",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2",
-        isActive && "bg-muted outline outline-border"
+        "hover:bg-default hover:outline hover:outline-border",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        isActive && "bg-default outline outline-border"
       )}
       onClick={onClick}
       title={isCollapsed ? label : undefined}
       to={href}
     >
-      <Icon className="size-4 shrink-0 text-muted-foreground" />
+      <Icon className="size-4 shrink-0 text-foreground-muted" />
 
       <div
         className={cn(
@@ -162,7 +162,7 @@ function SidebarItem({
       >
         <span className="truncate">{label}</span>
         {badge !== undefined && (
-          <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-sidebar-primary px-1.5 font-medium text-sidebar-primary-foreground text-xs">
+          <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 font-medium text-primary-foreground text-xs">
             {badge}
           </span>
         )}
@@ -174,12 +174,12 @@ function SidebarItem({
           className={cn(
             "-translate-y-1/2 pointer-events-none absolute top-1/2 left-full z-50",
             "ml-2 whitespace-nowrap rounded-md px-2 py-1",
-            "bg-sidebar-primary text-sidebar-primary-foreground text-xs",
+            "bg-primary text-primary-foreground text-xs",
             "opacity-0 transition-opacity duration-200 group-hover:opacity-100"
           )}
         >
           {label}
-          <div className="-translate-y-1/2 absolute top-1/2 right-full border-4 border-transparent border-r-sidebar-primary" />
+          <div className="-translate-y-1/2 absolute top-1/2 right-full border-4 border-transparent border-r-primary" />
         </div>
       )}
     </Link>

@@ -1,11 +1,11 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "mizu-hr-web",
-  "main": ".output/server/index.mjs",
-  "compatibility_date": "2025-07-05",
+  "main": "@tanstack/react-start/server-entry",
+  "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": ".output/public"
+    "directory": "dist/client"
   },
   "observability": {
     "enabled": true

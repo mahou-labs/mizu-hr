@@ -4,7 +4,7 @@ import { zodValidator } from "@tanstack/zod-adapter";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 
 const inviteSearchSchema = z.object({
   id: z.string(),
@@ -35,7 +35,7 @@ function RouteComponent() {
   const handleInvitationAccept = async () => {
     await acceptInvitation({ id });
     toast.success("Invitation accepted");
-    await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+    await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
     await navigate({ to: "/dashboard" });
   };
 

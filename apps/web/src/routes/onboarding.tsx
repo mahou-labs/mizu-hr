@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc-client";
 
 const onboardingSchema = z.object({
   name: z.string().min(1, "Organization name is required"),
@@ -59,7 +59,7 @@ function OnboardingComponent() {
 
       if (org) {
         toast.success("Organization created successfully!");
-        await queryClient.refetchQueries(orpc.user.getSession.queryOptions());
+        await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         navigate({ to: "/dashboard" });
       } else {
         toast.error("Failed to create organization");
