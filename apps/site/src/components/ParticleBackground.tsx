@@ -5,7 +5,6 @@ type Particle = {
   y: number;
   vx: number;
   vy: number;
-  targetY: number;
   size: number;
 };
 
@@ -15,87 +14,93 @@ export default function ParticleBackground() {
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: 0, y: 0, isActive: false });
 
-  const createParticle = (x: number, targetY: number): Particle => ({
+  const createParticle = (x: number, y: number): Particle => ({
     x,
-    y: targetY + (Math.random() - 0.5) * 20,
-    vx: 0,
-    vy: 0,
-    targetY,
-    size: Math.floor(Math.random() * 6 + 4), // Pixelated sizes: 4-9px
+    y,
+    vx: (Math.random() - 0.5) * 0.5,
+    vy: (Math.random() - 0.5) * 0.5,
+    size: Math.random() * 2 + 1.5,
   });
 
   const updateParticles = useCallback((width: number, height: number) => {
     const particles = particlesRef.current;
     const mouse = mouseRef.current;
-    const fluidHeight = height * 0.33; // Bottom 1/3 of screen
-    const surface = height - fluidHeight;
 
     for (const particle of particles) {
-      // Mouse interaction - splash effect
+      // Mouse interaction - push particles away
       if (mouse.isActive) {
         const dx = particle.x - mouse.x;
         const dy = particle.y - mouse.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = 100;
+        const minDistance = 120;
 
-        if (distance < maxDistance && mouse.y > surface) {
-          const force = (maxDistance - distance) / maxDistance;
-          const angle = Math.atan2(dy, dx);
-          particle.vx += Math.cos(angle) * force * 8;
-          particle.vy += Math.sin(angle) * force * 8 - force * 3; // Add upward force
+        if (distance < minDistance) {
+          const force = (minDistance - distance) / minDistance;
+          particle.vx += (dx / distance) * force * 2;
+          particle.vy += (dy / distance) * force * 2;
         }
       }
 
-      // Apply physics
+      // Apply velocity with damping
       particle.x += particle.vx;
       particle.y += particle.vy;
+      particle.vx *= 0.95;
+      particle.vy *= 0.95;
 
-      // Gravity and friction
-      particle.vy += 0.2; // gravity
-      particle.vx *= 0.98; // friction
-      particle.vy *= 0.99;
+      // Gentle drift
+      particle.vx += (Math.random() - 0.5) * 0.1;
+      particle.vy += (Math.random() - 0.5) * 0.1;
 
-      // Return to target position
-      const targetForce = 0.02;
-      particle.vx += (particle.x - particle.x) * targetForce; // Stay at original x
-      particle.vy += (particle.targetY - particle.y) * targetForce;
-
-      // Boundaries
-      if (particle.x < 0) {
-        particle.x = 0;
-        particle.vx *= -0.5;
-      }
-      if (particle.x > width) {
-        particle.x = width;
-        particle.vx *= -0.5;
-      }
-      if (particle.y > height) {
-        particle.y = height;
-        particle.vy = 0;
-      }
-      if (particle.y < surface) {
-        particle.y = surface;
-        particle.vy = Math.max(0, particle.vy);
-      }
+      // Wrap around edges for seamless effect
+      if (particle.x < -10) particle.x = width + 10;
+      if (particle.x > width + 10) particle.x = -10;
+      if (particle.y < -10) particle.y = height + 10;
+      if (particle.y > height + 10) particle.y = -10;
     }
   }, []);
 
   const drawParticles = useCallback((ctx: CanvasRenderingContext2D) => {
     const particles = particlesRef.current;
 
-    for (const particle of particles) {
-      // Draw pixelated particles as squares instead of circles
-      ctx.fillStyle = "rgba(59, 130, 246, 0.9)"; // Blue-500 with high opacity
-      const size = Math.floor(particle.size); // Ensure pixel-perfect rendering
-      ctx.fillRect(
-        Math.floor(particle.x - size / 2),
-        Math.floor(particle.y - size / 2),
-        size,
-        size
-      );
+    // Draw connections between nearby particles for fluid effect
+    ctx.strokeStyle = "rgba(59, 130, 246, 0.15)";
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 100) {
+          const opacity = (1 - distance / 100) * 0.3;
+          ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
     }
 
-    console.log(`Drawing ${particles.length} particles`); // Debug log
+    // Draw particles as smooth circles
+    for (const particle of particles) {
+      const gradient = ctx.createRadialGradient(
+        particle.x,
+        particle.y,
+        0,
+        particle.x,
+        particle.y,
+        particle.size
+      );
+      gradient.addColorStop(0, "rgba(59, 130, 246, 0.8)");
+      gradient.addColorStop(1, "rgba(59, 130, 246, 0)");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }, []);
 
   const animate = useCallback(() => {
@@ -105,21 +110,7 @@ export default function ParticleBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Enable crisp pixel rendering
-    ctx.imageSmoothingEnabled = false;
-
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Test: Draw a visible blue rectangle to verify canvas is working
-    ctx.fillStyle = "rgba(59, 130, 246, 0.2)";
-    ctx.fillRect(0, canvas.height * 0.67, canvas.width, canvas.height * 0.33);
-
-    // Test: Draw a few test squares to verify drawing works
-    ctx.fillStyle = "rgba(59, 130, 246, 1)";
-    ctx.fillRect(50, canvas.height - 100, 10, 10);
-    ctx.fillRect(100, canvas.height - 80, 8, 8);
-    ctx.fillRect(150, canvas.height - 120, 12, 12);
 
     updateParticles(canvas.width, canvas.height);
     drawParticles(ctx);
@@ -133,25 +124,16 @@ export default function ParticleBackground() {
 
     const width = canvas.width;
     const height = canvas.height;
-    const fluidHeight = height * 0.33;
-    const surface = height - fluidHeight;
-
-    // Create particles in a grid pattern for fluid-like appearance
-    const particleSpacing = 12; // Increased spacing for better visibility
+    const particleCount = Math.floor((width * height) / 10000);
     const particles: Particle[] = [];
 
-    for (let x = particleSpacing; x < width; x += particleSpacing) {
-      for (
-        let y = surface + particleSpacing;
-        y < height;
-        y += particleSpacing
-      ) {
-        particles.push(createParticle(x, y));
-      }
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(
+        createParticle(Math.random() * width, Math.random() * height)
+      );
     }
 
     particlesRef.current = particles;
-    console.log(`Initialized ${particles.length} particles`); // Debug log
   }, []);
 
   const resizeCanvas = useCallback(() => {
@@ -160,7 +142,6 @@ export default function ParticleBackground() {
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    console.log(`Canvas resized to: ${canvas.width}x${canvas.height}`); // Debug log
     initializeParticles();
   }, [initializeParticles]);
 
@@ -180,11 +161,8 @@ export default function ParticleBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Small delay to ensure canvas is properly mounted
-    setTimeout(() => {
-      resizeCanvas();
-      animate();
-    }, 100);
+    resizeCanvas();
+    animate();
 
     window.addEventListener("resize", resizeCanvas);
     window.addEventListener("mousemove", handleMouseMove);
@@ -206,12 +184,6 @@ export default function ParticleBackground() {
       ref={canvasRef}
       style={{
         zIndex: -1,
-        display: "block",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
       }}
     />
   );
