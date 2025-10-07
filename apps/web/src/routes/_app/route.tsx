@@ -1,6 +1,6 @@
 import { ScrollArea } from "@base-ui-components/react/scroll-area";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { useWindowSize } from "@uidotdev/usehooks";
+// import { useWindowSize } from "@uidotdev/usehooks";
 import { Sidebar } from "@/components/sidebar";
 import { orpc } from "@/utils/orpc-client";
 
@@ -23,17 +23,17 @@ export const Route = createFileRoute("/_app")({
 });
 
 function RouteComponent() {
-  const { width } = useWindowSize();
+  // const { width } = useWindowSize();
 
-  if (width && width < 1024) {
-    return <Outlet />;
-  }
+  // if (width && width < 1024) {
+  //   return <Outlet />;
+  // }
 
   return (
     <div className="flex h-full gap-2 overflow-hidden py-2 pr-2">
       <Sidebar />
       <ScrollArea.Root className="h-full flex-1">
-        <ScrollArea.Viewport className="h-full overscroll-contain rounded-md border border-border bg-default p-2 pt-4">
+        <ScrollArea.Viewport className="h-full overscroll-contain rounded-md border border-border bg-default p-4">
           <Outlet />
         </ScrollArea.Viewport>
         <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded bg-border opacity-0 transition-opacity delay-300 data-[hovering]:opacity-100 data-[scrolling]:opacity-100 data-[hovering]:delay-0 data-[scrolling]:delay-0 data-[hovering]:duration-75 data-[scrolling]:duration-75">
