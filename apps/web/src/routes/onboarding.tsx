@@ -12,8 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { orpc } from "@/utils/orpc-client";
 
 const onboardingSchema = z.object({
@@ -97,8 +97,8 @@ function OnboardingComponent() {
           >
             <form.Field name="name">
               {(field) => (
-                <div className="space-y-2">
-                  <Label>Organization Name</Label>
+                <Field.Root>
+                  <Field.Label>Organization Name</Field.Label>
                   <Input
                     disabled={form.state.isSubmitting}
                     onChange={(e) => field.handleChange(e.target.value)}
@@ -106,14 +106,11 @@ function OnboardingComponent() {
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <p
-                      className="text-destructive text-sm"
-                      key={error?.message}
-                    >
+                    <Field.Error key={error?.message}>
                       {error?.message}
-                    </p>
+                    </Field.Error>
                   ))}
-                </div>
+                </Field.Root>
               )}
             </form.Field>
 
@@ -127,8 +124,8 @@ function OnboardingComponent() {
                 const isTyping = field.state.value !== debouncedSlug;
 
                 return (
-                  <div className="space-y-2">
-                    <Label>Organization Slug</Label>
+                  <Field.Root>
+                    <Field.Label>Organization Slug</Field.Label>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -136,24 +133,21 @@ function OnboardingComponent() {
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <p
-                        className="text-destructive text-sm"
-                        key={error?.message}
-                      >
+                      <Field.Error key={error?.message}>
                         {error?.message}
-                      </p>
+                      </Field.Error>
                     ))}
                     {field.state.meta.errors.length === 0 &&
                       field.state.value && (
-                        <p className="text-muted-foreground text-sm">
+                        <Field.Description>
                           {isTyping || isLoading
                             ? "Checking availability..."
                             : slugAvailable
                               ? "✓ Available"
                               : "✗ Taken"}
-                        </p>
+                        </Field.Description>
                       )}
-                  </div>
+                  </Field.Root>
                 );
               }}
             </form.Field>

@@ -7,8 +7,8 @@ import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
 import { Button } from "./ui/button";
 import { Dialog } from "./ui/dialog";
+import { Field } from "./ui/field";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 
 type CreateOrgDialogProps = {
   allowClosing?: boolean;
@@ -100,8 +100,8 @@ export function CreateOrgDialog({
           >
             <form.Field name="name">
               {(field) => (
-                <div className="space-y-2">
-                  <Label>Organization Name</Label>
+                <Field.Root>
+                  <Field.Label>Organization Name</Field.Label>
                   <Input
                     disabled={form.state.isSubmitting}
                     onChange={(e) => field.handleChange(e.target.value)}
@@ -109,14 +109,11 @@ export function CreateOrgDialog({
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <p
-                      className="text-destructive text-sm"
-                      key={error?.message}
-                    >
+                    <Field.Error key={error?.message}>
                       {error?.message}
-                    </p>
+                    </Field.Error>
                   ))}
-                </div>
+                </Field.Root>
               )}
             </form.Field>
 
@@ -130,8 +127,8 @@ export function CreateOrgDialog({
                 const isTyping = field.state.value !== debouncedSlug;
 
                 return (
-                  <div className="space-y-2">
-                    <Label>Organization Slug</Label>
+                  <Field.Root>
+                    <Field.Label>Organization Slug</Field.Label>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -139,24 +136,21 @@ export function CreateOrgDialog({
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <p
-                        className="text-destructive text-sm"
-                        key={error?.message}
-                      >
+                      <Field.Error key={error?.message}>
                         {error?.message}
-                      </p>
+                      </Field.Error>
                     ))}
                     {field.state.meta.errors.length === 0 &&
                       field.state.value && (
-                        <p className="text-muted-foreground text-sm">
+                        <Field.Description>
                           {isTyping || isLoading
                             ? "Checking availability..."
                             : slugAvailable
                               ? "✓ Available"
                               : "✗ Taken"}
-                        </p>
+                        </Field.Description>
                       )}
-                  </div>
+                  </Field.Root>
                 );
               }}
             </form.Field>

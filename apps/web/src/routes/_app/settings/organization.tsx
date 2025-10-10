@@ -8,8 +8,8 @@ import { z } from "zod";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
+import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/utils/cn";
 import { orpc } from "@/utils/orpc-client";
@@ -114,8 +114,8 @@ function RouteComponent() {
                 validators={{ onChange: inviteSchema.shape.email }}
               >
                 {(field) => (
-                  <div className="space-y-2">
-                    <Label>Email Address</Label>
+                  <Field.Root>
+                    <Field.Label>Email Address</Field.Label>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -124,14 +124,11 @@ function RouteComponent() {
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <p
-                        className="text-destructive text-sm"
-                        key={error?.message}
-                      >
+                      <Field.Error key={error?.message}>
                         {error?.message}
-                      </p>
+                      </Field.Error>
                     ))}
-                  </div>
+                  </Field.Root>
                 )}
               </form.Field>
 
