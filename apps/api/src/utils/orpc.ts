@@ -44,7 +44,9 @@ const requireSubscription = o
   .middleware(async ({ context, errors, next }) => {
     const orgId = context?.session?.activeOrganizationId;
     if (!orgId) {
-      throw errors.NO_SUBSCRIPTION({ data: { missingSubscription: true } });
+      // user doesn't have an org yet (currently onboarding)
+      return next();
+      // throw errors.NO_SUBSCRIPTION({ data: { missingSubscription: true } });
     }
 
     redis.del(orgId);
