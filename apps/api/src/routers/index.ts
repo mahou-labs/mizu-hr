@@ -1,5 +1,6 @@
 import type { RouterClient } from "@orpc/server";
 import { protectedProcedure, publicProcedure } from "../utils/orpc";
+import { jobRouter } from "./job";
 import { organizationRouter } from "./organization";
 import { todoRouter } from "./todo";
 import { userRouter } from "./user";
@@ -19,6 +20,7 @@ export const appRouter = {
   organization: organizationRouter,
   user: userRouter,
   waitlist: waitlistRouter,
+  job: jobRouter,
 };
 
 export type AppRouterClient = RouterClient<typeof appRouter>;
