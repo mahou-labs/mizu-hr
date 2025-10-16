@@ -1,10 +1,16 @@
 import { redis } from "bun";
-import z from "zod";
+import * as z from "zod";
 import { auth } from "../utils/auth";
-import { type CachedSubscriptionData, protectedProcedure } from "../utils/orpc";
+import {
+  type CachedSubscriptionData,
+  protectedProcedure,
+  publicProcedure,
+  requireAuth,
+} from "../utils/orpc";
 
 export const organizationRouter = {
-  createOrg: protectedProcedure
+  createOrg: publicProcedure
+    .use(requireAuth)
     .input(
       z.object({
         name: z.string().min(1),

@@ -17,7 +17,7 @@ export type CachedSubscriptionData = {
 
 export const o = os.$context<Context>();
 
-const requireAuth = o
+export const requireAuth = o
   .errors({
     UNAUTHORIZED: {
       status: 401,
@@ -45,11 +45,11 @@ const requireSubscription = o
     const orgId = context?.session?.activeOrganizationId;
     if (!orgId) {
       // user doesn't have an org yet (currently onboarding)
-      return next();
-      // throw errors.NO_SUBSCRIPTION({ data: { missingSubscription: true } });
+      // return next();
+      throw errors.NO_SUBSCRIPTION({ data: { missingSubscription: true } });
     }
 
-    redis.del(orgId);
+    // redis.del(orgId);
 
     // Step 1: Check Redis for cached subscription data
     const cachedData = await redis.get(orgId);
