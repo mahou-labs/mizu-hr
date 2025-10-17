@@ -64,6 +64,7 @@ const requireSubscription = o
         const currentPeriodEnd = subscriptionData.currentPeriodEnd
           ? new Date(subscriptionData.currentPeriodEnd)
           : null;
+
         const isNotExpired = currentPeriodEnd
           ? currentPeriodEnd.getTime() > Date.now()
           : false;
