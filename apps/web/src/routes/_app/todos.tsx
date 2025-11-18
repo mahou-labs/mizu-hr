@@ -106,15 +106,13 @@ function TodosRoute() {
                   key={todo.id}
                 >
                   <div className="flex items-center space-x-2">
-                    <Checkbox.Root
+                    <Checkbox
                       checked={todo.completed}
                       id={`todo-${todo.id}`}
                       onCheckedChange={() =>
                         handleToggleTodo(todo.id, todo.completed)
                       }
-                    >
-                      <Checkbox.Indicator />
-                    </Checkbox.Root>
+                    />
                     <label
                       className={`text-card-foreground ${todo.completed ? "line-through opacity-60" : ""}`}
                       htmlFor={`todo-${todo.id}`}

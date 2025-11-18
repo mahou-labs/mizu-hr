@@ -6,8 +6,14 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
 import { Button } from "./ui/button";
-import { Dialog } from "./ui/dialog";
-import { Field } from "./ui/field";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPopup,
+  DialogPortal,
+  DialogTitle,
+} from "./ui/dialog";
+import { Field, FieldDescription, FieldError, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 
 type CreateOrgDialogProps = {
@@ -82,15 +88,15 @@ export function CreateOrgDialog({
   );
 
   return (
-    <Dialog.Root
+    <Dialog
       dismissible={allowClosing}
       onOpenChange={onOpenChange}
       open={isOpen}
     >
-      <Dialog.Portal>
-        <Dialog.Backdrop />
-        <Dialog.Popup>
-          <Dialog.Title>Create new organization</Dialog.Title>
+      <DialogPortal>
+        <DialogBackdrop />
+        <DialogPopup>
+          <DialogTitle>Create new organization</DialogTitle>
           <form
             className="space-y-4"
             onSubmit={(e) => {
@@ -100,8 +106,8 @@ export function CreateOrgDialog({
           >
             <form.Field name="name">
               {(field) => (
-                <Field.Root>
-                  <Field.Label>Organization Name</Field.Label>
+                <Field>
+                  <FieldLabel>Organization Name</FieldLabel>
                   <Input
                     disabled={form.state.isSubmitting}
                     onChange={(e) => field.handleChange(e.target.value)}
@@ -109,11 +115,11 @@ export function CreateOrgDialog({
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <Field.Error key={error?.message}>
+                    <FieldError key={error?.message}>
                       {error?.message}
-                    </Field.Error>
+                    </FieldError>
                   ))}
-                </Field.Root>
+                </Field>
               )}
             </form.Field>
 
@@ -127,8 +133,8 @@ export function CreateOrgDialog({
                 const isTyping = field.state.value !== debouncedSlug;
 
                 return (
-                  <Field.Root>
-                    <Field.Label>Organization Slug</Field.Label>
+                  <Field>
+                    <FieldLabel>Organization Slug</FieldLabel>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -136,21 +142,21 @@ export function CreateOrgDialog({
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <Field.Error key={error?.message}>
+                      <FieldError key={error?.message}>
                         {error?.message}
-                      </Field.Error>
+                      </FieldError>
                     ))}
                     {field.state.meta.errors.length === 0 &&
                       field.state.value && (
-                        <Field.Description>
+                        <FieldDescription>
                           {isTyping || isLoading
                             ? "Checking availability..."
                             : slugAvailable
                               ? "✓ Available"
                               : "✗ Taken"}
-                        </Field.Description>
+                        </FieldDescription>
                       )}
-                  </Field.Root>
+                  </Field>
                 );
               }}
             </form.Field>
@@ -171,9 +177,9 @@ export function CreateOrgDialog({
           </form>
 
           {/* <Dialog.Close>Close</Dialog.Close> */}
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </DialogPopup>
+      </DialogPortal>
+    </Dialog>
   );
 
   // return (

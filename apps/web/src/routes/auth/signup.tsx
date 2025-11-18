@@ -8,7 +8,7 @@ import {
 import { toast } from "sonner";
 import z from "zod";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc-client";
@@ -66,8 +66,8 @@ function RouteComponent() {
         <div>
           <form.Field name="name">
             {(field) => (
-              <Field.Root>
-                <Field.Label htmlFor={field.name}>Name</Field.Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -76,11 +76,9 @@ function RouteComponent() {
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <Field.Error key={error?.message}>
-                    {error?.message}
-                  </Field.Error>
+                  <FieldError key={error?.message}>{error?.message}</FieldError>
                 ))}
-              </Field.Root>
+              </Field>
             )}
           </form.Field>
         </div>
@@ -88,8 +86,8 @@ function RouteComponent() {
         <div>
           <form.Field name="email">
             {(field) => (
-              <Field.Root>
-                <Field.Label htmlFor={field.name}>Email</Field.Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -99,11 +97,9 @@ function RouteComponent() {
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <Field.Error key={error?.message}>
-                    {error?.message}
-                  </Field.Error>
+                  <FieldError key={error?.message}>{error?.message}</FieldError>
                 ))}
-              </Field.Root>
+              </Field>
             )}
           </form.Field>
         </div>
@@ -111,8 +107,8 @@ function RouteComponent() {
         <div>
           <form.Field name="password">
             {(field) => (
-              <Field.Root>
-                <Field.Label htmlFor={field.name}>Password</Field.Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -122,11 +118,9 @@ function RouteComponent() {
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <Field.Error key={error?.message}>
-                    {error?.message}
-                  </Field.Error>
+                  <FieldError key={error?.message}>{error?.message}</FieldError>
                 ))}
-              </Field.Root>
+              </Field>
             )}
           </form.Field>
         </div>

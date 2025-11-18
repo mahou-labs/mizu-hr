@@ -5,10 +5,16 @@ import { User, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
-import { Field } from "@/components/ui/field";
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPopup,
+  DialogPortal,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/utils/cn";
@@ -95,13 +101,13 @@ function RouteComponent() {
         Invite Member
       </Button>
 
-      <Dialog.Root onOpenChange={setIsDialogOpen} open={isDialogOpen}>
-        <Dialog.Portal>
-          <Dialog.Backdrop className="fixed inset-0 bg-black/50" />
-          <Dialog.Popup className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-full max-w-md rounded-lg border bg-card p-6 shadow-lg">
-            <Dialog.Title className="mb-4 font-semibold text-lg">
+      <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
+        <DialogPortal>
+          <DialogBackdrop className="fixed inset-0 bg-black/50" />
+          <DialogPopup className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-full max-w-md rounded-lg border bg-card p-6 shadow-lg">
+            <DialogTitle className="mb-4 font-semibold text-lg">
               Invite Team Member
-            </Dialog.Title>
+            </DialogTitle>
             <form
               className="space-y-4"
               onSubmit={(e) => {
@@ -114,8 +120,8 @@ function RouteComponent() {
                 validators={{ onChange: inviteSchema.shape.email }}
               >
                 {(field) => (
-                  <Field.Root>
-                    <Field.Label>Email Address</Field.Label>
+                  <Field>
+                    <FieldLabel>Email Address</FieldLabel>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -124,11 +130,11 @@ function RouteComponent() {
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <Field.Error key={error?.message}>
+                      <FieldError key={error?.message}>
                         {error?.message}
-                      </Field.Error>
+                      </FieldError>
                     ))}
-                  </Field.Root>
+                  </Field>
                 )}
               </form.Field>
 
@@ -149,9 +155,9 @@ function RouteComponent() {
                 </Button>
               </div>
             </form>
-          </Dialog.Popup>
-        </Dialog.Portal>
-      </Dialog.Root>
+          </DialogPopup>
+        </DialogPortal>
+      </Dialog>
     </div>
   );
 }
@@ -203,12 +209,12 @@ function Member({
     >
       <div className="flex items-center gap-3">
         <div className="relative">
-          <Avatar.Root>
-            <Avatar.Image alt={`${name}'s avatar`} src={avatarUrl} />
-            <Avatar.Fallback>
+          <Avatar>
+            <AvatarImage alt={`${name}'s avatar`} src={avatarUrl} />
+            <AvatarFallback>
               {initials || <User className="size-5" />}
-            </Avatar.Fallback>
-          </Avatar.Root>
+            </AvatarFallback>
+          </Avatar>
 
           {isPending && (
             <div className="-bottom-1 -right-1 absolute size-4 rounded-full border-2 border-card bg-chart-4" />

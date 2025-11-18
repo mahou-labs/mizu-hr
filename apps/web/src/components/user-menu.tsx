@@ -10,7 +10,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
 import { orpc } from "@/utils/orpc-client";
-import { Menu } from "./ui/menu";
+import {
+  Menu,
+  MenuItem,
+  MenuPopup,
+  MenuPortal,
+  MenuSeparator,
+  MenuTrigger,
+} from "./ui/menu";
 
 const WHITESPACE_REGEX = /\s+/;
 
@@ -57,14 +64,14 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
   const activeOrg = organizations.find((org) => org.id === activeOrgId);
 
   return (
-    <Menu.Root>
-      <Menu.Trigger
+    <Menu>
+      <MenuTrigger
         className={cn(
-          "focus-visible:-outline-offset-1 flex w-full cursor-pointer select-none items-center rounded-lg p-2 transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-2 focus-visible:outline-sidebar-ring",
+          "focus-visible:-outline-offset-1 flex w-full cursor-pointer select-none items-center rounded-lg p-2 transition-all duration-200 hover:bg-light focus-visible:outline-2 focus-visible:ring-2 focus-visible:ring-ring",
           isCollapsed ? "justify-center" : "gap-3"
         )}
       >
-        <Avatar.Root className="inline-flex size-8 shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-sidebar-accent align-middle font-medium text-sidebar-accent-foreground text-sm">
+        <Avatar.Root className="inline-flex size-8 shrink-0 select-none items-center justify-center overflow-hidden rounded-full border border-border bg-muted align-middle font-medium text-muted-foreground text-sm">
           <Avatar.Image
             alt={user?.name ?? ""}
             className="size-full object-cover"
@@ -72,7 +79,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
             src={user?.image ?? undefined}
             width="32"
           />
-          <Avatar.Fallback className="flex size-full items-center justify-center text-sm">
+          <Avatar.Fallback className="flex size-full items-center justify-center bg-muted text-muted-foreground text-sm">
             {getAvatarInitials(user?.name)}
           </Avatar.Fallback>
         </Avatar.Root>
@@ -85,38 +92,36 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
           <span className="truncate font-medium text-foreground text-sm">
             {user?.name}
           </span>
-          <span className="truncate text-foreground/60 text-xs">
+          <span className="truncate text-foreground-muted text-xs">
             {activeOrg?.name}
           </span>
         </div>
         <ChevronDown
           className={cn(
-            "size-4 transition-all duration-200",
+            "size-4 text-foreground-muted transition-all duration-200",
             isCollapsed ? "w-0 opacity-0" : "ml-auto w-auto opacity-100"
           )}
         />
-      </Menu.Trigger>
-      <Menu.Portal>
-        <Menu.Positioner className="outline-none" sideOffset={8}>
-          <Menu.Popup className="origin-[var(--transform-origin)] rounded-md border border-border bg-popover py-1 text-popover-foreground shadow-lg transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0">
-            {/* <Menu.Arrow className="data-[side=right]:-rotate-90 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=top]:bottom-[-8px] data-[side=right]:left-[-13px] data-[side=left]:rotate-90 data-[side=top]:rotate-180">
+      </MenuTrigger>
+      <MenuPortal>
+        <MenuPopup className="origin-[var(--transform-origin)] rounded-md border border-border bg-popover py-1 text-popover-foreground shadow-lg transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0">
+          {/* <Menu.Arrow className="data-[side=right]:-rotate-90 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=top]:bottom-[-8px] data-[side=right]:left-[-13px] data-[side=left]:rotate-90 data-[side=top]:rotate-180">
                 <ArrowSvg />
               </Menu.Arrow> */}
-            <Menu.Item onClick={() => navigate({ to: "/settings" })}>
-              Settings
-            </Menu.Item>
-            <Menu.Separator />
-            <Menu.Item>Favorite</Menu.Item>
-            <Menu.Item
-              className="text-destructive data-[highlighted]:before:bg-destructive"
-              onClick={signOut}
-            >
-              Sign Out
-            </Menu.Item>
-          </Menu.Popup>
-        </Menu.Positioner>
-      </Menu.Portal>
-    </Menu.Root>
+          <MenuItem onClick={() => navigate({ to: "/settings" })}>
+            Settings
+          </MenuItem>
+          <MenuSeparator />
+          <MenuItem>Favorite</MenuItem>
+          <MenuItem
+            className="text-destructive data-[highlighted]:before:bg-destructive"
+            onClick={signOut}
+          >
+            Sign Out
+          </MenuItem>
+        </MenuPopup>
+      </MenuPortal>
+    </Menu>
   );
 }
 
@@ -124,7 +129,7 @@ function UserMenuSkeleton({ isCollapsed = false }: { isCollapsed?: boolean }) {
   return (
     <div
       className={cn(
-        "flex cursor-pointer select-none items-center rounded-lg p-2",
+        "flex cursor-pointer select-none items-center rounded-lg bg-light p-2",
         isCollapsed ? "justify-center" : "gap-3"
       )}
     >

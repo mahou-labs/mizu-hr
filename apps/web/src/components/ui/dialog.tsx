@@ -1,90 +1,129 @@
 import { Dialog as DialogPrimitive } from "@base-ui-components/react/dialog";
-import type { ComponentProps } from "react";
+import { XIcon } from "lucide-react";
+
 import { cn } from "@/utils/cn";
 
-function Root(props: ComponentProps<typeof DialogPrimitive.Root>) {
-  return <DialogPrimitive.Root {...props} />;
+const Dialog = DialogPrimitive.Root;
+
+function DialogTrigger(props: DialogPrimitive.Trigger.Props) {
+  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
 
-function Trigger(props: ComponentProps<typeof DialogPrimitive.Trigger>) {
-  return (
-    <DialogPrimitive.Trigger
-      {...props}
-      className={cn(
-        "flex h-10 select-none items-center justify-center rounded-md border border-input bg-default px-3.5 font-medium text-foreground text-sm hover:bg-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        props.className
-      )}
-    />
-  );
-}
-
-function Portal(props: ComponentProps<typeof DialogPrimitive.Portal>) {
+function DialogPortal(props: DialogPrimitive.Portal.Props) {
   return <DialogPrimitive.Portal {...props} />;
 }
 
-function Backdrop(props: ComponentProps<typeof DialogPrimitive.Backdrop>) {
+function DialogClose(props: DialogPrimitive.Close.Props) {
+  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
+}
+
+function DialogBackdrop({
+  className,
+  ...props
+}: DialogPrimitive.Backdrop.Props) {
   return (
     <DialogPrimitive.Backdrop
-      {...props}
       className={cn(
-        "fixed inset-0 bg-black/80 transition-all duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0",
-        props.className
+        "fixed inset-0 z-50 bg-black/32 backdrop-blur-sm transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+        className
       )}
+      data-slot="dialog-backdrop"
+      {...props}
     />
   );
 }
 
-function Popup(props: ComponentProps<typeof DialogPrimitive.Popup>) {
+function DialogPopup({
+  className,
+  children,
+  showCloseButton = true,
+  ...props
+}: DialogPrimitive.Popup.Props & {
+  showCloseButton?: boolean;
+}) {
   return (
-    <DialogPrimitive.Popup
+    <DialogPortal>
+      <DialogBackdrop />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <DialogPrimitive.Popup
+          className={cn(
+            "grid w-full min-w-0 origin-center gap-4 border bg-popover bg-clip-padding p-6 text-popover-foreground shadow-lg transition-[scale,opacity] duration-200 ease-in-out will-change-transform data-ending-style:scale-95 data-starting-style:scale-95 data-ending-style:opacity-0 data-starting-style:opacity-0 sm:max-w-lg sm:rounded-2xl dark:bg-clip-border",
+            "relative before:pointer-events-none before:absolute before:inset-0 before:shadow-[0_1px_--theme(--color-black/4%)] sm:before:rounded-[calc(var(--radius-2xl)-1px)] dark:before:shadow-[0_-1px_--theme(--color-white/8%)]",
+            className
+          )}
+          data-slot="dialog-popup"
+          {...props}
+        >
+          {children}
+          {showCloseButton && (
+            <DialogPrimitive.Close className="absolute end-2 top-2 inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md border border-transparent opacity-72 outline-none transition-[color,background-color,box-shadow,opacity] pointer-coarse:after:absolute pointer-coarse:after:size-full pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11 hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0">
+              <XIcon />
+              <span className="sr-only">Close</span>
+            </DialogPrimitive.Close>
+          )}
+        </DialogPrimitive.Popup>
+      </div>
+    </DialogPortal>
+  );
+}
+
+function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("flex flex-col gap-1 text-center sm:text-left", className)}
+      data-slot="dialog-header"
       {...props}
-      className={cn(
-        "-mt-8 -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-96 max-w-[calc(100vw-3rem)] rounded-lg border border-border bg-default p-6 text-foreground shadow-lg transition-all duration-150 data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0",
-        props.className
-      )}
     />
   );
 }
 
-function Title(props: ComponentProps<typeof DialogPrimitive.Title>) {
+function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "sm:-mx-6 sm:-mb-6 flex flex-col-reverse gap-2 sm:mt-2 sm:flex-row sm:justify-end sm:rounded-b-xl sm:border-t sm:bg-muted/50 sm:px-6 sm:py-4",
+        className
+      )}
+      data-slot="dialog-footer"
+      {...props}
+    />
+  );
+}
+
+function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
+      className={cn("font-heading text-xl leading-none", className)}
+      data-slot="dialog-title"
       {...props}
-      className={cn("text-foreground", props.className)}
     />
   );
 }
 
-function Description(
-  props: ComponentProps<typeof DialogPrimitive.Description>
-) {
+function DialogDescription({
+  className,
+  ...props
+}: DialogPrimitive.Description.Props) {
   return (
     <DialogPrimitive.Description
+      className={cn("text-muted-foreground text-sm", className)}
+      data-slot="dialog-description"
       {...props}
-      className={cn("text-foreground", props.className)}
     />
   );
 }
 
-function Close(props: ComponentProps<typeof DialogPrimitive.Close>) {
-  return (
-    <DialogPrimitive.Close
-      {...props}
-      className={cn(
-        "flex h-10 select-none items-center justify-center rounded-md border border-input bg-default px-3.5 font-medium text-foreground text-sm hover:bg-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        props.className
-      )}
-    />
-  );
-}
-
-export const Dialog = {
-  Root,
-  Trigger,
-  Portal,
-  Backdrop,
-  Popup,
-  Title,
-  Description,
-  Close,
+export {
+  Dialog,
+  DialogTrigger,
+  DialogPortal,
+  DialogClose,
+  DialogBackdrop,
+  DialogBackdrop as DialogOverlay,
+  DialogPopup,
+  DialogPopup as DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
 };

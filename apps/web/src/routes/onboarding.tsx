@@ -12,7 +12,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { orpc } from "@/utils/orpc-client";
 
@@ -97,8 +102,8 @@ function OnboardingComponent() {
           >
             <form.Field name="name">
               {(field) => (
-                <Field.Root>
-                  <Field.Label>Organization Name</Field.Label>
+                <Field>
+                  <FieldLabel>Organization Name</FieldLabel>
                   <Input
                     disabled={form.state.isSubmitting}
                     onChange={(e) => field.handleChange(e.target.value)}
@@ -106,11 +111,11 @@ function OnboardingComponent() {
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <Field.Error key={error?.message}>
+                    <FieldError key={error?.message}>
                       {error?.message}
-                    </Field.Error>
+                    </FieldError>
                   ))}
-                </Field.Root>
+                </Field>
               )}
             </form.Field>
 
@@ -124,8 +129,8 @@ function OnboardingComponent() {
                 const isTyping = field.state.value !== debouncedSlug;
 
                 return (
-                  <Field.Root>
-                    <Field.Label>Organization Slug</Field.Label>
+                  <Field>
+                    <FieldLabel>Organization Slug</FieldLabel>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -133,21 +138,21 @@ function OnboardingComponent() {
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <Field.Error key={error?.message}>
+                      <FieldError key={error?.message}>
                         {error?.message}
-                      </Field.Error>
+                      </FieldError>
                     ))}
                     {field.state.meta.errors.length === 0 &&
                       field.state.value && (
-                        <Field.Description>
+                        <FieldDescription>
                           {isTyping || isLoading
                             ? "Checking availability..."
                             : slugAvailable
                               ? "✓ Available"
                               : "✗ Taken"}
-                        </Field.Description>
+                        </FieldDescription>
                       )}
-                  </Field.Root>
+                  </Field>
                 );
               }}
             </form.Field>

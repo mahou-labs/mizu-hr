@@ -28,7 +28,7 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col gap-3 bg-dark py-3 pr-2.5 pl-4.5 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
+        "relative flex h-full flex-col gap-3 border-border border-r bg-default py-3 pr-2.5 pl-4.5 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
@@ -104,7 +104,7 @@ export function Sidebar() {
         />
       </nav>
       <button
-        className="flex h-8 w-8 items-center justify-center rounded-md bg-dark text-foreground transition-all hover:bg-default"
+        className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-light text-foreground transition-all hover:bg-default"
         onClick={() => setIsCollapsed(!isCollapsed)}
         title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         type="button"
@@ -143,10 +143,10 @@ function SidebarItem({
   return (
     <Link
       className={cn(
-        "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2.5 py-2 font-medium text-sm",
-        "hover:bg-default hover:outline hover:outline-border",
+        "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2.5 py-2 font-medium text-foreground text-sm",
+        "hover:bg-light",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        isActive && "bg-default outline outline-border"
+        isActive && "bg-light"
       )}
       onClick={onClick}
       title={isCollapsed ? label : undefined}
@@ -173,13 +173,12 @@ function SidebarItem({
         <div
           className={cn(
             "-translate-y-1/2 pointer-events-none absolute top-1/2 left-full z-50",
-            "ml-2 whitespace-nowrap rounded-md px-2 py-1",
-            "bg-primary text-primary-foreground text-xs",
+            "ml-2 whitespace-nowrap rounded-md border border-border px-2 py-1",
+            "bg-popover text-popover-foreground text-xs shadow-lg",
             "opacity-0 transition-opacity duration-200 group-hover:opacity-100"
           )}
         >
           {label}
-          <div className="-translate-y-1/2 absolute top-1/2 right-full border-4 border-transparent border-r-primary" />
         </div>
       )}
     </Link>

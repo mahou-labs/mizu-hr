@@ -1,45 +1,44 @@
 import { Avatar as AvatarPrimitive } from "@base-ui-components/react/avatar";
-import type { ComponentProps } from "react";
+
 import { cn } from "@/utils/cn";
 
-function Root(props: ComponentProps<typeof AvatarPrimitive.Root>) {
+function Avatar({ className, ...props }: AvatarPrimitive.Root.Props) {
   return (
     <AvatarPrimitive.Root
-      {...props}
       className={cn(
-        "relative inline-flex size-9 shrink-0 overflow-hidden rounded-full",
-        props.className
+        "inline-flex size-8 shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-background align-middle font-medium text-xs",
+        className
       )}
+      data-slot="avatar"
+      {...props}
     />
   );
 }
 
-function Image(props: ComponentProps<typeof AvatarPrimitive.Image>) {
+function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
   return (
     <AvatarPrimitive.Image
+      className={cn("size-full object-cover", className)}
+      data-slot="avatar-image"
       {...props}
-      className={cn(
-        "aspect-square h-full w-full object-cover",
-        props.className
-      )}
     />
   );
 }
 
-function Fallback(props: ComponentProps<typeof AvatarPrimitive.Fallback>) {
+function AvatarFallback({
+  className,
+  ...props
+}: AvatarPrimitive.Fallback.Props) {
   return (
     <AvatarPrimitive.Fallback
-      {...props}
       className={cn(
-        "flex h-full w-full items-center justify-center bg-default font-medium text-foreground-muted text-sm",
-        props.className
+        "flex size-full items-center justify-center rounded-full bg-muted",
+        className
       )}
+      data-slot="avatar-fallback"
+      {...props}
     />
   );
 }
 
-export const Avatar = {
-  Root,
-  Image,
-  Fallback,
-};
+export { Avatar, AvatarImage, AvatarFallback };

@@ -33,19 +33,19 @@ export function ThemeToggle({
     <Button
       className={`transition-all duration-200 ${
         isCollapsed ? "h-8 w-8 p-0" : "h-8 w-full justify-start gap-3 px-3"
-      } hover:bg-sidebar-accent hover:text-sidebar-accent-foreground`}
+      } hover:bg-light`}
       onClick={toggleTheme}
       size={isCollapsed ? "icon" : "default"}
       title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       variant="ghost"
     >
       {theme === "light" ? (
-        <Moon className="h-4 w-4" />
+        <Moon className="h-4 w-4 text-foreground-muted" />
       ) : (
-        <Sun className="h-4 w-4" />
+        <Sun className="h-4 w-4 text-foreground-muted" />
       )}
       {!isCollapsed && (
-        <span className="font-medium text-sm">
+        <span className="font-medium text-foreground text-sm">
           {theme === "light" ? "Dark mode" : "Light mode"}
         </span>
       )}
