@@ -93,7 +93,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
             {user?.name}
           </span>
           <span className="truncate text-foreground-muted text-xs">
-            {activeOrg?.name}
+            {user?.email} lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
           </span>
         </div>
         <ChevronDown
@@ -104,21 +104,13 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
         />
       </MenuTrigger>
       <MenuPortal>
-        <MenuPopup className="origin-[var(--transform-origin)] rounded-md border border-border bg-popover py-1 text-popover-foreground shadow-lg transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0">
-          {/* <Menu.Arrow className="data-[side=right]:-rotate-90 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=top]:bottom-[-8px] data-[side=right]:left-[-13px] data-[side=left]:rotate-90 data-[side=top]:rotate-180">
-                <ArrowSvg />
-              </Menu.Arrow> */}
+        <MenuPopup>
           <MenuItem onClick={() => navigate({ to: "/settings" })}>
             Settings
           </MenuItem>
           <MenuSeparator />
           <MenuItem>Favorite</MenuItem>
-          <MenuItem
-            className="text-destructive data-[highlighted]:before:bg-destructive"
-            onClick={signOut}
-          >
-            Sign Out
-          </MenuItem>
+          <MenuItem onClick={signOut}>Sign Out</MenuItem>
         </MenuPopup>
       </MenuPortal>
     </Menu>

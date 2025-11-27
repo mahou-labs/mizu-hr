@@ -52,14 +52,10 @@ function RouteComponent() {
           Manage your account and organization settings.
         </p>
       </div>
-      <Tabs className="" onValueChange={handleTabChange} value={activeTab}>
-        <TabsList className="relative z-0 flex gap-2 border-border border-b px-1">
+      <Tabs onValueChange={handleTabChange} value={activeTab}>
+        <TabsList>
           {tabs.map((tab) => (
-            <TabsTab
-              className="p-1 text-muted-foreground hover:text-foreground data-[selected]:text-foreground"
-              key={tab.id}
-              value={tab.id}
-            >
+            <TabsTab key={tab.id} value={tab.id}>
               {tab.label}
             </TabsTab>
           ))}
