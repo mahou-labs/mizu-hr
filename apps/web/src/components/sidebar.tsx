@@ -18,19 +18,26 @@ import { cn } from "@/utils/cn";
 import { OrgMenu } from "./org-menu";
 import { ThemeToggle } from "./theme-toggle";
 import { Separator } from "./ui/separator";
+import {
+  Tooltip,
+  TooltipCreateHandle,
+  TooltipPopup,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 import { UserMenu } from "./user-menu";
+
+const tooltipHandle = TooltipCreateHandle<React.ComponentType>();
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
   useKeyPress("s", () => setIsCollapsed((prev) => !prev));
 
-  // pr-2.5 pl-4.5
-
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col gap-3 bg-default px-4 py-3 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
+        "relative flex h-full flex-col gap-3 bg-default bg-sidebar px-4 py-3 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
@@ -67,43 +74,84 @@ export function Sidebar() {
       <OrgMenu isCollapsed={isCollapsed} />
       {/* Navigation */}
       <nav className="mt-6 flex flex-1 flex-col gap-1">
-        <SidebarItem
-          href="/"
-          icon={Home}
-          isActive={location.pathname === "/"}
-          isCollapsed={isCollapsed}
-          label="Home"
-        />
-        <SidebarItem
-          href="/jobs"
-          icon={Briefcase}
-          isActive={location.pathname === "/jobs"}
-          isCollapsed={isCollapsed}
-          label="Jobs"
-        />
-        <SidebarItem
-          href="/dashboard"
-          icon={LayoutDashboard}
-          isActive={location.pathname === "/dashboard"}
-          isCollapsed={isCollapsed}
-          label="Dashboard"
-        />
-        <SidebarItem
-          href="/todos"
-          icon={ListTodo}
-          isActive={location.pathname === "/todos"}
-          isCollapsed={isCollapsed}
-          label="Todos"
-        />
+        <TooltipProvider delay={0} timeout={500}>
+          <Tooltip disabled={!isCollapsed}>
+            <TooltipTrigger>
+              <SidebarItem
+                href="/"
+                icon={Home}
+                isActive={location.pathname === "/"}
+                isCollapsed={isCollapsed}
+                label="Home"
+              />
+              <TooltipPopup side="right">
+                <span>Home</span>
+              </TooltipPopup>
+            </TooltipTrigger>
+          </Tooltip>
 
-        <Separator className="mt-auto h-px w-full" orientation="horizontal" />
-        <SidebarItem
-          href="/settings"
-          icon={Settings}
-          isActive={location.pathname.startsWith("/settings")}
-          isCollapsed={isCollapsed}
-          label="Settings"
-        />
+          <Tooltip disabled={!isCollapsed}>
+            <TooltipTrigger>
+              <SidebarItem
+                href="/jobs"
+                icon={Briefcase}
+                isActive={location.pathname === "/jobs"}
+                isCollapsed={isCollapsed}
+                label="Jobs"
+              />
+              <TooltipPopup side="right">
+                <span>Jobs</span>
+              </TooltipPopup>
+            </TooltipTrigger>
+          </Tooltip>
+
+          <Tooltip disabled={!isCollapsed}>
+            <TooltipTrigger>
+              <SidebarItem
+                href="/dashboard"
+                icon={LayoutDashboard}
+                isActive={location.pathname === "/dashboard"}
+                isCollapsed={isCollapsed}
+                label="Dashboard"
+              />
+              <TooltipPopup side="right">
+                <span>Dashboard</span>
+              </TooltipPopup>
+            </TooltipTrigger>
+          </Tooltip>
+
+          <Tooltip disabled={!isCollapsed}>
+            <TooltipTrigger>
+              <SidebarItem
+                href="/todos"
+                icon={ListTodo}
+                isActive={location.pathname === "/todos"}
+                isCollapsed={isCollapsed}
+                label="Todos"
+              />
+              <TooltipPopup side="right">
+                <span>Todos</span>
+              </TooltipPopup>
+            </TooltipTrigger>
+          </Tooltip>
+
+          <Separator className="mt-auto h-px w-full" orientation="horizontal" />
+          <SidebarItem
+            href="/settings"
+            icon={Settings}
+            isActive={location.pathname.startsWith("/settings")}
+            isCollapsed={isCollapsed}
+            label="Settings"
+          />
+
+          <Tooltip disabled={!isCollapsed} handle={tooltipHandle}>
+            {({ payload: Payload }) => (
+              <TooltipPopup side="right">
+                {Payload !== undefined && <Payload />}
+              </TooltipPopup>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </nav>
       <button
         className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-light text-foreground transition-all hover:bg-default"
@@ -171,7 +219,7 @@ function SidebarItem({
       </div>
 
       {/* Tooltip for collapsed state */}
-      {isCollapsed && (
+      {/* {isCollapsed && (
         <div
           className={cn(
             "-translate-y-1/2 pointer-events-none absolute top-1/2 left-full z-50",
@@ -182,7 +230,7 @@ function SidebarItem({
         >
           {label}
         </div>
-      )}
+      )} */}
     </Link>
   );
 }

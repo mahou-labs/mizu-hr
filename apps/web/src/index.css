@@ -11,6 +11,7 @@
   --color-success: var(--success);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
+  --color-sidebar: var(--sidebar);
   --color-ring: var(--ring);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
@@ -59,6 +60,7 @@
   --ring: var(--color-zinc-400);
   --secondary: --alpha(var(--color-black) / 4%);
   --secondary-foreground: var(--color-zinc-900);
+  --sidebar: #fafafa;
   --success: var(--color-emerald-500);
   --success-foreground: var(--color-emerald-700);
   --warning: var(--color-amber-500);
@@ -87,6 +89,7 @@
   --ring: var(--color-zinc-500);
   --secondary: --alpha(var(--color-white) / 8%);
   --secondary-foreground: var(--color-zinc-100);
+  --sidebar: #0e0e10;
   --success: var(--color-emerald-500);
   --success-foreground: var(--color-emerald-400);
   --warning: var(--color-amber-500);
