@@ -2,6 +2,7 @@ import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
+import { Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
@@ -89,7 +90,7 @@ export function CreateOrgDialog({
 
   return (
     <Dialog
-      dismissible={allowClosing}
+      disablePointerDismissal={!allowClosing}
       onOpenChange={onOpenChange}
       open={isOpen}
     >
@@ -149,11 +150,17 @@ export function CreateOrgDialog({
                     {field.state.meta.errors.length === 0 &&
                       field.state.value && (
                         <FieldDescription>
-                          {isTyping || isLoading
-                            ? "Checking availability..."
-                            : slugAvailable
-                              ? "✓ Available"
-                              : "✗ Taken"}
+                          {isTyping || isLoading ? (
+                            "Checking availability..."
+                          ) : slugAvailable ? (
+                            <span className="flex gap-1 text-success">
+                              <Check className="size-4" /> Available
+                            </span>
+                          ) : (
+                            <span className="flex gap-1 text-destructive">
+                              <X className="size-4" /> Taken
+                            </span>
+                          )}
                         </FieldDescription>
                       )}
                   </Field>

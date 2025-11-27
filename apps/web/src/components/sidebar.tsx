@@ -41,38 +41,7 @@ export function Sidebar() {
         isCollapsed ? "w-16" : "w-64"
       )}
     >
-      {/* Header */}
-      {/* <div
-        className={cn(
-          "flex items-center py-4",
-          isCollapsed ? "justify-center" : "justify-between"
-        )}
-      >
-        <div
-          className={cn(
-            "transition-opacity duration-200",
-            isCollapsed ? "pointer-events-none opacity-0" : "opacity-100"
-          )}
-        >
-          <h1 className="font-semibold text-sidebar-foreground text-xl">
-            Mizu HR
-          </h1>
-        </div>
-        <button
-          className="flex h-8 w-8 items-center justify-center rounded-md bg-dark text-foreground transition-all hover:bg-default"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          type="button"
-        >
-          {isCollapsed ? (
-            <PanelLeftOpen className="h-4 w-4" />
-          ) : (
-            <PanelLeftClose className="h-4 w-4" />
-          )}
-        </button>
-      </div> */}
       <OrgMenu isCollapsed={isCollapsed} />
-      {/* Navigation */}
       <nav className="mt-6 flex flex-1 flex-col gap-1">
         <TooltipProvider delay={0} timeout={500}>
           <Tooltip disabled={!isCollapsed}>
@@ -135,7 +104,10 @@ export function Sidebar() {
             </TooltipTrigger>
           </Tooltip>
 
-          <Separator className="mt-auto h-px w-full" orientation="horizontal" />
+          <Separator
+            className="mt-auto h-0 bg-transparent"
+            orientation="horizontal"
+          />
           <SidebarItem
             href="/settings"
             icon={Settings}
@@ -196,7 +168,7 @@ function SidebarItem({
         "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2 py-2 font-medium text-foreground text-sm",
         "outline-border hover:bg-card hover:outline",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        isActive && "bg-background outline"
+        isActive && "bg-card outline"
       )}
       onClick={onClick}
       title={isCollapsed ? label : undefined}
@@ -217,20 +189,6 @@ function SidebarItem({
           </span>
         )}
       </div>
-
-      {/* Tooltip for collapsed state */}
-      {/* {isCollapsed && (
-        <div
-          className={cn(
-            "-translate-y-1/2 pointer-events-none absolute top-1/2 left-full z-50",
-            "ml-2 whitespace-nowrap rounded-md border border-border px-2 py-1",
-            "bg-popover text-popover-foreground text-xs shadow-lg",
-            "opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-          )}
-        >
-          {label}
-        </div>
-      )} */}
     </Link>
   );
 }

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouteContext, useRouter } from "@tanstack/react-router";
-import { Building2, Check, ChevronDown, Plus } from "lucide-react";
+import { Check, ChevronDown, Plus } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
 import { getInitials } from "@/utils/initials";
@@ -103,10 +103,14 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
 
       <MenuPortal>
         <MenuPopup>
-          {/* <Menu.Arrow /> */}
           {orgs?.map((org) => (
             <MenuItem key={org.id} onClick={() => handleOrgChange(org.id)}>
-              <Building2 className="size-4" />
+              <Avatar className="size-4 rounded-sm text-[8px]">
+                <AvatarImage src={org.logo ?? undefined} />
+                <AvatarFallback className="rounded-sm">
+                  {getInitials(org.name)}
+                </AvatarFallback>
+              </Avatar>
               <span className="flex-1">{org.name}</span>
               {org.id === session?.activeOrganizationId && (
                 <Check className="size-4" />
