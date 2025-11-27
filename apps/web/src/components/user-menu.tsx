@@ -71,8 +71,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
             {user?.name}
           </span>
           <span className="w-full truncate text-foreground-muted text-xs">
-            {user?.email} lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Quisquam, quos.
+            {user?.email}
           </span>
         </div>
         <ChevronDown

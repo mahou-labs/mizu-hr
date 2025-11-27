@@ -145,7 +145,7 @@ function SidebarItem({
   return (
     <Link
       className={cn(
-        "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2.5 py-2 font-medium text-foreground text-sm",
+        "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2 py-2 font-medium text-foreground text-sm",
         "hover:bg-light",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         isActive && "bg-light"
