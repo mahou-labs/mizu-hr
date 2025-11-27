@@ -76,7 +76,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
 
   return (
     <Menu>
-      <MenuTrigger className="!px-0 flex cursor-pointer select-none items-center gap-2 rounded-lg">
+      <MenuTrigger className="flex cursor-pointer select-none items-center gap-2 rounded-lg">
         <Avatar className="rounded-md">
           <AvatarImage src={activeOrg?.logo ?? undefined} />
           <AvatarFallback className="rounded-md">
@@ -90,7 +90,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
             isCollapsed && "opacity-0"
           )}
         >
-          <span className="w-full truncate font-semibold text-foreground text-sm">
+          <span className="w-full truncate text-start font-semibold text-foreground text-sm">
             {activeOrg?.name}
           </span>
           <span className="w-full truncate text-start text-foreground-muted text-xs">
@@ -98,7 +98,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
           </span>
         </div>
 
-        <ChevronDown className="ml-auto size-4 text-foreground-muted" />
+        <ChevronDown className="ml-auto size-4 shrink-0 text-foreground-muted" />
       </MenuTrigger>
 
       <MenuPortal>

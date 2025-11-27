@@ -36,37 +36,32 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
 
   return (
     <Menu>
-      <MenuTrigger className="flex w-full cursor-pointer select-none items-center gap-2 rounded-lg p-2 transition-colors hover:bg-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      <MenuTrigger className="flex cursor-pointer select-none items-center gap-2 rounded-lg">
         <Avatar>
           <AvatarImage src={user?.image ?? undefined} />
-          <AvatarFallback className="rounded-md">
-            {getInitials(user?.name)}
-          </AvatarFallback>
+          <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
         </Avatar>
 
         <div
           className={cn(
-            "flex min-w-0 flex-1 flex-col items-start transition-opacity duration-300",
+            "flex min-w-0 flex-col items-start overflow-hidden transition-opacity duration-300",
             isCollapsed && "opacity-0"
           )}
         >
-          <span className="w-full truncate text-start font-medium text-foreground text-sm">
+          <span className="w-full truncate text-start font-semibold text-foreground text-sm">
             {user?.name}
           </span>
-          <span className="w-full truncate text-foreground-muted text-xs">
-            {user?.email}
+          <span className="w-full truncate text-start text-foreground-muted text-xs">
+            {user?.email} asdlkajsdlakjsd alksdjalksdj lkas
           </span>
         </div>
-        <ChevronDown
-          className={cn(
-            "ml-auto size-4 text-foreground-muted transition-opacity duration-300",
-            isCollapsed && "opacity-0"
-          )}
-        />
+
+        <ChevronDown className="ml-auto size-4 shrink-0 text-foreground-muted" />
       </MenuTrigger>
+
       <MenuPortal>
         <MenuPopup>
-          <MenuItem onClick={() => navigate({ to: "/settings" })}>
+          <MenuItem onClick={() => navigate({ to: "/settings/account" })}>
             Settings
           </MenuItem>
           <MenuSeparator />
