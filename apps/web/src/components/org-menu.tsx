@@ -75,24 +75,24 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
 
   return (
     <Menu>
-      <MenuTrigger className="flex cursor-pointer select-none items-center gap-2 rounded-lg p-2 transition-colors hover:bg-light">
-        <Avatar className="rounded-md border border-border">
+      <MenuTrigger className="!px-0 flex cursor-pointer select-none items-center gap-2 rounded-lg">
+        <Avatar className="rounded-md">
           <AvatarImage src={activeOrg?.logo ?? undefined} />
-          <AvatarFallback className="bg-muted text-muted-foreground">
+          <AvatarFallback className="rounded-md">
             {activeOrg?.name?.[0]}
           </AvatarFallback>
         </Avatar>
 
         <div
           className={cn(
-            "flex flex-col items-start transition-opacity duration-300",
+            "flex min-w-0 flex-col items-start overflow-hidden transition-opacity duration-300",
             isCollapsed && "opacity-0"
           )}
         >
-          <span className="truncate font-semibold text-foreground text-sm">
+          <span className="w-full truncate font-semibold text-foreground text-sm">
             {activeOrg?.name}
           </span>
-          <span className="truncate text-foreground-muted text-xs">
+          <span className="w-full truncate text-start text-foreground-muted text-xs">
             {subscriptionLabel}
           </span>
         </div>

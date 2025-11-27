@@ -1,5 +1,5 @@
 import { Avatar } from "@base-ui-components/react/avatar";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   useNavigate,
   useRouteContext,
@@ -9,7 +9,6 @@ import { ChevronDown } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
-import { orpc } from "@/utils/orpc-client";
 import {
   Menu,
   MenuItem,
@@ -39,20 +38,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { session, user } = useRouteContext({ from: "/_app" });
-  const {
-    data: organizations,
-    isPending,
-    isError,
-  } = useQuery(orpc.organization.getOrgList.queryOptions());
-
-  if (isPending) {
-    return <UserMenuSkeleton isCollapsed={isCollapsed} />;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
-  }
+  const { user } = useRouteContext({ from: "/_app" });
 
   const signOut = async () => {
     await authClient.signOut();
@@ -60,17 +46,9 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
     router.invalidate();
   };
 
-  const activeOrgId = session?.activeOrganizationId;
-  const activeOrg = organizations.find((org) => org.id === activeOrgId);
-
   return (
     <Menu>
-      <MenuTrigger
-        className={cn(
-          "focus-visible:-outline-offset-1 flex w-full cursor-pointer select-none items-center rounded-lg p-2 transition-all duration-200 hover:bg-light focus-visible:outline-2 focus-visible:ring-2 focus-visible:ring-ring",
-          isCollapsed ? "justify-center" : "gap-3"
-        )}
-      >
+      <MenuTrigger className="flex w-full cursor-pointer select-none items-center gap-2 rounded-lg p-2 transition-colors hover:bg-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         <Avatar.Root className="inline-flex size-8 shrink-0 select-none items-center justify-center overflow-hidden rounded-full border border-border bg-muted align-middle font-medium text-muted-foreground text-sm">
           <Avatar.Image
             alt={user?.name ?? ""}
@@ -85,21 +63,22 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
         </Avatar.Root>
         <div
           className={cn(
-            "flex flex-col items-start transition-all duration-200",
-            isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
+            "flex min-w-0 flex-1 flex-col items-start transition-opacity duration-300",
+            isCollapsed && "opacity-0"
           )}
         >
-          <span className="truncate font-medium text-foreground text-sm">
+          <span className="w-full truncate text-start font-medium text-foreground text-sm">
             {user?.name}
           </span>
-          <span className="truncate text-foreground-muted text-xs">
-            {user?.email} lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+          <span className="w-full truncate text-foreground-muted text-xs">
+            {user?.email} lorem ipsum dolor sit amet consectetur adipisicing
+            elit. Quisquam, quos.
           </span>
         </div>
         <ChevronDown
           className={cn(
-            "size-4 text-foreground-muted transition-all duration-200",
-            isCollapsed ? "w-0 opacity-0" : "ml-auto w-auto opacity-100"
+            "ml-auto size-4 text-foreground-muted transition-opacity duration-300",
+            isCollapsed && "opacity-0"
           )}
         />
       </MenuTrigger>
@@ -116,23 +95,17 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
     </Menu>
   );
 }
-
 function UserMenuSkeleton({ isCollapsed = false }: { isCollapsed?: boolean }) {
   return (
-    <div
-      className={cn(
-        "flex cursor-pointer select-none items-center rounded-lg bg-light p-2",
-        isCollapsed ? "justify-center" : "gap-3"
-      )}
-    >
+    <div className="flex cursor-pointer select-none items-center gap-2 rounded-lg bg-light p-2">
       {/* Avatar skeleton */}
       <Skeleton className="size-8 shrink-0 rounded-full" />
 
       {/* Text content skeleton */}
       <div
         className={cn(
-          "flex flex-col gap-1 transition-all duration-200",
-          isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
+          "flex flex-1 flex-col gap-1 transition-opacity duration-300",
+          isCollapsed && "opacity-0"
         )}
       >
         <Skeleton className="h-4 w-28" />
@@ -142,8 +115,8 @@ function UserMenuSkeleton({ isCollapsed = false }: { isCollapsed?: boolean }) {
       {/* Chevron icon skeleton */}
       <Skeleton
         className={cn(
-          "size-4 transition-all duration-200",
-          isCollapsed ? "w-0 opacity-0" : "ml-auto w-auto opacity-100"
+          "ml-auto size-4 transition-opacity duration-300",
+          isCollapsed && "opacity-0"
         )}
       />
     </div>

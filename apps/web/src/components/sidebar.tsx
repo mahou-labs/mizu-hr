@@ -25,10 +25,12 @@ export function Sidebar() {
   const location = useLocation();
   useKeyPress("s", () => setIsCollapsed((prev) => !prev));
 
+  // pr-2.5 pl-4.5
+
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col gap-3 border-border border-r bg-default py-3 pr-2.5 pl-4.5 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
+        "relative flex h-full flex-col gap-3 bg-default px-4 py-3 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
