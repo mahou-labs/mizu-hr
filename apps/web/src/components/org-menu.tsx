@@ -3,6 +3,7 @@ import { useRouteContext, useRouter } from "@tanstack/react-router";
 import { Building2, Check, ChevronDown, Plus } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
+import { getInitials } from "@/utils/initials";
 import { orpc } from "@/utils/orpc-client";
 import { CreateOrgDialog } from "./create-org-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -79,7 +80,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
         <Avatar className="rounded-md">
           <AvatarImage src={activeOrg?.logo ?? undefined} />
           <AvatarFallback className="rounded-md">
-            {activeOrg?.name?.[0]}
+            {getInitials(activeOrg?.name)}
           </AvatarFallback>
         </Avatar>
 
