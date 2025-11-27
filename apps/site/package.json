@@ -9,13 +9,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/react": "^4.4.0",
+    "@astrojs/react": "^4.4.2",
     "@fontsource-variable/pixelify-sans": "^5.2.7",
     "@orpc/client": "^1.9.3",
     "@tailwindcss/vite": "^4.1.14",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "astro": "^5.14.4",
+    "astro": "^5.16.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "tailwindcss": "^4.1.14"
