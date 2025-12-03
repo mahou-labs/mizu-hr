@@ -3,22 +3,22 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { User, UserPlus } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 import { z } from "zod";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@mizu-hr/ui/avatar";
+import { Button } from "@mizu-hr/ui/button";
 import {
   Dialog,
   DialogBackdrop,
   DialogPopup,
   DialogPortal,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@mizu-hr/ui/dialog";
+import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
+import { Input } from "@mizu-hr/ui/input";
+import { Skeleton } from "@mizu-hr/ui/skeleton";
 import { cn } from "@/utils/cn";
 import { orpc } from "@/utils/orpc-client";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 const inviteSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -33,11 +33,11 @@ function RouteComponent() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data, isPending } = useQuery(
-    orpc.organization.getMembers.queryOptions()
+    orpc.organization.getMembers.queryOptions(),
   );
 
   const { mutateAsync: inviteMember } = useMutation(
-    orpc.organization.inviteMember.mutationOptions()
+    orpc.organization.inviteMember.mutationOptions(),
   );
 
   const form = useForm({
@@ -47,14 +47,17 @@ function RouteComponent() {
       try {
         await inviteMember({ email: value.email, role: "member" });
         await queryClient.invalidateQueries(
-          orpc.organization.getMembers.queryOptions()
+          orpc.organization.getMembers.queryOptions(),
         );
-        toast.success("Invitation sent");
+        toastManager.add({ title: "Invitation sent", type: "success" });
         setIsDialogOpen(false);
         form.reset();
       } catch (error) {
         console.error(error);
-        toast.error("Failed to invite member, try again later");
+        toastManager.add({
+          title: "Failed to invite member, try again later",
+          type: "error",
+        });
       }
     },
   });
@@ -204,7 +207,7 @@ function Member({
     <div
       className={cn(
         "flex h-20 flex-col gap-3 rounded-lg border border-border bg-card p-4 shadow-sm transition-colors sm:flex-row sm:items-center sm:justify-between sm:gap-0",
-        className
+        className,
       )}
     >
       <div className="flex items-center gap-3">
@@ -243,7 +246,7 @@ function Member({
         <span
           className={cn(
             "inline-flex items-center rounded-full border px-2.5 py-0.5 font-medium text-xs",
-            roleColors[role]
+            roleColors[role],
           )}
         >
           {roleLabels[role]}

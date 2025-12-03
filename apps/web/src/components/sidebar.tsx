@@ -17,14 +17,14 @@ import { useKeyPress } from "@/hooks/useKeyPress";
 import { cn } from "@/utils/cn";
 import { OrgMenu } from "./org-menu";
 import { ThemeToggle } from "./theme-toggle";
-import { Separator } from "./ui/separator";
+import { Separator } from "@mizu-hr/ui/separator";
 import {
   Tooltip,
   TooltipCreateHandle,
   TooltipPopup,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "@mizu-hr/ui/tooltip";
 import { UserMenu } from "./user-menu";
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>();

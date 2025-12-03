@@ -3,19 +3,24 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
 import { Check, X } from "lucide-react";
-import { toast } from "sonner";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
-import { Button } from "./ui/button";
+import { Button } from "@mizu-hr/ui/button";
 import {
   Dialog,
   DialogBackdrop,
   DialogPopup,
   DialogPortal,
   DialogTitle,
-} from "./ui/dialog";
-import { Field, FieldDescription, FieldError, FieldLabel } from "./ui/field";
-import { Input } from "./ui/input";
+} from "@mizu-hr/ui/dialog";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@mizu-hr/ui/field";
+import { Input } from "@mizu-hr/ui/input";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 type CreateOrgDialogProps = {
   allowClosing?: boolean;
@@ -49,7 +54,7 @@ export function CreateOrgDialog({
   const router = useRouter();
 
   const { mutateAsync: createOrg } = useMutation(
-    orpc.organization.createOrg.mutationOptions()
+    orpc.organization.createOrg.mutationOptions(),
   );
 
   const form = useForm({
@@ -62,17 +67,23 @@ export function CreateOrgDialog({
       });
 
       if (org) {
-        toast.success("Organization created successfully!");
+        toastManager.add({
+          title: "Organization created successfully!",
+          type: "success",
+        });
 
         await queryClient.invalidateQueries(
-          orpc.organization.getOrgList.queryOptions()
+          orpc.organization.getOrgList.queryOptions(),
         );
         await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         await router.invalidate();
         form.reset();
         onSuccess();
       } else {
-        toast.error("Failed to create organization");
+        toastManager.add({
+          title: "Failed to create organization",
+          type: "error",
+        });
       }
     },
   });
@@ -85,7 +96,7 @@ export function CreateOrgDialog({
     orpc.organization.checkSlugAvailability.queryOptions({
       input: debouncedSlug,
       enabled: isSlugValid && slug === debouncedSlug,
-    })
+    }),
   );
 
   return (

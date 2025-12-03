@@ -5,14 +5,14 @@ import {
   useNavigate,
   useSearch,
 } from "@tanstack/react-router";
-import { toast } from "sonner";
 import z from "zod";
 import Loader from "@/components/loader";
-import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Button } from "@mizu-hr/ui/button";
+import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
+import { Input } from "@mizu-hr/ui/input";
 import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc-client";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 export const Route = createFileRoute("/auth/signin")({
   component: RouteComponent,
@@ -33,12 +33,15 @@ function RouteComponent() {
     onSubmit: async ({ value }) => {
       await authClient.signIn.email(value, {
         onSuccess: async () => {
-          toast.success("Sign in successful");
+          toastManager.add({ title: "Sign in successful", type: "success" });
           await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
           await navigate({ to: redirect ?? "/dashboard" });
         },
         onError: (error) => {
-          toast.error(error.error.message || error.error.statusText);
+          toastManager.add({
+            title: error.error.message || error.error.statusText,
+            type: "error",
+          });
         },
       });
     },

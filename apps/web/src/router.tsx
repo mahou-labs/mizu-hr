@@ -8,9 +8,9 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
-import { toast } from "sonner";
 import { routeTree } from "./routeTree.gen";
 import { orpc } from "./utils/orpc-client";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 export const getRouter = () => {
   const queryClient = new QueryClient({
@@ -32,13 +32,15 @@ export const getRouter = () => {
             });
           }
         } else {
-          toast.error(`Error: ${error.message}`, {
-            action: {
-              label: "retry",
+          toastManager.add({
+            type: "error",
+            title: `Error ${error.message}`,
+            actionProps: {
+              children: "retry",
               onClick: () => {
                 query.reset();
                 query.fetch();
-                // queryClient.resetQueries({ type: "all" });
+                // queryClient.resetQueries({type: "all"})
                 // router.invalidate();
               },
             },

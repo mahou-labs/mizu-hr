@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 // import { useWindowSize } from "@uidotdev/usehooks";
 import { Sidebar } from "@/components/sidebar";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@mizu-hr/ui/scroll-area";
 import { orpc } from "@/utils/orpc-client";
 
 export const Route = createFileRoute("/_app")({

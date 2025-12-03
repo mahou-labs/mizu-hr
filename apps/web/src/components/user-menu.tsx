@@ -8,7 +8,7 @@ import { ChevronDown } from "lucide-react";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
 import { getInitials } from "@/utils/initials";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@mizu-hr/ui/avatar";
 import {
   Menu,
   MenuItem,
@@ -16,7 +16,7 @@ import {
   MenuPortal,
   MenuSeparator,
   MenuTrigger,
-} from "./ui/menu";
+} from "@mizu-hr/ui/menu";
 
 type UserMenuProps = {
   isCollapsed?: boolean;

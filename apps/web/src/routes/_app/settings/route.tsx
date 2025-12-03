@@ -4,7 +4,7 @@ import {
   useLocation,
   useNavigate,
 } from "@tanstack/react-router";
-import { Tabs, TabsList, TabsPanel, TabsTab } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsPanel, TabsTab } from "@mizu-hr/ui/tabs";
 
 export const Route = createFileRoute("/_app/settings")({
   component: RouteComponent,

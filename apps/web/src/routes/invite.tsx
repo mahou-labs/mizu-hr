@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mizu-hr/ui/button";
 import { orpc } from "@/utils/orpc-client";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 const inviteSearchSchema = z.object({
   id: z.string(),
@@ -29,12 +29,12 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const { mutateAsync: acceptInvitation, isPending } = useMutation(
-    orpc.organization.acceptInvitation.mutationOptions()
+    orpc.organization.acceptInvitation.mutationOptions(),
   );
 
   const handleInvitationAccept = async () => {
     await acceptInvitation({ id });
-    toast.success("Invitation accepted");
+    toastManager.add({ title: "Invitation accepted", type: "success" });
     await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
     await navigate({ to: "/dashboard" });
   };

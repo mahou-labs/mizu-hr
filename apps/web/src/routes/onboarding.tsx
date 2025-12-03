@@ -2,24 +2,24 @@ import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
-import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mizu-hr/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@mizu-hr/ui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+} from "@mizu-hr/ui/field";
+import { Input } from "@mizu-hr/ui/input";
 import { orpc } from "@/utils/orpc-client";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 const onboardingSchema = z.object({
   name: z.string().min(1, "Organization name is required"),
@@ -50,7 +50,7 @@ function OnboardingComponent() {
   const navigate = useNavigate();
 
   const { mutateAsync: createOrg } = useMutation(
-    orpc.organization.createOrg.mutationOptions()
+    orpc.organization.createOrg.mutationOptions(),
   );
 
   const form = useForm({
@@ -63,11 +63,17 @@ function OnboardingComponent() {
       });
 
       if (org) {
-        toast.success("Organization created successfully!");
+        toastManager.add({
+          title: "Organization created successfully!",
+          type: "success",
+        });
         await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         navigate({ to: "/dashboard" });
       } else {
-        toast.error("Failed to create organization");
+        toastManager.add({
+          title: "Failed to create organization",
+          type: "error",
+        });
       }
     },
   });
@@ -80,7 +86,7 @@ function OnboardingComponent() {
     orpc.organization.checkSlugAvailability.queryOptions({
       input: debouncedSlug,
       enabled: isSlugValid && slug === debouncedSlug,
-    })
+    }),
   );
 
   return (

@@ -6,7 +6,7 @@ import { cn } from "@/utils/cn";
 import { getInitials } from "@/utils/initials";
 import { orpc } from "@/utils/orpc-client";
 import { CreateOrgDialog } from "./create-org-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@mizu-hr/ui/avatar";
 import {
   Menu,
   MenuItem,
@@ -14,8 +14,8 @@ import {
   MenuPortal,
   MenuSeparator,
   MenuTrigger,
-} from "./ui/menu";
-import { Skeleton } from "./ui/skeleton";
+} from "@mizu-hr/ui/menu";
+import { Skeleton } from "@mizu-hr/ui/skeleton";
 
 type OrgMenuProps = {
   isCollapsed?: boolean;
@@ -34,15 +34,15 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
         await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         await router.invalidate();
       },
-    })
+    }),
   );
 
   const activeOrg = orgs?.find(
-    (org) => org.id === session?.activeOrganizationId
+    (org) => org.id === session?.activeOrganizationId,
   );
 
   const { data: subscription, isPending } = useQuery(
-    orpc.organization.getSubscription.queryOptions()
+    orpc.organization.getSubscription.queryOptions(),
   );
 
   const handleOrgChange = async (id: string) => {
@@ -63,7 +63,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
         <div
           className={cn(
             "flex flex-col gap-1.5 transition-opacity duration-300",
-            isCollapsed && "opacity-0"
+            isCollapsed && "opacity-0",
           )}
         >
           <Skeleton className="h-4 w-24" />
@@ -87,7 +87,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
         <div
           className={cn(
             "flex min-w-0 flex-col items-start overflow-hidden transition-opacity duration-300",
-            isCollapsed && "opacity-0"
+            isCollapsed && "opacity-0",
           )}
         >
           <span className="w-full truncate text-start font-semibold text-foreground text-sm">

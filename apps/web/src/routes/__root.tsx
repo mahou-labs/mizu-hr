@@ -10,10 +10,10 @@ import {
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
-import { Toaster } from "@/components/ui/sonner";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { orpc } from "@/utils/orpc-client";
 import appCss from "../index.css?url";
+import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
 
 const Posthog = () => {
   useEffect(() => {
@@ -60,7 +60,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   component: RootDocument,
   beforeLoad: async ({ context }) => {
     const authSession = await context.queryClient.ensureQueryData(
-      orpc.user.getSession.queryOptions()
+      orpc.user.getSession.queryOptions(),
     );
 
     return { session: authSession?.session, user: authSession?.user };
@@ -94,10 +94,13 @@ function RootDocument() {
           }}
         />
         <div className="h-svh">
-          <Outlet />
+          <ToastProvider>
+            <AnchoredToastProvider>
+              <Outlet />
+            </AnchoredToastProvider>
+          </ToastProvider>
         </div>
 
-        <Toaster richColors />
         <TanStackDevtools
           plugins={[
             {

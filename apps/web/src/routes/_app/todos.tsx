@@ -2,16 +2,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@mizu-hr/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+} from "@mizu-hr/ui/card";
+import { Checkbox } from "@mizu-hr/ui/checkbox";
+import { Input } from "@mizu-hr/ui/input";
 import { orpc } from "@/utils/orpc-client";
 
 export const Route = createFileRoute("/_app/todos")({
