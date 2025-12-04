@@ -23,16 +23,16 @@ app.use(
     standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
     keyGenerator: () => randomUUIDv7(), // Method to generate custom identifiers for clients.
     // store: new RedisStore({ client: redisClient }),
-  })
+  }),
 );
 app.use(
   "/*",
   cors({
     origin: [env.APP_URL, env.SITE_URL],
     allowMethods: ["GET", "POST", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization"],
+    allowHeaders: ["Content-Type", "Authorization", "User-Agent"],
     credentials: true,
-  })
+  }),
 );
 
 app.get("/healthcheck", (c) => {
