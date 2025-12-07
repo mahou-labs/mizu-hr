@@ -1,54 +1,46 @@
-import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useTheme, type UserTheme } from "@/utils/theme-provider";
 import { Button } from "@mizu-hr/ui/button";
+import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@mizu-hr/ui/menu";
+import { Check, Laptop, Moon, Sun } from "lucide-react";
+import type React from "react";
 
-type Theme = "light" | "dark";
+const themeConfig: Record<
+  UserTheme,
+  { icon: React.ComponentType<{ className?: string }>; label: string }
+> = {
+  light: { icon: Sun, label: "Light" },
+  dark: { icon: Moon, label: "Dark" },
+  system: { icon: Laptop, label: "System" },
+};
 
-export function ThemeToggle({
-  isCollapsed = false,
-}: {
-  isCollapsed?: boolean;
-}) {
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setTheme(isDark ? "dark" : "light");
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-
-    localStorage.setItem("theme", newTheme);
-  };
+export const ThemeToggle = () => {
+  const { userTheme, setTheme } = useTheme();
+  const CurrentIcon = themeConfig[userTheme].icon;
 
   return (
-    <Button
-      className={`transition-all duration-200 ${
-        isCollapsed ? "h-8 w-8 p-0" : "h-8 w-full justify-start gap-3 px-3"
-      } hover:bg-light`}
-      onClick={toggleTheme}
-      size={isCollapsed ? "icon" : "default"}
-      title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-      variant="ghost"
-    >
-      {theme === "light" ? (
-        <Moon className="h-4 w-4 text-foreground-muted" />
-      ) : (
-        <Sun className="h-4 w-4 text-foreground-muted" />
-      )}
-      {!isCollapsed && (
-        <span className="font-medium text-foreground text-sm">
-          {theme === "light" ? "Dark mode" : "Light mode"}
-        </span>
-      )}
-    </Button>
+    <Menu>
+      <MenuTrigger>
+        <Button variant="outline" size="sm" className="gap-2">
+          <CurrentIcon className="size-4" />
+          <span className="hidden sm:inline">
+            {themeConfig[userTheme].label}
+          </span>
+        </Button>
+      </MenuTrigger>
+      <MenuPopup>
+        {(Object.keys(themeConfig) as UserTheme[]).map((theme) => {
+          const Icon = themeConfig[theme].icon;
+          const isActive = userTheme === theme;
+
+          return (
+            <MenuItem key={theme} onClick={() => setTheme(theme)}>
+              <Icon className="size-4" />
+              <span className="flex-1">{themeConfig[theme].label}</span>
+              {isActive && <Check className="size-4" />}
+            </MenuItem>
+          );
+        })}
+      </MenuPopup>
+    </Menu>
   );
-}
+};

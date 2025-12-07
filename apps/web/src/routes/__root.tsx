@@ -14,6 +14,7 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { orpc } from "@/utils/orpc-client";
 import appCss from "../index.css?url";
 import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
+import { ThemeProvider } from "@/utils/theme-provider";
 
 const Posthog = () => {
   useEffect(() => {
@@ -79,27 +80,14 @@ function RootDocument() {
       <head>
         <HeadContent />
       </head>
-      <body>
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: dark mode script
-          dangerouslySetInnerHTML={{
-            __html: `
-            let theme = localStorage.getItem('theme')
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-            if((theme === 'system' || theme === null) && prefersDark) {
-              theme = 'dark'
-            }
-            document.documentElement.classList.add(theme === 'dark' ? 'dark' : 'light');
-          `,
-          }}
-        />
-        <div className="h-svh">
+      <body className="h-svh">
+        <ThemeProvider>
           <ToastProvider>
             <AnchoredToastProvider>
               <Outlet />
             </AnchoredToastProvider>
           </ToastProvider>
-        </div>
+        </ThemeProvider>
 
         <TanStackDevtools
           plugins={[

@@ -70,7 +70,7 @@ export const getRouter = () => {
   setupRouterSsrQueryIntegration({ router, queryClient });
 
   return router;
-};
+}
 
 declare module "@tanstack/react-router" {
   // biome-ignore lint/nursery/useConsistentTypeDefinitions: boilerplate
