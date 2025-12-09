@@ -1,6 +1,4 @@
 /// <reference types="vite/client" />
-/** biome-ignore-all lint/complexity/noBannedTypes: vite-env */
-/** biome-ignore-all lint/nursery/useConsistentTypeDefinitions: vite-env */
 
 type ViteTypeOptions = {};
 

@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: input fields */
 import { useEffect, useRef } from "react";
 
 type UseKeyPressOptions = {

@@ -70,6 +70,7 @@ const themeScript = (function () {
         document.documentElement.classList.add(validTheme);
       }
     } catch (e) {
+      console.error(e);
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
         .matches
         ? "dark"

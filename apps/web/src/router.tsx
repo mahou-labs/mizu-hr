@@ -73,7 +73,6 @@ export const getRouter = () => {
 }
 
 declare module "@tanstack/react-router" {
-  // biome-ignore lint/nursery/useConsistentTypeDefinitions: boilerplate
   interface Register {
     router: ReturnType<typeof createRouter>;
   }

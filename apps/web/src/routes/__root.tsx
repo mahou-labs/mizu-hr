@@ -1,4 +1,3 @@
-/** biome-ignore-all assist/source/organizeImports: react-scan */
 import { scan } from "react-scan";
 import type { QueryClient } from "@tanstack/react-query";
 import {
@@ -94,7 +93,7 @@ function RootDocument() {
             {
               name: "TanStack Query",
               render: <ReactQueryDevtoolsPanel />,
-            },
+           },
             {
               name: "TanStack Router",
               render: <TanStackRouterDevtoolsPanel />,

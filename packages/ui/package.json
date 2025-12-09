@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "scripts": {
+    "lint": "oxlint --type-aware",
+    "format": "oxfmt"
+  },
   "exports": {
     "./cn": {
       "types": "./src/utils/cn.ts",
