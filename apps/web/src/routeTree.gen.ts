@@ -8,338 +8,337 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as SuccessRouteImport } from "./routes/success";
-import { Route as OnboardingRouteImport } from "./routes/onboarding";
-import { Route as InviteRouteImport } from "./routes/invite";
-import { Route as AuthRouteRouteImport } from "./routes/auth/route";
-import { Route as AppRouteRouteImport } from "./routes/_app/route";
-import { Route as AppIndexRouteImport } from "./routes/_app/index";
-import { Route as AuthSignupRouteImport } from "./routes/auth/signup";
-import { Route as AuthSigninRouteImport } from "./routes/auth/signin";
-import { Route as AppTodosRouteImport } from "./routes/_app/todos";
-import { Route as AppJobsRouteImport } from "./routes/_app/jobs";
-import { Route as AppDashboardRouteImport } from "./routes/_app/dashboard";
-import { Route as AppSettingsRouteRouteImport } from "./routes/_app/settings/route";
-import { Route as AppSettingsIndexRouteImport } from "./routes/_app/settings/index";
-import { Route as AppSettingsOrganizationRouteImport } from "./routes/_app/settings/organization";
-import { Route as AppSettingsAccountRouteImport } from "./routes/_app/settings/account";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuccessRouteImport } from './routes/success'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as InviteRouteImport } from './routes/invite'
+import { Route as AuthRouteRouteImport } from './routes/auth/route'
+import { Route as AppRouteRouteImport } from './routes/_app/route'
+import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AuthSignupRouteImport } from './routes/auth/signup'
+import { Route as AuthSigninRouteImport } from './routes/auth/signin'
+import { Route as AppTodosRouteImport } from './routes/_app/todos'
+import { Route as AppJobsRouteImport } from './routes/_app/jobs'
+import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppSettingsRouteRouteImport } from './routes/_app/settings/route'
+import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
+import { Route as AppSettingsOrganizationRouteImport } from './routes/_app/settings/organization'
+import { Route as AppSettingsAccountRouteImport } from './routes/_app/settings/account'
 
 const SuccessRoute = SuccessRouteImport.update({
-  id: "/success",
-  path: "/success",
+  id: '/success',
+  path: '/success',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
-  id: "/onboarding",
-  path: "/onboarding",
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const InviteRoute = InviteRouteImport.update({
-  id: "/invite",
-  path: "/invite",
+  id: '/invite',
+  path: '/invite',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: "/auth",
-  path: "/auth",
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AppRouteRoute = AppRouteRouteImport.update({
-  id: "/_app",
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
-  id: "/signup",
-  path: "/signup",
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => AuthRouteRoute,
-} as any);
+} as any)
 const AuthSigninRoute = AuthSigninRouteImport.update({
-  id: "/signin",
-  path: "/signin",
+  id: '/signin',
+  path: '/signin',
   getParentRoute: () => AuthRouteRoute,
-} as any);
+} as any)
 const AppTodosRoute = AppTodosRouteImport.update({
-  id: "/todos",
-  path: "/todos",
+  id: '/todos',
+  path: '/todos',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AppJobsRoute = AppJobsRouteImport.update({
-  id: "/jobs",
-  path: "/jobs",
+  id: '/jobs',
+  path: '/jobs',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: "/dashboard",
-  path: "/dashboard",
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
-  id: "/settings",
-  path: "/settings",
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AppRouteRoute,
-} as any);
+} as any)
 const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => AppSettingsRouteRoute,
-} as any);
+} as any)
 const AppSettingsOrganizationRoute = AppSettingsOrganizationRouteImport.update({
-  id: "/organization",
-  path: "/organization",
+  id: '/organization',
+  path: '/organization',
   getParentRoute: () => AppSettingsRouteRoute,
-} as any);
+} as any)
 const AppSettingsAccountRoute = AppSettingsAccountRouteImport.update({
-  id: "/account",
-  path: "/account",
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AppSettingsRouteRoute,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  "/auth": typeof AuthRouteRouteWithChildren;
-  "/invite": typeof InviteRoute;
-  "/onboarding": typeof OnboardingRoute;
-  "/success": typeof SuccessRoute;
-  "/settings": typeof AppSettingsRouteRouteWithChildren;
-  "/dashboard": typeof AppDashboardRoute;
-  "/jobs": typeof AppJobsRoute;
-  "/todos": typeof AppTodosRoute;
-  "/auth/signin": typeof AuthSigninRoute;
-  "/auth/signup": typeof AuthSignupRoute;
-  "/": typeof AppIndexRoute;
-  "/settings/account": typeof AppSettingsAccountRoute;
-  "/settings/organization": typeof AppSettingsOrganizationRoute;
-  "/settings/": typeof AppSettingsIndexRoute;
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/invite': typeof InviteRoute
+  '/onboarding': typeof OnboardingRoute
+  '/success': typeof SuccessRoute
+  '/settings': typeof AppSettingsRouteRouteWithChildren
+  '/dashboard': typeof AppDashboardRoute
+  '/jobs': typeof AppJobsRoute
+  '/todos': typeof AppTodosRoute
+  '/auth/signin': typeof AuthSigninRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/': typeof AppIndexRoute
+  '/settings/account': typeof AppSettingsAccountRoute
+  '/settings/organization': typeof AppSettingsOrganizationRoute
+  '/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
-  "/auth": typeof AuthRouteRouteWithChildren;
-  "/invite": typeof InviteRoute;
-  "/onboarding": typeof OnboardingRoute;
-  "/success": typeof SuccessRoute;
-  "/dashboard": typeof AppDashboardRoute;
-  "/jobs": typeof AppJobsRoute;
-  "/todos": typeof AppTodosRoute;
-  "/auth/signin": typeof AuthSigninRoute;
-  "/auth/signup": typeof AuthSignupRoute;
-  "/": typeof AppIndexRoute;
-  "/settings/account": typeof AppSettingsAccountRoute;
-  "/settings/organization": typeof AppSettingsOrganizationRoute;
-  "/settings": typeof AppSettingsIndexRoute;
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/invite': typeof InviteRoute
+  '/onboarding': typeof OnboardingRoute
+  '/success': typeof SuccessRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/jobs': typeof AppJobsRoute
+  '/todos': typeof AppTodosRoute
+  '/auth/signin': typeof AuthSigninRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/': typeof AppIndexRoute
+  '/settings/account': typeof AppSettingsAccountRoute
+  '/settings/organization': typeof AppSettingsOrganizationRoute
+  '/settings': typeof AppSettingsIndexRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  "/_app": typeof AppRouteRouteWithChildren;
-  "/auth": typeof AuthRouteRouteWithChildren;
-  "/invite": typeof InviteRoute;
-  "/onboarding": typeof OnboardingRoute;
-  "/success": typeof SuccessRoute;
-  "/_app/settings": typeof AppSettingsRouteRouteWithChildren;
-  "/_app/dashboard": typeof AppDashboardRoute;
-  "/_app/jobs": typeof AppJobsRoute;
-  "/_app/todos": typeof AppTodosRoute;
-  "/auth/signin": typeof AuthSigninRoute;
-  "/auth/signup": typeof AuthSignupRoute;
-  "/_app/": typeof AppIndexRoute;
-  "/_app/settings/account": typeof AppSettingsAccountRoute;
-  "/_app/settings/organization": typeof AppSettingsOrganizationRoute;
-  "/_app/settings/": typeof AppSettingsIndexRoute;
+  __root__: typeof rootRouteImport
+  '/_app': typeof AppRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
+  '/invite': typeof InviteRoute
+  '/onboarding': typeof OnboardingRoute
+  '/success': typeof SuccessRoute
+  '/_app/settings': typeof AppSettingsRouteRouteWithChildren
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/jobs': typeof AppJobsRoute
+  '/_app/todos': typeof AppTodosRoute
+  '/auth/signin': typeof AuthSigninRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/settings/account': typeof AppSettingsAccountRoute
+  '/_app/settings/organization': typeof AppSettingsOrganizationRoute
+  '/_app/settings/': typeof AppSettingsIndexRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/auth"
-    | "/invite"
-    | "/onboarding"
-    | "/success"
-    | "/settings"
-    | "/dashboard"
-    | "/jobs"
-    | "/todos"
-    | "/auth/signin"
-    | "/auth/signup"
-    | "/"
-    | "/settings/account"
-    | "/settings/organization"
-    | "/settings/";
-  fileRoutesByTo: FileRoutesByTo;
+    | '/auth'
+    | '/invite'
+    | '/onboarding'
+    | '/success'
+    | '/settings'
+    | '/dashboard'
+    | '/jobs'
+    | '/todos'
+    | '/auth/signin'
+    | '/auth/signup'
+    | '/'
+    | '/settings/account'
+    | '/settings/organization'
+    | '/settings/'
+  fileRoutesByTo: FileRoutesByTo
   to:
-    | "/auth"
-    | "/invite"
-    | "/onboarding"
-    | "/success"
-    | "/dashboard"
-    | "/jobs"
-    | "/todos"
-    | "/auth/signin"
-    | "/auth/signup"
-    | "/"
-    | "/settings/account"
-    | "/settings/organization"
-    | "/settings";
+    | '/auth'
+    | '/invite'
+    | '/onboarding'
+    | '/success'
+    | '/dashboard'
+    | '/jobs'
+    | '/todos'
+    | '/auth/signin'
+    | '/auth/signup'
+    | '/'
+    | '/settings/account'
+    | '/settings/organization'
+    | '/settings'
   id:
-    | "__root__"
-    | "/_app"
-    | "/auth"
-    | "/invite"
-    | "/onboarding"
-    | "/success"
-    | "/_app/settings"
-    | "/_app/dashboard"
-    | "/_app/jobs"
-    | "/_app/todos"
-    | "/auth/signin"
-    | "/auth/signup"
-    | "/_app/"
-    | "/_app/settings/account"
-    | "/_app/settings/organization"
-    | "/_app/settings/";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/_app'
+    | '/auth'
+    | '/invite'
+    | '/onboarding'
+    | '/success'
+    | '/_app/settings'
+    | '/_app/dashboard'
+    | '/_app/jobs'
+    | '/_app/todos'
+    | '/auth/signin'
+    | '/auth/signup'
+    | '/_app/'
+    | '/_app/settings/account'
+    | '/_app/settings/organization'
+    | '/_app/settings/'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AppRouteRoute: typeof AppRouteRouteWithChildren;
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren;
-  InviteRoute: typeof InviteRoute;
-  OnboardingRoute: typeof OnboardingRoute;
-  SuccessRoute: typeof SuccessRoute;
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  InviteRoute: typeof InviteRoute
+  OnboardingRoute: typeof OnboardingRoute
+  SuccessRoute: typeof SuccessRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/success": {
-      id: "/success";
-      path: "/success";
-      fullPath: "/success";
-      preLoaderRoute: typeof SuccessRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/onboarding": {
-      id: "/onboarding";
-      path: "/onboarding";
-      fullPath: "/onboarding";
-      preLoaderRoute: typeof OnboardingRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/invite": {
-      id: "/invite";
-      path: "/invite";
-      fullPath: "/invite";
-      preLoaderRoute: typeof InviteRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/auth": {
-      id: "/auth";
-      path: "/auth";
-      fullPath: "/auth";
-      preLoaderRoute: typeof AuthRouteRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/_app": {
-      id: "/_app";
-      path: "";
-      fullPath: "";
-      preLoaderRoute: typeof AppRouteRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/_app/": {
-      id: "/_app/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof AppIndexRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/auth/signup": {
-      id: "/auth/signup";
-      path: "/signup";
-      fullPath: "/auth/signup";
-      preLoaderRoute: typeof AuthSignupRouteImport;
-      parentRoute: typeof AuthRouteRoute;
-    };
-    "/auth/signin": {
-      id: "/auth/signin";
-      path: "/signin";
-      fullPath: "/auth/signin";
-      preLoaderRoute: typeof AuthSigninRouteImport;
-      parentRoute: typeof AuthRouteRoute;
-    };
-    "/_app/todos": {
-      id: "/_app/todos";
-      path: "/todos";
-      fullPath: "/todos";
-      preLoaderRoute: typeof AppTodosRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/_app/jobs": {
-      id: "/_app/jobs";
-      path: "/jobs";
-      fullPath: "/jobs";
-      preLoaderRoute: typeof AppJobsRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/_app/dashboard": {
-      id: "/_app/dashboard";
-      path: "/dashboard";
-      fullPath: "/dashboard";
-      preLoaderRoute: typeof AppDashboardRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/_app/settings": {
-      id: "/_app/settings";
-      path: "/settings";
-      fullPath: "/settings";
-      preLoaderRoute: typeof AppSettingsRouteRouteImport;
-      parentRoute: typeof AppRouteRoute;
-    };
-    "/_app/settings/": {
-      id: "/_app/settings/";
-      path: "/";
-      fullPath: "/settings/";
-      preLoaderRoute: typeof AppSettingsIndexRouteImport;
-      parentRoute: typeof AppSettingsRouteRoute;
-    };
-    "/_app/settings/organization": {
-      id: "/_app/settings/organization";
-      path: "/organization";
-      fullPath: "/settings/organization";
-      preLoaderRoute: typeof AppSettingsOrganizationRouteImport;
-      parentRoute: typeof AppSettingsRouteRoute;
-    };
-    "/_app/settings/account": {
-      id: "/_app/settings/account";
-      path: "/account";
-      fullPath: "/settings/account";
-      preLoaderRoute: typeof AppSettingsAccountRouteImport;
-      parentRoute: typeof AppSettingsRouteRoute;
-    };
+    '/success': {
+      id: '/success'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof SuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite': {
+      id: '/invite'
+      path: '/invite'
+      fullPath: '/invite'
+      preLoaderRoute: typeof InviteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/auth/signup': {
+      id: '/auth/signup'
+      path: '/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/auth/signin': {
+      id: '/auth/signin'
+      path: '/signin'
+      fullPath: '/auth/signin'
+      preLoaderRoute: typeof AuthSigninRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_app/todos': {
+      id: '/_app/todos'
+      path: '/todos'
+      fullPath: '/todos'
+      preLoaderRoute: typeof AppTodosRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/jobs': {
+      id: '/_app/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof AppJobsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/settings/': {
+      id: '/_app/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AppSettingsIndexRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/_app/settings/organization': {
+      id: '/_app/settings/organization'
+      path: '/organization'
+      fullPath: '/settings/organization'
+      preLoaderRoute: typeof AppSettingsOrganizationRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/_app/settings/account': {
+      id: '/_app/settings/account'
+      path: '/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof AppSettingsAccountRouteImport
+      parentRoute: typeof AppSettingsRouteRoute
+    }
   }
 }
 
 interface AppSettingsRouteRouteChildren {
-  AppSettingsAccountRoute: typeof AppSettingsAccountRoute;
-  AppSettingsOrganizationRoute: typeof AppSettingsOrganizationRoute;
-  AppSettingsIndexRoute: typeof AppSettingsIndexRoute;
+  AppSettingsAccountRoute: typeof AppSettingsAccountRoute
+  AppSettingsOrganizationRoute: typeof AppSettingsOrganizationRoute
+  AppSettingsIndexRoute: typeof AppSettingsIndexRoute
 }
 
 const AppSettingsRouteRouteChildren: AppSettingsRouteRouteChildren = {
   AppSettingsAccountRoute: AppSettingsAccountRoute,
   AppSettingsOrganizationRoute: AppSettingsOrganizationRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,
-};
+}
 
-const AppSettingsRouteRouteWithChildren = AppSettingsRouteRoute._addFileChildren(
-  AppSettingsRouteRouteChildren,
-);
+const AppSettingsRouteRouteWithChildren =
+  AppSettingsRouteRoute._addFileChildren(AppSettingsRouteRouteChildren)
 
 interface AppRouteRouteChildren {
-  AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren;
-  AppDashboardRoute: typeof AppDashboardRoute;
-  AppJobsRoute: typeof AppJobsRoute;
-  AppTodosRoute: typeof AppTodosRoute;
-  AppIndexRoute: typeof AppIndexRoute;
+  AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppJobsRoute: typeof AppJobsRoute
+  AppTodosRoute: typeof AppTodosRoute
+  AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -348,21 +347,25 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppJobsRoute: AppJobsRoute,
   AppTodosRoute: AppTodosRoute,
   AppIndexRoute: AppIndexRoute,
-};
+}
 
-const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(AppRouteRouteChildren);
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
 
 interface AuthRouteRouteChildren {
-  AuthSigninRoute: typeof AuthSigninRoute;
-  AuthSignupRoute: typeof AuthSignupRoute;
+  AuthSigninRoute: typeof AuthSigninRoute
+  AuthSignupRoute: typeof AuthSignupRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthSigninRoute: AuthSigninRoute,
   AuthSignupRoute: AuthSignupRoute,
-};
+}
 
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(AuthRouteRouteChildren);
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
@@ -370,16 +373,16 @@ const rootRouteChildren: RootRouteChildren = {
   InviteRoute: InviteRoute,
   OnboardingRoute: OnboardingRoute,
   SuccessRoute: SuccessRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from "./router.tsx";
-import type { createStart } from "@tanstack/react-start";
-declare module "@tanstack/react-start" {
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
   interface Register {
-    ssr: true;
-    router: Awaited<ReturnType<typeof getRouter>>;
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
   }
 }
