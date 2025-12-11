@@ -128,6 +128,7 @@ export const auth = betterAuth({
               externalId: user.id,
             });
           } catch (error) {
+            console.error(error);
             // Don't throw - we don't want to fail user creation if Polar fails
           }
         },
