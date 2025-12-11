@@ -112,8 +112,7 @@
   * {
     /* Firefox/Zen Browser */
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in srgb, var(--foreground) 20%, transparent)
-      transparent;
+    scrollbar-color: color-mix(in srgb, var(--foreground) 20%, transparent) transparent;
   }
 
   /* Webkit browsers (Chrome, Edge, Safari) */

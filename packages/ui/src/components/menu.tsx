@@ -46,9 +46,7 @@ function MenuPopup({
           data-slot="menu-popup"
           {...props}
         >
-          <div className="max-h-(--available-height) w-full overflow-y-auto p-1">
-            {children}
-          </div>
+          <div className="max-h-(--available-height) w-full overflow-y-auto p-1">{children}</div>
         </MenuPrimitive.Popup>
       </MenuPrimitive.Positioner>
     </MenuPrimitive.Portal>
@@ -110,11 +108,7 @@ function MenuRadioGroup(props: MenuPrimitive.RadioGroup.Props) {
   return <MenuPrimitive.RadioGroup data-slot="menu-radio-group" {...props} />;
 }
 
-function MenuRadioItem({
-  className,
-  children,
-  ...props
-}: MenuPrimitive.RadioItem.Props) {
+function MenuRadioItem({ className, children, ...props }: MenuPrimitive.RadioItem.Props) {
   return (
     <MenuPrimitive.RadioItem
       className={cn(
@@ -165,10 +159,7 @@ function MenuSeparator({ className, ...props }: MenuPrimitive.Separator.Props) {
 function MenuShortcut({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
-      className={cn(
-        "ms-auto text-muted-foreground/72 text-xs tracking-widest",
-        className,
-      )}
+      className={cn("ms-auto text-muted-foreground/72 text-xs tracking-widest", className)}
       data-slot="menu-shortcut"
       {...props}
     />

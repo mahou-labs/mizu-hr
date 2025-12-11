@@ -1,9 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  useNavigate,
-  useRouteContext,
-  useRouter,
-} from "@tanstack/react-router";
+import { useNavigate, useRouteContext, useRouter } from "@tanstack/react-router";
 import { ChevronDown } from "lucide-react";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
@@ -45,7 +41,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
         <div
           className={cn(
             "flex min-w-0 flex-col items-start overflow-hidden transition-opacity duration-300",
-            isCollapsed && "opacity-0"
+            isCollapsed && "opacity-0",
           )}
         >
           <span className="w-full truncate text-start font-semibold text-foreground text-sm">
@@ -61,9 +57,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
 
       <MenuPortal>
         <MenuPopup>
-          <MenuItem onClick={() => navigate({ to: "/settings/account" })}>
-            Settings
-          </MenuItem>
+          <MenuItem onClick={() => navigate({ to: "/settings/account" })}>Settings</MenuItem>
           <MenuSeparator />
           <MenuItem>Favorite</MenuItem>
           <MenuItem onClick={signOut}>Sign Out</MenuItem>

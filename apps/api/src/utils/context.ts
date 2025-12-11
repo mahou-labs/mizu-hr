@@ -14,5 +14,4 @@ export async function createContext(c: HonoContext) {
   };
 }
 
-export type Context = Awaited<ReturnType<typeof createContext>> &
-  ResponseHeadersPluginContext;
+export type Context = Awaited<ReturnType<typeof createContext>> & ResponseHeadersPluginContext;

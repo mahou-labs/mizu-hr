@@ -1,13 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@mizu-hr/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@mizu-hr/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
 
 type SuccessSearch = {
   checkout_id?: string;
@@ -84,12 +78,7 @@ function SuccessComponent() {
               <Button asChild className="w-full" type="button">
                 <Link to="/dashboard">Go to Dashboard</Link>
               </Button>
-              <Button
-                asChild
-                className="w-full"
-                type="button"
-                variant="outline"
-              >
+              <Button asChild className="w-full" type="button" variant="outline">
                 <Link to="/">Back to Home</Link>
               </Button>
             </div>

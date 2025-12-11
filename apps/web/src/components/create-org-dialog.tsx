@@ -6,19 +6,8 @@ import { Check, X } from "lucide-react";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
 import { Button } from "@mizu-hr/ui/button";
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPopup,
-  DialogPortal,
-  DialogTitle,
-} from "@mizu-hr/ui/dialog";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@mizu-hr/ui/field";
+import { Dialog, DialogBackdrop, DialogPopup, DialogPortal, DialogTitle } from "@mizu-hr/ui/dialog";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@mizu-hr/ui/field";
 import { Input } from "@mizu-hr/ui/input";
 import { toastManager } from "@mizu-hr/ui/toast";
 
@@ -53,9 +42,7 @@ export function CreateOrgDialog({
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { mutateAsync: createOrg } = useMutation(
-    orpc.organization.createOrg.mutationOptions(),
-  );
+  const { mutateAsync: createOrg } = useMutation(orpc.organization.createOrg.mutationOptions());
 
   const form = useForm({
     defaultValues: { name: "", slug: "" },
@@ -72,9 +59,7 @@ export function CreateOrgDialog({
           type: "success",
         });
 
-        await queryClient.invalidateQueries(
-          orpc.organization.getOrgList.queryOptions(),
-        );
+        await queryClient.invalidateQueries(orpc.organization.getOrgList.queryOptions());
         await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         await router.invalidate();
         form.reset();
@@ -100,11 +85,7 @@ export function CreateOrgDialog({
   );
 
   return (
-    <Dialog
-      disablePointerDismissal={!allowClosing}
-      onOpenChange={onOpenChange}
-      open={isOpen}
-    >
+    <Dialog disablePointerDismissal={!allowClosing} onOpenChange={onOpenChange} open={isOpen}>
       <DialogPortal>
         <DialogBackdrop />
         <DialogPopup>
@@ -127,9 +108,7 @@ export function CreateOrgDialog({
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <FieldError key={error?.message}>
-                      {error?.message}
-                    </FieldError>
+                    <FieldError key={error?.message}>{error?.message}</FieldError>
                   ))}
                 </Field>
               )}
@@ -154,26 +133,23 @@ export function CreateOrgDialog({
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <FieldError key={error?.message}>
-                        {error?.message}
-                      </FieldError>
+                      <FieldError key={error?.message}>{error?.message}</FieldError>
                     ))}
-                    {field.state.meta.errors.length === 0 &&
-                      field.state.value && (
-                        <FieldDescription>
-                          {isTyping || isLoading ? (
-                            "Checking availability..."
-                          ) : slugAvailable ? (
-                            <span className="flex gap-1 text-success">
-                              <Check className="size-4" /> Available
-                            </span>
-                          ) : (
-                            <span className="flex gap-1 text-destructive">
-                              <X className="size-4" /> Taken
-                            </span>
-                          )}
-                        </FieldDescription>
-                      )}
+                    {field.state.meta.errors.length === 0 && field.state.value && (
+                      <FieldDescription>
+                        {isTyping || isLoading ? (
+                          "Checking availability..."
+                        ) : slugAvailable ? (
+                          <span className="flex gap-1 text-success">
+                            <Check className="size-4" /> Available
+                          </span>
+                        ) : (
+                          <span className="flex gap-1 text-destructive">
+                            <X className="size-4" /> Taken
+                          </span>
+                        )}
+                      </FieldDescription>
+                    )}
                   </Field>
                 );
               }}

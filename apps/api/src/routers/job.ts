@@ -21,43 +21,41 @@ const jobSchema = z.object({
 });
 
 export const jobRouter = {
-  create: protectedProcedure
-    .input(jobSchema)
-    .handler(async ({ input, context }) => {
-      const orgId = context.session?.activeOrganizationId;
-      if (!context.user?.id) {
-        throw new ORPCError("UNAUTHORIZED", {
-          message: "User not authenticated",
-        });
-      }
+  create: protectedProcedure.input(jobSchema).handler(async ({ input, context }) => {
+    const orgId = context.session?.activeOrganizationId;
+    if (!context.user?.id) {
+      throw new ORPCError("UNAUTHORIZED", {
+        message: "User not authenticated",
+      });
+    }
 
-      if (!orgId) {
-        throw new ORPCError("BAD_REQUEST", {
-          message: "No active organization selected",
-        });
-      }
+    if (!orgId) {
+      throw new ORPCError("BAD_REQUEST", {
+        message: "No active organization selected",
+      });
+    }
 
-      const { data, error } = await tryCatch(
-        db
-          .insert(job)
-          .values({
-            ...input,
-            organizationId: orgId,
-            createdBy: context.user.id,
-            publishedAt: input.status === "published" ? new Date() : null,
-          })
-          .returning()
-      );
+    const { data, error } = await tryCatch(
+      db
+        .insert(job)
+        .values({
+          ...input,
+          organizationId: orgId,
+          createdBy: context.user.id,
+          publishedAt: input.status === "published" ? new Date() : null,
+        })
+        .returning(),
+    );
 
-      if (error) {
-        throw new ORPCError("INTERNAL_SERVER_ERROR", {
-          message: "Failed to create job posting",
-          cause: error,
-        });
-      }
+    if (error) {
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "Failed to create job posting",
+        cause: error,
+      });
+    }
 
-      return data[0];
-    }),
+    return data[0];
+  }),
 
   list: protectedProcedure.handler(async ({ context }) => {
     const orgId = context.session?.activeOrganizationId;
@@ -68,11 +66,7 @@ export const jobRouter = {
     }
 
     const { data, error } = await tryCatch(
-      db
-        .select()
-        .from(job)
-        .where(eq(job.organizationId, orgId))
-        .orderBy(desc(job.createdAt))
+      db.select().from(job).where(eq(job.organizationId, orgId)).orderBy(desc(job.createdAt)),
     );
 
     if (error) {
@@ -99,7 +93,7 @@ export const jobRouter = {
         db
           .select()
           .from(job)
-          .where(and(eq(job.id, input.id), eq(job.organizationId, orgId)))
+          .where(and(eq(job.id, input.id), eq(job.organizationId, orgId))),
       );
 
       if (error) {
@@ -149,7 +143,7 @@ export const jobRouter = {
           .update(job)
           .set(updateData)
           .where(and(eq(job.id, id), eq(job.organizationId, orgId)))
-          .returning()
+          .returning(),
       );
 
       if (error) {
@@ -179,9 +173,7 @@ export const jobRouter = {
       }
 
       const { error } = await tryCatch(
-        db
-          .delete(job)
-          .where(and(eq(job.id, input.id), eq(job.organizationId, orgId)))
+        db.delete(job).where(and(eq(job.id, input.id), eq(job.organizationId, orgId))),
       );
 
       if (error) {

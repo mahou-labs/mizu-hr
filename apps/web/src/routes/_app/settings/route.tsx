@@ -1,9 +1,4 @@
-import {
-  createFileRoute,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@mizu-hr/ui/tabs";
 
 export const Route = createFileRoute("/_app/settings")({

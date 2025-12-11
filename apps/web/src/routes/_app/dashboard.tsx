@@ -16,9 +16,7 @@ function RouteComponent() {
       <div className="grid gap-6">
         <div className="rounded-lg border border-border bg-card p-6">
           <p className="text-card-foreground text-lg">Welcome {user?.name}</p>
-          <p className="mt-2 text-muted-foreground text-sm">
-            privateData: {privateData?.message}
-          </p>
+          <p className="mt-2 text-muted-foreground text-sm">privateData: {privateData?.message}</p>
         </div>
       </div>
     </div>

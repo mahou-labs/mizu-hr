@@ -1,11 +1,6 @@
 import { scan } from "react-scan";
 import type { QueryClient } from "@tanstack/react-query";
-import {
-  createRootRouteWithContext,
-  HeadContent,
-  Outlet,
-  Scripts,
-} from "@tanstack/react-router";
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
@@ -93,7 +88,7 @@ function RootDocument() {
             {
               name: "TanStack Query",
               render: <ReactQueryDevtoolsPanel />,
-           },
+            },
             {
               name: "TanStack Router",
               render: <TanStackRouterDevtoolsPanel />,

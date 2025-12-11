@@ -17,9 +17,7 @@ export const Route = createFileRoute("/_app")({
     }
   },
   loader: ({ context }) => {
-    context.queryClient.ensureQueryData(
-      orpc.organization.getOrgList.queryOptions()
-    );
+    context.queryClient.ensureQueryData(orpc.organization.getOrgList.queryOptions());
   },
 });
 
@@ -34,7 +32,7 @@ function RouteComponent() {
     <div className="flex h-full overflow-hidden bg-sidebar py-2 pr-2">
       <Sidebar />
       {/* Native browser scroll implementation */}
-       {/*<div className="h-full flex-1 overflow-y-auto overscroll-contain rounded-md border border-border bg-background p-4">
+      {/*<div className="h-full flex-1 overflow-y-auto overscroll-contain rounded-md border border-border bg-background p-4">
         <Outlet />
       </div> */}
 

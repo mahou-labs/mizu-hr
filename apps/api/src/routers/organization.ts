@@ -15,7 +15,7 @@ export const organizationRouter = {
       z.object({
         name: z.string().min(1),
         slug: z.string().min(1),
-      })
+      }),
     )
     .handler(async ({ context: { headers, resHeaders }, input }) => {
       const data = await auth.api.createOrganization({
@@ -82,7 +82,7 @@ export const organizationRouter = {
           z.enum(["admin", "member", "owner"]),
           z.array(z.enum(["admin", "member", "owner"])),
         ]),
-      })
+      }),
     )
     .handler(async ({ context: { headers }, input }) => {
       await auth.api.createInvitation({
@@ -134,24 +134,22 @@ export const organizationRouter = {
       }
     }),
 
-  getSubscription: protectedProcedure.handler(
-    async ({ context: { session } }) => {
-      if (!session?.activeOrganizationId) {
-        return null;
-      }
-
-      try {
-        const subscription = await redis.get(session.activeOrganizationId);
-        const parsedSubscription = subscription
-          ? (JSON.parse(subscription) as CachedSubscriptionData)
-          : null;
-
-        return parsedSubscription;
-      } catch (error) {
-        // Log error and return null instead of letting exception bubble up
-        console.error("Failed to get subscription from Redis:", error);
-        return null;
-      }
+  getSubscription: protectedProcedure.handler(async ({ context: { session } }) => {
+    if (!session?.activeOrganizationId) {
+      return null;
     }
-  ),
+
+    try {
+      const subscription = await redis.get(session.activeOrganizationId);
+      const parsedSubscription = subscription
+        ? (JSON.parse(subscription) as CachedSubscriptionData)
+        : null;
+
+      return parsedSubscription;
+    } catch (error) {
+      // Log error and return null instead of letting exception bubble up
+      console.error("Failed to get subscription from Redis:", error);
+      return null;
+    }
+  }),
 };

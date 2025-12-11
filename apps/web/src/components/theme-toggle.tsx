@@ -22,9 +22,7 @@ export const ThemeToggle = () => {
       <MenuTrigger>
         <Button variant="outline" size="sm" className="gap-2">
           <CurrentIcon className="size-4" />
-          <span className="hidden sm:inline">
-            {themeConfig[userTheme].label}
-          </span>
+          <span className="hidden sm:inline">{themeConfig[userTheme].label}</span>
         </Button>
       </MenuTrigger>
       <MenuPopup>

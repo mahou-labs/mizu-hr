@@ -4,19 +4,8 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
 import { z } from "zod";
 import { Button } from "@mizu-hr/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@mizu-hr/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@mizu-hr/ui/field";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@mizu-hr/ui/field";
 import { Input } from "@mizu-hr/ui/input";
 import { orpc } from "@/utils/orpc-client";
 import { toastManager } from "@mizu-hr/ui/toast";
@@ -49,9 +38,7 @@ function OnboardingComponent() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { mutateAsync: createOrg } = useMutation(
-    orpc.organization.createOrg.mutationOptions(),
-  );
+  const { mutateAsync: createOrg } = useMutation(orpc.organization.createOrg.mutationOptions());
 
   const form = useForm({
     defaultValues: { name: "", slug: "" },
@@ -94,9 +81,7 @@ function OnboardingComponent() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle>Welcome to Mizu HR!</CardTitle>
-          <CardDescription>
-            Let's get you started by creating your organization
-          </CardDescription>
+          <CardDescription>Let's get you started by creating your organization</CardDescription>
         </CardHeader>
         <CardContent>
           <form
@@ -117,9 +102,7 @@ function OnboardingComponent() {
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <FieldError key={error?.message}>
-                      {error?.message}
-                    </FieldError>
+                    <FieldError key={error?.message}>{error?.message}</FieldError>
                   ))}
                 </Field>
               )}
@@ -144,20 +127,17 @@ function OnboardingComponent() {
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <FieldError key={error?.message}>
-                        {error?.message}
-                      </FieldError>
+                      <FieldError key={error?.message}>{error?.message}</FieldError>
                     ))}
-                    {field.state.meta.errors.length === 0 &&
-                      field.state.value && (
-                        <FieldDescription>
-                          {isTyping || isLoading
-                            ? "Checking availability..."
-                            : slugAvailable
-                              ? "✓ Available"
-                              : "✗ Taken"}
-                        </FieldDescription>
-                      )}
+                    {field.state.meta.errors.length === 0 && field.state.value && (
+                      <FieldDescription>
+                        {isTyping || isLoading
+                          ? "Checking availability..."
+                          : slugAvailable
+                            ? "✓ Available"
+                            : "✗ Taken"}
+                      </FieldDescription>
+                    )}
                   </Field>
                 );
               }}

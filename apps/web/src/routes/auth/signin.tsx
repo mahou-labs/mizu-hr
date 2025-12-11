@@ -1,10 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  createFileRoute,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import z from "zod";
 import Loader from "@/components/loader";
 import { Button } from "@mizu-hr/ui/button";
@@ -59,9 +55,7 @@ function RouteComponent() {
 
   return (
     <div className="mx-auto mt-10 w-full max-w-md p-6">
-      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">
-        Welcome Back
-      </h1>
+      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">Welcome Back</h1>
 
       <form
         className="space-y-4"

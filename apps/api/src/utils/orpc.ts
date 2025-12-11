@@ -55,9 +55,7 @@ const requireSubscription = o
     const cachedData = await redis.get(orgId);
     if (cachedData) {
       try {
-        const subscriptionData = JSON.parse(
-          cachedData
-        ) as CachedSubscriptionData;
+        const subscriptionData = JSON.parse(cachedData) as CachedSubscriptionData;
 
         // Validate that the cached subscription is still active and not expired
         const isActive = subscriptionData.status === "active";
@@ -65,9 +63,7 @@ const requireSubscription = o
           ? new Date(subscriptionData.currentPeriodEnd)
           : null;
 
-        const isNotExpired = currentPeriodEnd
-          ? currentPeriodEnd.getTime() > Date.now()
-          : false;
+        const isNotExpired = currentPeriodEnd ? currentPeriodEnd.getTime() > Date.now() : false;
 
         if (isActive && isNotExpired) {
           // Valid cached subscription, continue
@@ -96,9 +92,7 @@ const requireSubscription = o
       });
 
       // Find the first active subscription
-      const activeSubscription = subscriptions.items.find(
-        (sub) => sub.status === "active"
-      );
+      const activeSubscription = subscriptions.items.find((sub) => sub.status === "active");
 
       if (activeSubscription) {
         // Cache subscription details in Redis
@@ -144,6 +138,4 @@ const requireSubscription = o
   });
 
 export const publicProcedure = o;
-export const protectedProcedure = publicProcedure
-  .use(requireAuth)
-  .use(requireSubscription);
+export const protectedProcedure = publicProcedure.use(requireAuth).use(requireSubscription);

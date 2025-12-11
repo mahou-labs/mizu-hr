@@ -9,13 +9,9 @@ type UseKeyPressOptions = {
 export function useKeyPress(
   key: string | string[],
   callback: (event: KeyboardEvent) => void,
-  options: UseKeyPressOptions = {}
+  options: UseKeyPressOptions = {},
 ) {
-  const {
-    preventDefault = false,
-    stopPropagation = false,
-    ignoreInputFields = true,
-  } = options;
+  const { preventDefault = false, stopPropagation = false, ignoreInputFields = true } = options;
 
   const callbackRef = useRef(callback);
   const keysRef = useRef<Set<string>>(new Set());

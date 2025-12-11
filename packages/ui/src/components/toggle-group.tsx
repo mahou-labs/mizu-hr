@@ -7,14 +7,9 @@ import * as React from "react";
 
 import { cn } from "@/utils/cn";
 import { Separator } from "@/components/separator";
-import {
-  Toggle as ToggleComponent,
-  type toggleVariants,
-} from "@/components/toggle";
+import { Toggle as ToggleComponent, type toggleVariants } from "@/components/toggle";
 
-const ToggleGroupContext = React.createContext<
-  VariantProps<typeof toggleVariants>
->({
+const ToggleGroupContext = React.createContext<VariantProps<typeof toggleVariants>>({
   size: "default",
   variant: "default",
 });
@@ -87,9 +82,7 @@ function ToggleGroupSeparator({
 }: {
   className?: string;
 } & React.ComponentProps<typeof Separator>) {
-  return (
-    <Separator className={className} orientation={orientation} {...props} />
-  );
+  return <Separator className={className} orientation={orientation} {...props} />;
 }
 
 export { ToggleGroup, Toggle, Toggle as ToggleGroupItem, ToggleGroupSeparator };

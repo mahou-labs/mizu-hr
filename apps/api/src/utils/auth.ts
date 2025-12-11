@@ -1,10 +1,4 @@
-import {
-  checkout,
-  polar,
-  portal,
-  usage,
-  webhooks,
-} from "@polar-sh/better-auth";
+import { checkout, polar, portal, usage, webhooks } from "@polar-sh/better-auth";
 import { Polar } from "@polar-sh/sdk";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -28,10 +22,7 @@ export const getActiveOrganization = async (userId: string) => {
     const userOrganizations = await db
       .select({ id: schema.organization.id })
       .from(schema.member)
-      .innerJoin(
-        schema.organization,
-        eq(schema.member.organizationId, schema.organization.id)
-      )
+      .innerJoin(schema.organization, eq(schema.member.organizationId, schema.organization.id))
       .where(eq(schema.member.userId, userId));
 
     if (userOrganizations.length === 0) {
@@ -44,7 +35,7 @@ export const getActiveOrganization = async (userId: string) => {
     return activeOrg?.id;
   } catch (error) {
     throw new Error(
-      `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`
+      `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
   }
 };
@@ -93,10 +84,9 @@ export const auth = betterAuth({
         before: async (user) => {
           try {
             // Check if a Polar customer already exists with this email
-            const { result: existingCustomers } =
-              await polarClient.customers.list({
-                email: user.email,
-              });
+            const { result: existingCustomers } = await polarClient.customers.list({
+              email: user.email,
+            });
 
             const existingCustomer = existingCustomers.items[0];
 
@@ -121,10 +111,9 @@ export const auth = betterAuth({
         after: async (user) => {
           try {
             // Check if customer already exists
-            const { result: existingCustomers } =
-              await polarClient.customers.list({
-                email: user.email,
-              });
+            const { result: existingCustomers } = await polarClient.customers.list({
+              email: user.email,
+            });
 
             const existingCustomer = existingCustomers.items[0];
 

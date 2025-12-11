@@ -37,9 +37,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
     }),
   );
 
-  const activeOrg = orgs?.find(
-    (org) => org.id === session?.activeOrganizationId,
-  );
+  const activeOrg = orgs?.find((org) => org.id === session?.activeOrganizationId);
 
   const { data: subscription, isPending } = useQuery(
     orpc.organization.getSubscription.queryOptions(),
@@ -79,9 +77,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
       <MenuTrigger className="flex cursor-pointer select-none items-center gap-2 rounded-lg">
         <Avatar className="rounded-md">
           <AvatarImage src={activeOrg?.logo ?? undefined} />
-          <AvatarFallback className="rounded-md">
-            {getInitials(activeOrg?.name)}
-          </AvatarFallback>
+          <AvatarFallback className="rounded-md">{getInitials(activeOrg?.name)}</AvatarFallback>
         </Avatar>
 
         <div
@@ -107,14 +103,10 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
             <MenuItem key={org.id} onClick={() => handleOrgChange(org.id)}>
               <Avatar className="size-4 rounded-sm text-[8px]">
                 <AvatarImage src={org.logo ?? undefined} />
-                <AvatarFallback className="rounded-sm">
-                  {getInitials(org.name)}
-                </AvatarFallback>
+                <AvatarFallback className="rounded-sm">{getInitials(org.name)}</AvatarFallback>
               </Avatar>
               <span className="flex-1">{org.name}</span>
-              {org.id === session?.activeOrganizationId && (
-                <Check className="size-4" />
-              )}
+              {org.id === session?.activeOrganizationId && <Check className="size-4" />}
             </MenuItem>
           ))}
 

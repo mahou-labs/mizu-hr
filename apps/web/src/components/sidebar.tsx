@@ -38,7 +38,7 @@ export function Sidebar() {
     <div
       className={cn(
         "relative flex h-full flex-col gap-3 bg-default bg-sidebar px-4 py-3 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
-        isCollapsed ? "w-16" : "w-64"
+        isCollapsed ? "w-16" : "w-64",
       )}
     >
       <OrgMenu isCollapsed={isCollapsed} />
@@ -104,10 +104,7 @@ export function Sidebar() {
             </TooltipTrigger>
           </Tooltip>
 
-          <Separator
-            className="mt-auto h-0 bg-transparent"
-            orientation="horizontal"
-          />
+          <Separator className="mt-auto h-0 bg-transparent" orientation="horizontal" />
           <SidebarItem
             href="/settings"
             icon={Settings}
@@ -118,9 +115,7 @@ export function Sidebar() {
 
           <Tooltip disabled={!isCollapsed} handle={tooltipHandle}>
             {({ payload: Payload }) => (
-              <TooltipPopup side="right">
-                {Payload !== undefined && <Payload />}
-              </TooltipPopup>
+              <TooltipPopup side="right">{Payload !== undefined && <Payload />}</TooltipPopup>
             )}
           </Tooltip>
         </TooltipProvider>
@@ -168,7 +163,7 @@ function SidebarItem({
         "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2 py-2 font-medium text-foreground text-sm",
         "outline-border hover:bg-card hover:outline",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        isActive && "bg-card outline"
+        isActive && "bg-card outline",
       )}
       onClick={onClick}
       title={isCollapsed ? label : undefined}
@@ -179,7 +174,7 @@ function SidebarItem({
       <div
         className={cn(
           "flex flex-1 items-center justify-between transition-opacity duration-200",
-          isCollapsed ? "opacity-0" : "w-auto opacity-100"
+          isCollapsed ? "opacity-0" : "w-auto opacity-100",
         )}
       >
         <span className="truncate">{label}</span>

@@ -3,13 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@mizu-hr/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@mizu-hr/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
 import { Checkbox } from "@mizu-hr/ui/checkbox";
 import { Input } from "@mizu-hr/ui/input";
 import { orpc } from "@/utils/orpc-client";
@@ -28,21 +22,21 @@ function TodosRoute() {
         todos.refetch();
         setNewTodoText("");
       },
-    })
+    }),
   );
   const toggleMutation = useMutation(
     orpc.todo.toggle.mutationOptions({
       onSuccess: () => {
         todos.refetch();
       },
-    })
+    }),
   );
   const deleteMutation = useMutation(
     orpc.todo.delete.mutationOptions({
       onSuccess: () => {
         todos.refetch();
       },
-    })
+    }),
   );
 
   const handleAddTodo = (e: React.FormEvent) => {
@@ -68,25 +62,15 @@ function TodosRoute() {
           <CardDescription>Manage your tasks efficiently</CardDescription>
         </CardHeader>
         <CardContent>
-          <form
-            className="mb-6 flex items-center space-x-2"
-            onSubmit={handleAddTodo}
-          >
+          <form className="mb-6 flex items-center space-x-2" onSubmit={handleAddTodo}>
             <Input
               disabled={createMutation.isPending}
               onChange={(e) => setNewTodoText(e.target.value)}
               placeholder="Add a new task..."
               value={newTodoText}
             />
-            <Button
-              disabled={createMutation.isPending || !newTodoText.trim()}
-              type="submit"
-            >
-              {createMutation.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Add"
-              )}
+            <Button disabled={createMutation.isPending || !newTodoText.trim()} type="submit">
+              {createMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Add"}
             </Button>
           </form>
 
@@ -95,9 +79,7 @@ function TodosRoute() {
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
           ) : todos.data?.length === 0 ? (
-            <p className="py-4 text-center text-muted-foreground">
-              No todos yet. Add one above!
-            </p>
+            <p className="py-4 text-center text-muted-foreground">No todos yet. Add one above!</p>
           ) : (
             <ul className="space-y-2">
               {todos.data?.map((todo) => (
@@ -109,9 +91,7 @@ function TodosRoute() {
                     <Checkbox
                       checked={todo.completed}
                       id={`todo-${todo.id}`}
-                      onCheckedChange={() =>
-                        handleToggleTodo(todo.id, todo.completed)
-                      }
+                      onCheckedChange={() => handleToggleTodo(todo.id, todo.completed)}
                     />
                     <label
                       className={`text-card-foreground ${todo.completed ? "line-through opacity-60" : ""}`}

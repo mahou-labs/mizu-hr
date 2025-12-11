@@ -6,7 +6,7 @@ export const db = drizzle(
   new Pool({
     connectionString: env.DATABASE_URL,
     max: 5,
-  })
+  }),
 );
 
 // TODO: use bun sql

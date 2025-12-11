@@ -1,10 +1,4 @@
-import {
-  boolean,
-  integer,
-  pgTable,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { v7 as uuidv7 } from "uuid";
 import { organization, user } from "./auth";
 

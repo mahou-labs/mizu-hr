@@ -26,9 +26,7 @@ const setStoredTheme = createClientOnlyFn((theme: UserTheme) => {
 const getSystemTheme = createIsomorphicFn()
   .server((): AppTheme => "light")
   .client((): AppTheme => {
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   });
 
 const handleThemeChange = createClientOnlyFn((userTheme: UserTheme) => {
@@ -56,13 +54,10 @@ const themeScript = (function () {
   function themeFn() {
     try {
       const storedTheme = localStorage.getItem("ui-theme") || "system";
-      const validTheme = ["light", "dark", "system"].includes(storedTheme)
-        ? storedTheme
-        : "system";
+      const validTheme = ["light", "dark", "system"].includes(storedTheme) ? storedTheme : "system";
 
       if (validTheme === "system") {
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-          .matches
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
           : "light";
         document.documentElement.classList.add(systemTheme, "system");
@@ -71,8 +66,7 @@ const themeScript = (function () {
       }
     } catch (e) {
       console.error(e);
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light";
       document.documentElement.classList.add(systemTheme, "system");
