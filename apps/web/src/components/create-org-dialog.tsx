@@ -6,8 +6,17 @@ import { Check, X } from "lucide-react";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
 import { Button } from "@mizu-hr/ui/button";
-import { Dialog, DialogBackdrop, DialogPopup, DialogPortal, DialogTitle } from "@mizu-hr/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogFooter,
+  DialogHeader,
+  DialogPanel,
+  DialogPopup,
+  DialogTitle,
+} from "@mizu-hr/ui/dialog";
 import { Field, FieldDescription, FieldError, FieldLabel } from "@mizu-hr/ui/field";
+import { Form } from "@mizu-hr/ui/form";
 import { Input } from "@mizu-hr/ui/input";
 import { toastManager } from "@mizu-hr/ui/toast";
 
@@ -85,18 +94,18 @@ export function CreateOrgDialog({
   );
 
   return (
-    <Dialog disablePointerDismissal={!allowClosing} onOpenChange={onOpenChange} open={isOpen}>
-      <DialogPortal>
-        <DialogBackdrop />
-        <DialogPopup>
-          <DialogTitle>Create new organization</DialogTitle>
-          <form
-            className="space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              form.handleSubmit();
-            }}
-          >
+    <Dialog dismissible={allowClosing} onOpenChange={onOpenChange} open={isOpen}>
+      <DialogPopup className="sm:max-w-md" showCloseButton={allowClosing}>
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit();
+          }}
+        >
+          <DialogHeader>
+            <DialogTitle>Create new organization</DialogTitle>
+          </DialogHeader>
+          <DialogPanel className="grid gap-4">
             <form.Field name="name">
               {(field) => (
                 <Field>
@@ -154,9 +163,22 @@ export function CreateOrgDialog({
                 );
               }}
             </form.Field>
-
+          </DialogPanel>
+          <DialogFooter>
+            {allowClosing && (
+              <DialogClose
+                render={
+                  <Button
+                    disabled={form.state.isSubmitting}
+                    type="button"
+                    variant="ghost"
+                  />
+                }
+              >
+                Cancel
+              </DialogClose>
+            )}
             <Button
-              className="w-full"
               disabled={
                 !form.state.canSubmit ||
                 form.state.isSubmitting ||
@@ -168,109 +190,9 @@ export function CreateOrgDialog({
             >
               {form.state.isSubmitting ? "Creating..." : "Create Organization"}
             </Button>
-          </form>
-
-          {/* <Dialog.Close>Close</Dialog.Close> */}
-        </DialogPopup>
-      </DialogPortal>
+          </DialogFooter>
+        </Form>
+      </DialogPopup>
     </Dialog>
   );
-
-  // return (
-  // <div className="flex h-full items-center justify-center p-4">
-  //   <Card className="w-full max-w-md">
-  //     <CardHeader className="text-center">
-  //       <CardTitle>Welcome to Mizu HR!</CardTitle>
-  //       <CardDescription>
-  //         Let's get you started by creating your organization
-  //       </CardDescription>
-  //     </CardHeader>
-  //     <CardContent>
-  //       <form
-  //         className="space-y-4"
-  //         onSubmit={(e) => {
-  //           e.preventDefault();
-  //           form.handleSubmit();
-  //         }}
-  //       >
-  //         <form.Field name="name">
-  //           {(field) => (
-  //             <div className="space-y-2">
-  //               <Label>Organization Name</Label>
-  //               <Input
-  //                 disabled={form.state.isSubmitting}
-  //                 onChange={(e) => field.handleChange(e.target.value)}
-  //                 placeholder="Enter your organization name"
-  //                 value={field.state.value}
-  //               />
-  //               {field.state.meta.errors.map((error) => (
-  //                 <p
-  //                   className="text-destructive text-sm"
-  //                   key={error?.message}
-  //                 >
-  //                   {error?.message}
-  //                 </p>
-  //               ))}
-  //             </div>
-  //           )}
-  //         </form.Field>
-
-  //         <form.Field
-  //           name="slug"
-  //           validators={{
-  //             onChange: onboardingSchema.shape.slug,
-  //           }}
-  //         >
-  //           {(field) => {
-  //             const isTyping = field.state.value !== debouncedSlug;
-
-  //             return (
-  //               <div className="space-y-2">
-  //                 <Label>Organization Slug</Label>
-  //                 <Input
-  //                   disabled={form.state.isSubmitting}
-  //                   onChange={(e) => field.handleChange(e.target.value)}
-  //                   placeholder="your-organization-slug"
-  //                   value={field.state.value}
-  //                 />
-  //                 {field.state.meta.errors.map((error) => (
-  //                   <p
-  //                     className="text-destructive text-sm"
-  //                     key={error?.message}
-  //                   >
-  //                     {error?.message}
-  //                   </p>
-  //                 ))}
-  //                 {field.state.meta.errors.length === 0 &&
-  //                   field.state.value && (
-  //                     <p className="text-muted-foreground text-sm">
-  //                       {isTyping || isLoading
-  //                         ? "Checking availability..."
-  //                         : slugAvailable
-  //                           ? "✓ Available"
-  //                           : "✗ Taken"}
-  //                     </p>
-  //                   )}
-  //               </div>
-  //             );
-  //           }}
-  //         </form.Field>
-
-  //         <Button
-  //           className="w-full"
-  //           disabled={
-  //             !form.state.canSubmit ||
-  //             form.state.isSubmitting ||
-  //             slug !== debouncedSlug ||
-  //             (debouncedSlug.length >= 4 && isLoading) ||
-  //             !slugAvailable
-  //           }
-  //           type="submit"
-  //         >
-  //           {form.state.isSubmitting ? "Creating..." : "Create Organization"}
-  //         </Button>
-  //       </form>
-  //     </CardContent>
-  //   </Card>
-  // </div>
 }
