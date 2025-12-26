@@ -42,7 +42,7 @@ export function Sidebar() {
       )}
     >
       <OrgMenu isCollapsed={isCollapsed} />
-      <nav className="mt-6 flex flex-1 flex-col gap-1">
+      <nav className="mt-6 flex flex-1 flex-col gap-1.5">
         <TooltipProvider delay={0} timeout={500}>
           <Tooltip disabled={!isCollapsed}>
             <TooltipTrigger>
@@ -132,7 +132,7 @@ export function Sidebar() {
           <PanelLeftClose className="h-4 w-4" />
         )}
       </button>
-      <ThemeToggle isCollapsed={isCollapsed} />
+      <ThemeToggle />
       <UserMenu isCollapsed={isCollapsed} />
     </div>
   );
@@ -160,7 +160,7 @@ function SidebarItem({
   return (
     <Link
       className={cn(
-        "group relative flex h-9 w-full items-center gap-3 rounded-lg px-2 py-2 font-medium text-foreground text-sm",
+        "group relative flex h-8 w-full items-center gap-3 rounded-lg px-2 font-medium text-foreground text-sm",
         "outline-border hover:bg-card hover:outline",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         isActive && "bg-card outline",

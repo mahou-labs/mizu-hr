@@ -1,6 +1,5 @@
 import { RPCHandler } from "@orpc/server/fetch";
 import { ResponseHeadersPlugin } from "@orpc/server/plugins";
-import { randomUUIDv7 } from "bun";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
@@ -16,15 +15,20 @@ const handler = new RPCHandler(appRouter, {
 });
 
 app.use(logger());
+
 app.use(
   rateLimiter({
     windowMs: 10 * 60 * 1000, // 10 minutes
     limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
     standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-    keyGenerator: () => randomUUIDv7(), // Method to generate custom identifiers for clients.
+    keyGenerator: async (c) => {
+      const authSession = await auth.api.getSession({ headers: c.req.raw.headers });
+      return authSession?.user.id ?? c.req.header("X-Forwarded-For") ?? "";
+    },
     // store: new RedisStore({ client: redisClient }),
   }),
 );
+
 app.use(
   "/*",
   cors({
@@ -44,7 +48,7 @@ app.get("/healthcheck", (c) => {
   });
 });
 
-app.on(["POST", "GET"], "/auth/**", (c) => auth.handler(c.req.raw));
+app.use("/auth/*", (c) => auth.handler(c.req.raw));
 
 app.use("/rpc/*", async (c, next) => {
   const context = await createContext(c);
