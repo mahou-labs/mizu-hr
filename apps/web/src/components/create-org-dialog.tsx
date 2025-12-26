@@ -94,7 +94,7 @@ export function CreateOrgDialog({
   );
 
   return (
-    <Dialog dismissible={allowClosing} onOpenChange={onOpenChange} open={isOpen}>
+    <Dialog disablePointerDismissal={!allowClosing} onOpenChange={onOpenChange} open={isOpen}>
       <DialogPopup className="sm:max-w-md" showCloseButton={allowClosing}>
         <Form
           onSubmit={(e) => {

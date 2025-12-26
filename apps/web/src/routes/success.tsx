@@ -75,11 +75,11 @@ function SuccessComponent() {
             </p>
 
             <div className="flex flex-col gap-2">
-              <Button asChild className="w-full" type="button">
-                <Link to="/dashboard">Go to Dashboard</Link>
+              <Button className="w-full" render={<Link to="/dashboard" />}>
+                Go to Dashboard
               </Button>
-              <Button asChild className="w-full" type="button" variant="outline">
-                <Link to="/">Back to Home</Link>
+              <Button className="w-full" render={<Link to="/" />} variant="outline">
+                Back to Home
               </Button>
             </div>
           </div>
