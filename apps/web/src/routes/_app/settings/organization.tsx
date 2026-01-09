@@ -35,7 +35,14 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data, isPending } = useQuery(orpc.organization.getMembers.queryOptions());
+  const { data: membersData, isPending: isMembersPending } = useQuery(
+    orpc.organization.getMembers.queryOptions(),
+  );
+  const { data: invitesData, isPending: isInvitesPending } = useQuery(
+    orpc.organization.getInvites.queryOptions(),
+  );
+
+  const isPending = isMembersPending || isInvitesPending;
 
   const { mutateAsync: inviteMember } = useMutation(
     orpc.organization.inviteMember.mutationOptions(),
@@ -47,7 +54,7 @@ function RouteComponent() {
     onSubmit: async ({ value }) => {
       try {
         await inviteMember({ email: value.email, role: "member" });
-        await queryClient.invalidateQueries(orpc.organization.getMembers.queryOptions());
+        await queryClient.invalidateQueries(orpc.organization.getInvites.queryOptions());
         toastManager.add({ title: "Invitation sent", type: "success" });
         setIsDialogOpen(false);
         form.reset();
@@ -70,7 +77,7 @@ function RouteComponent() {
           <MemberSkeleton />
         ) : (
           <>
-            {data?.members?.members.map((member) => (
+            {membersData?.members?.map((member) => (
               <Member
                 email={member.user.email}
                 key={member.id}
@@ -79,7 +86,7 @@ function RouteComponent() {
               />
             ))}
 
-            {data?.invites
+            {invitesData
               ?.filter((invite) => invite.status === "pending")
               .map((invite) => (
                 <Member

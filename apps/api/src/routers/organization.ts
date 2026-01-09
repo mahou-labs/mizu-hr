@@ -66,12 +66,11 @@ export const organizationRouter = {
   }),
 
   getMembers: protectedProcedure.handler(async ({ context: { headers } }) => {
-    const [members, invites] = await Promise.all([
-      auth.api.listMembers({ headers }),
-      auth.api.listInvitations({ headers }),
-    ]);
+    return await auth.api.listMembers({ headers });
+  }),
 
-    return { members, invites };
+  getInvites: protectedProcedure.handler(async ({ context: { headers } }) => {
+    return await auth.api.listInvitations({ headers });
   }),
 
   inviteMember: protectedProcedure

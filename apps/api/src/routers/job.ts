@@ -9,15 +9,22 @@ import { protectedProcedure } from "../utils/orpc";
 const jobSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  department: z.string().optional(),
-  location: z.string().optional(),
+  location: z.string().min(1, "Location is required"),
   employmentType: z.enum(["full-time", "part-time", "contract", "internship"]),
-  experienceLevel: z.enum(["entry", "mid", "senior", "lead"]).optional(),
   salaryMin: z.number().int().positive().optional(),
   salaryMax: z.number().int().positive().optional(),
-  salaryCurrency: z.string().default("USD"),
-  remote: z.boolean().default(false),
-  status: z.enum(["draft", "published", "closed", "archived"]).default("draft"),
+  recruiters: z.array(z.string()).default([]),
+});
+
+const jobUpdateSchema = z.object({
+  id: z.string(),
+  title: z.string().min(1, "Title is required").optional(),
+  description: z.string().min(1, "Description is required").optional(),
+  location: z.string().min(1, "Location is required").optional(),
+  employmentType: z.enum(["full-time", "part-time", "contract", "internship"]).optional(),
+  salaryMin: z.number().int().positive().optional(),
+  salaryMax: z.number().int().positive().optional(),
+  recruiters: z.array(z.string()).optional(),
 });
 
 export const jobRouter = {
@@ -42,7 +49,6 @@ export const jobRouter = {
           ...input,
           organizationId: orgId,
           createdBy: context.user.id,
-          publishedAt: input.status === "published" ? new Date() : null,
         })
         .returning(),
     );
@@ -113,7 +119,7 @@ export const jobRouter = {
     }),
 
   update: protectedProcedure
-    .input(z.object({ id: z.string() }).merge(jobSchema.partial()))
+    .input(jobUpdateSchema)
     .handler(async ({ input, context }) => {
       const { id, ...updates } = input;
       const orgId = context.session?.activeOrganizationId;
@@ -123,25 +129,10 @@ export const jobRouter = {
         });
       }
 
-      // If status is being changed to published and publishedAt is not set, set it
-      const updateData: typeof updates & { publishedAt?: Date | null } = {
-        ...updates,
-      };
-      if (updates.status === "published") {
-        // Check if job already has publishedAt
-        const existing = await db
-          .select()
-          .from(job)
-          .where(and(eq(job.id, id), eq(job.organizationId, orgId)));
-        if (existing[0] && !existing[0].publishedAt) {
-          updateData.publishedAt = new Date();
-        }
-      }
-
       const { data, error } = await tryCatch(
         db
           .update(job)
-          .set(updateData)
+          .set(updates)
           .where(and(eq(job.id, id), eq(job.organizationId, orgId)))
           .returning(),
       );
