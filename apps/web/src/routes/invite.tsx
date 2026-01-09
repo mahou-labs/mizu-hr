@@ -29,7 +29,7 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const { mutateAsync: acceptInvitation, isPending } = useMutation(
-    orpc.organization.acceptInvitation.mutationOptions(),
+    orpc.orgInvite.accept.mutationOptions(),
   );
 
   const handleInvitationAccept = async () => {

@@ -69,53 +69,6 @@ export const organizationRouter = {
     return await auth.api.listMembers({ headers });
   }),
 
-  getInvites: protectedProcedure.handler(async ({ context: { headers } }) => {
-    return await auth.api.listInvitations({ headers });
-  }),
-
-  inviteMember: protectedProcedure
-    .input(
-      z.object({
-        email: z.email(),
-        role: z.union([
-          z.enum(["admin", "member", "owner"]),
-          z.array(z.enum(["admin", "member", "owner"])),
-        ]),
-      }),
-    )
-    .handler(async ({ context: { headers }, input }) => {
-      await auth.api.createInvitation({
-        headers,
-        body: {
-          email: input.email,
-          role: input.role,
-          resend: true,
-        },
-      });
-    }),
-
-  acceptInvitation: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .handler(async ({ context: { headers, resHeaders }, input }) => {
-      const data = await auth.api.acceptInvitation({
-        headers,
-        body: { invitationId: input.id },
-      });
-
-      const { headers: sessionHeaders } = await auth.api.setActiveOrganization({
-        headers,
-        returnHeaders: true,
-        body: {
-          organizationId: data?.invitation.organizationId,
-        },
-      });
-
-      const cookies = sessionHeaders.getSetCookie();
-      for (const cookie of cookies) {
-        resHeaders?.append("set-cookie", cookie);
-      }
-    }),
-
   setActive: protectedProcedure
     .input(z.object({ organizationId: z.string() }))
     .handler(async ({ context: { headers, resHeaders }, input }) => {

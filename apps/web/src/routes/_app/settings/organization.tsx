@@ -39,22 +39,20 @@ function RouteComponent() {
     orpc.organization.getMembers.queryOptions(),
   );
   const { data: invitesData, isPending: isInvitesPending } = useQuery(
-    orpc.organization.getInvites.queryOptions(),
+    orpc.orgInvite.list.queryOptions(),
   );
 
   const isPending = isMembersPending || isInvitesPending;
 
-  const { mutateAsync: inviteMember } = useMutation(
-    orpc.organization.inviteMember.mutationOptions(),
-  );
+  const { mutateAsync: createInvite } = useMutation(orpc.orgInvite.create.mutationOptions());
 
   const form = useForm({
     defaultValues: { email: "" },
     validators: { onSubmit: inviteSchema },
     onSubmit: async ({ value }) => {
       try {
-        await inviteMember({ email: value.email, role: "member" });
-        await queryClient.invalidateQueries(orpc.organization.getInvites.queryOptions());
+        await createInvite({ email: value.email, role: "member" });
+        await queryClient.invalidateQueries(orpc.orgInvite.list.queryOptions());
         toastManager.add({ title: "Invitation sent", type: "success" });
         setIsDialogOpen(false);
         form.reset();
