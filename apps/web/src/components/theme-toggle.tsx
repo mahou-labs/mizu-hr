@@ -1,39 +1,47 @@
-import { useTheme, type UserTheme } from "@/utils/theme-provider";
 import { Button } from "@mizu-hr/ui/button";
 import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@mizu-hr/ui/menu";
 import { Check, Laptop, Moon, Sun } from "lucide-react";
-import type React from "react";
+import { useTheme } from "better-themes";
+import { useHydrated } from "@tanstack/react-router";
 
-const themeConfig: Record<
-  UserTheme,
-  { icon: React.ComponentType<{ className?: string }>; label: string }
-> = {
+type ThemeOption = "light" | "dark" | "system";
+
+const themeConfig: Record<ThemeOption, { icon: typeof Sun; label: string }> = {
   light: { icon: Sun, label: "Light" },
   dark: { icon: Moon, label: "Dark" },
   system: { icon: Laptop, label: "System" },
 };
 
+const themeOptions: ThemeOption[] = ["light", "dark", "system"];
+
+function isValidTheme(theme: string | undefined): theme is ThemeOption {
+  return theme !== undefined && theme in themeConfig;
+}
+
 export const ThemeToggle = () => {
-  const { userTheme, setTheme } = useTheme();
-  const CurrentIcon = themeConfig[userTheme].icon;
+  const hydrated = useHydrated();
+  const { theme, setTheme } = useTheme();
+
+  if (!isValidTheme(theme)) return null;
+  const CurrentIcon = themeConfig[theme].icon;
 
   return (
-    <Menu>
+    <Menu disabled={!hydrated}>
       <MenuTrigger>
         <Button variant="outline" size="sm" className="gap-2">
           <CurrentIcon className="size-4" />
-          <span className="hidden sm:inline">{themeConfig[userTheme].label}</span>
+          <span className="hidden sm:inline">{themeConfig[theme].label}</span>
         </Button>
       </MenuTrigger>
       <MenuPopup>
-        {(Object.keys(themeConfig) as UserTheme[]).map((theme) => {
-          const Icon = themeConfig[theme].icon;
-          const isActive = userTheme === theme;
+        {themeOptions.map((themeOption) => {
+          const Icon = themeConfig[themeOption].icon;
+          const isActive = themeOption === theme;
 
           return (
-            <MenuItem key={theme} onClick={() => setTheme(theme)}>
+            <MenuItem key={themeOption} onClick={() => setTheme(themeOption)}>
               <Icon className="size-4" />
-              <span className="flex-1">{themeConfig[theme].label}</span>
+              <span className="flex-1">{themeConfig[themeOption].label}</span>
               {isActive && <Check className="size-4" />}
             </MenuItem>
           );
