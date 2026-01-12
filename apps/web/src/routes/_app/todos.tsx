@@ -2,8 +2,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { Page } from "@/components/page";
 import { Button } from "@mizu-hr/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
+import { Card, CardContent } from "@mizu-hr/ui/card";
 import { Checkbox } from "@mizu-hr/ui/checkbox";
 import { Input } from "@mizu-hr/ui/input";
 import { orpc } from "@/utils/orpc-client";
@@ -55,13 +56,9 @@ function TodosRoute() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md py-10">
-      <Card>
-        <CardHeader>
-          <CardTitle>Todo List</CardTitle>
-          <CardDescription>Manage your tasks efficiently</CardDescription>
-        </CardHeader>
-        <CardContent>
+    <Page title="Todos" description="Manage your tasks efficiently">
+      <Card className="mx-auto w-full max-w-md">
+        <CardContent className="pt-6">
           <form className="mb-6 flex items-center space-x-2" onSubmit={handleAddTodo}>
             <Input
               disabled={createMutation.isPending}
@@ -114,6 +111,6 @@ function TodosRoute() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </Page>
   );
 }

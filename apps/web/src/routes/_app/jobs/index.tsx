@@ -14,6 +14,7 @@ import {
   Trash2,
   Users,
 } from "lucide-react";
+import { Page } from "@/components/page";
 import { orpc } from "@/utils/orpc-client";
 import { Badge } from "@mizu-hr/ui/badge";
 import { Button } from "@mizu-hr/ui/button";
@@ -108,19 +109,16 @@ function JobsRoute() {
   const jobsData = jobs.data as Job[] | undefined;
 
   return (
-    <div className="flex flex-1 flex-col gap-6 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-2xl">Job Postings</h1>
-          <p className="text-muted-foreground text-sm">
-            Manage your open positions and job listings
-          </p>
-        </div>
+    <Page
+      title="Job Postings"
+      description="Manage your open positions and job listings"
+      actions={
         <Button render={<Link to="/jobs/new" />}>
           <Plus className="mr-2 size-4" />
           Add Job
         </Button>
-      </div>
+      }
+    >
 
       {jobs.isLoading ? (
         <div className="flex flex-1 items-center justify-center">
@@ -243,6 +241,6 @@ function JobsRoute() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   );
 }

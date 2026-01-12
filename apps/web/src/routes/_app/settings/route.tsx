@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { Page } from "@/components/page";
 import { Tabs, TabsList, TabsPanel, TabsTab } from "@mizu-hr/ui/tabs";
 
 export const Route = createFileRoute("/_app/settings")({
@@ -40,13 +41,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className="mx-auto flex max-w-[850px] flex-col gap-5">
-      <div className="flex flex-col">
-        <h1 className="font-semibold text-foreground text-xl">Settings</h1>
-        <p className="text-muted-foreground text-sm">
-          Manage your account and organization settings.
-        </p>
-      </div>
+    <Page title="Settings" description="Manage your account and organization settings">
       <Tabs onValueChange={handleTabChange} value={activeTab}>
         <TabsList>
           {tabs.map((tab) => (
@@ -54,13 +49,12 @@ function RouteComponent() {
               {tab.label}
             </TabsTab>
           ))}
-          {/* <Tabs.Indicator className="-translate-y-1/2 absolute top-1/2 left-0 z-[-1] h-6 w-[var(--active-tab-width)] translate-x-[var(--active-tab-left)] rounded-sm bg-muted" /> */}
         </TabsList>
 
         <TabsPanel value={activeTab}>
           <Outlet />
         </TabsPanel>
       </Tabs>
-    </div>
+    </Page>
   );
 }

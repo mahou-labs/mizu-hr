@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertCircle } from "lucide-react";
 
 export const Route = createFileRoute("/_app/settings/account")({
   component: RouteComponent,
@@ -7,11 +6,7 @@ export const Route = createFileRoute("/_app/settings/account")({
 
 function RouteComponent() {
   return (
-    <div className="p-6">
-      <div className="mb-4 flex items-center gap-3">
-        <AlertCircle className="size-5 text-muted-foreground" />
-        <h2 className="font-semibold text-foreground text-xl">Account Settings</h2>
-      </div>
+    <div className="pt-4">
       <p className="text-muted-foreground">
         Manage your personal account settings and preferences.
       </p>
