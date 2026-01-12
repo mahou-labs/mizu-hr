@@ -64,7 +64,7 @@ export function Sidebar() {
               <SidebarItem
                 href="/jobs"
                 icon={Briefcase}
-                isActive={location.pathname === "/jobs"}
+                isActive={location.pathname.startsWith("/jobs")}
                 isCollapsed={isCollapsed}
                 label="Jobs"
               />
@@ -79,7 +79,7 @@ export function Sidebar() {
               <SidebarItem
                 href="/dashboard"
                 icon={LayoutDashboard}
-                isActive={location.pathname === "/dashboard"}
+                isActive={location.pathname.startsWith("/dashboard")}
                 isCollapsed={isCollapsed}
                 label="Dashboard"
               />
@@ -94,7 +94,7 @@ export function Sidebar() {
               <SidebarItem
                 href="/todos"
                 icon={ListTodo}
-                isActive={location.pathname === "/todos"}
+                isActive={location.pathname.startsWith("/todos")}
                 isCollapsed={isCollapsed}
                 label="Todos"
               />
