@@ -1,6 +1,12 @@
 import { scan } from "react-scan";
 import type { QueryClient } from "@tanstack/react-query";
-import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  HeadContent,
+  Link,
+  Outlet,
+  Scripts,
+} from "@tanstack/react-router";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
@@ -10,6 +16,15 @@ import appCss from "../index.css?url";
 import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
 // import { ThemeProvider } from "@/utils/theme-provider";
 import { ThemeProvider } from "better-themes";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@mizu-hr/ui/empty";
+import { Button } from "@mizu-hr/ui/button";
+import { CircleX } from "lucide-react";
 
 const Posthog = () => {
   useEffect(() => {
@@ -54,6 +69,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   }),
 
   component: RootDocument,
+  notFoundComponent: NotFoundPage,
   beforeLoad: async ({ context }) => {
     const authSession = await context.queryClient.ensureQueryData(
       orpc.user.getSession.queryOptions(),
@@ -62,6 +78,25 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
     return { session: authSession?.session, user: authSession?.user };
   },
 });
+
+function NotFoundPage() {
+  return (
+    <div className="flex h-svh items-center justify-center">
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <CircleX />
+          </EmptyMedia>
+          <EmptyTitle>Page not found</EmptyTitle>
+          <EmptyDescription>
+            The page you're looking for doesn't exist or has been moved.
+          </EmptyDescription>
+        </EmptyHeader>
+        <Button render={<Link to="/" />}>Go to Dashboard</Button>
+      </Empty>
+    </div>
+  );
+}
 
 function RootDocument() {
   useEffect(() => {
