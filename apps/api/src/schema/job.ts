@@ -1,11 +1,11 @@
 import { integer, json, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { v7 as uuidv7 } from "uuid";
+import { randomUUIDv7 } from "bun";
 import { organization, user } from "./auth";
 
 export const job = pgTable("job", {
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => uuidv7()),
+    .$defaultFn(() => randomUUIDv7()),
   title: text("title").notNull(),
   description: text("description").notNull(),
   location: text("location").notNull(),
