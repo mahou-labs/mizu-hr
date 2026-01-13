@@ -27,7 +27,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
   const signOut = async () => {
     await authClient.signOut();
     queryClient.clear();
-    router.invalidate();
+    await router.invalidate();
   };
 
   return (
@@ -48,7 +48,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
             {user?.name}
           </span>
           <span className="w-full truncate text-start text-foreground-muted text-xs">
-            {user?.email} asdlkajsdlakjsd alksdjalksdj lkas
+            {user?.email}
           </span>
         </div>
 

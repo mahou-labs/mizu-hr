@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useKeyPress } from "@/hooks/useKeyPress";
 import { cn } from "@/utils/cn";
 import { OrgMenu } from "./org-menu";
-import { ThemeToggle } from "./theme-toggle";
 import { Separator } from "@mizu-hr/ui/separator";
 import {
   Tooltip,
@@ -92,7 +91,6 @@ export function Sidebar() {
           <PanelLeftClose className="h-4 w-4" />
         )}
       </button>
-      <ThemeToggle />
       <UserMenu isCollapsed={isCollapsed} />
     </div>
   );
