@@ -16,13 +16,7 @@ import appCss from "../index.css?url";
 import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
 // import { ThemeProvider } from "@/utils/theme-provider";
 import { ThemeProvider } from "better-themes";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@mizu-hr/ui/empty";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
 import { Button } from "@mizu-hr/ui/button";
 import { CircleX } from "lucide-react";
 

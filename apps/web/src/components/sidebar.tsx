@@ -1,13 +1,7 @@
 import type { ToOptions } from "@tanstack/react-router";
 import { Link, useLocation } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
-import {
-  Briefcase,
-  Home,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Settings,
-} from "lucide-react";
+import { Briefcase, Home, PanelLeftClose, PanelLeftOpen, Settings } from "lucide-react";
 import { useState } from "react";
 import { useKeyPress } from "@/hooks/useKeyPress";
 import { cn } from "@/utils/cn";

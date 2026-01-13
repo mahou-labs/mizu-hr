@@ -3,10 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "scripts": {
-    "lint": "oxlint --type-aware",
-    "format": "oxfmt"
-  },
   "exports": {
     "./cn": {
       "types": "./src/utils/cn.ts",
@@ -17,6 +13,10 @@
       "default": "./src/components/*.tsx"
     }
   },
+  "scripts": {
+    "lint": "oxlint --type-aware",
+    "format": "oxfmt"
+  },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
     "class-variance-authority": "^0.7.1",
@@ -24,13 +24,13 @@
     "lucide-react": "^0.562.0",
     "tailwind-merge": "^3.4.0"
   },
-  "peerDependencies": {
-    "react": "catalog:",
-    "react-dom": "catalog:"
-  },
   "devDependencies": {
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }
