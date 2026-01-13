@@ -12,12 +12,12 @@
     "format": "oxfmt"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.36.3",
-    "astro": "^5.16.0",
+    "@astrojs/starlight": "^0.37.2",
+    "astro": "^5.16.8",
     "sharp": "^0.34.5",
     "starlight-theme-rapide": "^0.5.2"
   },
   "devDependencies": {
-    "wrangler": "^4.42.2"
+    "wrangler": "^4.58.0"
   }
 }

@@ -13,16 +13,16 @@
   "dependencies": {
     "@astrojs/react": "^4.4.2",
     "@fontsource-variable/pixelify-sans": "^5.2.7",
-    "@orpc/client": "^1.9.3",
+    "@orpc/client": "^1.13.2",
     "@tailwindcss/vite": "^4.1.14",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
-    "astro": "^5.16.0",
+    "astro": "^5.16.8",
     "react": "catalog:",
     "react-dom": "catalog:",
     "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
-    "wrangler": "^4.42.2"
+    "wrangler": "^4.58.0"
   }
 }
