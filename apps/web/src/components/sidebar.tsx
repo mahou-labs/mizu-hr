@@ -4,12 +4,8 @@ import type { LucideIcon } from "lucide-react";
 import {
   Briefcase,
   Home,
-  LayoutDashboard,
-  ListTodo,
   PanelLeftClose,
   PanelLeftOpen,
-  // PanelLeftClose,
-  // PanelLeftOpen,
   Settings,
 } from "lucide-react";
 import { useState } from "react";
@@ -51,10 +47,10 @@ export function Sidebar() {
                 icon={Home}
                 isActive={location.pathname === "/"}
                 isCollapsed={isCollapsed}
-                label="Home"
+                label="Dashboard"
               />
               <TooltipPopup side="right">
-                <span>Home</span>
+                <span>Dashboard</span>
               </TooltipPopup>
             </TooltipTrigger>
           </Tooltip>
@@ -70,36 +66,6 @@ export function Sidebar() {
               />
               <TooltipPopup side="right">
                 <span>Jobs</span>
-              </TooltipPopup>
-            </TooltipTrigger>
-          </Tooltip>
-
-          <Tooltip disabled={!isCollapsed}>
-            <TooltipTrigger>
-              <SidebarItem
-                href="/dashboard"
-                icon={LayoutDashboard}
-                isActive={location.pathname.startsWith("/dashboard")}
-                isCollapsed={isCollapsed}
-                label="Dashboard"
-              />
-              <TooltipPopup side="right">
-                <span>Dashboard</span>
-              </TooltipPopup>
-            </TooltipTrigger>
-          </Tooltip>
-
-          <Tooltip disabled={!isCollapsed}>
-            <TooltipTrigger>
-              <SidebarItem
-                href="/todos"
-                icon={ListTodo}
-                isActive={location.pathname.startsWith("/todos")}
-                isCollapsed={isCollapsed}
-                label="Todos"
-              />
-              <TooltipPopup side="right">
-                <span>Todos</span>
               </TooltipPopup>
             </TooltipTrigger>
           </Tooltip>

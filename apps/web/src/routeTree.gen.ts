@@ -17,8 +17,6 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
-import { Route as AppTodosRouteImport } from './routes/_app/todos'
-import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppSettingsRouteRouteImport } from './routes/_app/settings/route'
 import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
 import { Route as AppJobsIndexRouteImport } from './routes/_app/jobs/index'
@@ -66,16 +64,6 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AppTodosRoute = AppTodosRouteImport.update({
-  id: '/todos',
-  path: '/todos',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AppRouteRoute,
-} as any)
 const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -118,8 +106,6 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingRoute
   '/success': typeof SuccessRoute
   '/settings': typeof AppSettingsRouteRouteWithChildren
-  '/dashboard': typeof AppDashboardRoute
-  '/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/': typeof AppIndexRoute
@@ -135,8 +121,6 @@ export interface FileRoutesByTo {
   '/invite': typeof InviteRoute
   '/onboarding': typeof OnboardingRoute
   '/success': typeof SuccessRoute
-  '/dashboard': typeof AppDashboardRoute
-  '/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/': typeof AppIndexRoute
@@ -155,8 +139,6 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/success': typeof SuccessRoute
   '/_app/settings': typeof AppSettingsRouteRouteWithChildren
-  '/_app/dashboard': typeof AppDashboardRoute
-  '/_app/todos': typeof AppTodosRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/_app/': typeof AppIndexRoute
@@ -175,8 +157,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/success'
     | '/settings'
-    | '/dashboard'
-    | '/todos'
     | '/auth/signin'
     | '/auth/signup'
     | '/'
@@ -192,8 +172,6 @@ export interface FileRouteTypes {
     | '/invite'
     | '/onboarding'
     | '/success'
-    | '/dashboard'
-    | '/todos'
     | '/auth/signin'
     | '/auth/signup'
     | '/'
@@ -211,8 +189,6 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/success'
     | '/_app/settings'
-    | '/_app/dashboard'
-    | '/_app/todos'
     | '/auth/signin'
     | '/auth/signup'
     | '/_app/'
@@ -290,20 +266,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSigninRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_app/todos': {
-      id: '/_app/todos'
-      path: '/todos'
-      fullPath: '/todos'
-      preLoaderRoute: typeof AppTodosRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -373,8 +335,6 @@ const AppSettingsRouteRouteWithChildren =
 
 interface AppRouteRouteChildren {
   AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren
-  AppDashboardRoute: typeof AppDashboardRoute
-  AppTodosRoute: typeof AppTodosRoute
   AppIndexRoute: typeof AppIndexRoute
   AppJobsNewRoute: typeof AppJobsNewRoute
   AppJobsIndexRoute: typeof AppJobsIndexRoute
@@ -383,8 +343,6 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppSettingsRouteRoute: AppSettingsRouteRouteWithChildren,
-  AppDashboardRoute: AppDashboardRoute,
-  AppTodosRoute: AppTodosRoute,
   AppIndexRoute: AppIndexRoute,
   AppJobsNewRoute: AppJobsNewRoute,
   AppJobsIndexRoute: AppJobsIndexRoute,
