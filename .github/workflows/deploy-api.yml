@@ -1,0 +1,110 @@
+name: Deploy API to Dokploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/api/**"
+      - "bun.lock"
+      - ".github/workflows/deploy-api.yml"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment environment"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - production
+          - staging
+
+concurrency:
+  group: deploy-api-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
+  DOKPLOY_API_TOKEN: ${{ secrets.DOKPLOY_API_TOKEN }}
+  DOKPLOY_APPLICATION_ID: ${{ secrets.DOKPLOY_API_APPLICATION_ID }}
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    name: Deploy to Dokploy
+    runs-on: ubuntu-latest
+    needs: [ci]
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}
+      url: ${{ secrets.API_URL }}
+    steps:
+      - name: Validate inputs
+        run: |
+          if [ -z "$DOKPLOY_URL" ]; then
+            echo "::error::DOKPLOY_URL secret is not set"
+            exit 1
+          fi
+          if [ -z "$DOKPLOY_API_TOKEN" ]; then
+            echo "::error::DOKPLOY_API_TOKEN secret is not set"
+            exit 1
+          fi
+          if [ -z "$DOKPLOY_APPLICATION_ID" ]; then
+            echo "::error::DOKPLOY_API_APPLICATION_ID secret is not set"
+            exit 1
+          fi
+
+      - name: Trigger Dokploy deployment
+        run: |
+          echo "Triggering deployment for application: $DOKPLOY_APPLICATION_ID"
+
+          response=$(curl -X POST \
+            "$DOKPLOY_URL/api/application.deploy" \
+            -H "Accept: application/json" \
+            -H "x-api-key: $DOKPLOY_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"applicationId\": \"$DOKPLOY_APPLICATION_ID\"}" \
+            -w "\n%{http_code}" \
+            -s)
+
+          http_code=$(echo "$response" | tail -n 1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "Response body: $body"
+          echo "HTTP status: $http_code"
+
+          if [ "$http_code" -ne 200 ]; then
+            echo "::error::Deployment failed with status code: $http_code"
+            exit 1
+          fi
+
+          echo "::notice::Deployment triggered successfully"
+
+      - name: Wait for deployment
+        run: |
+          echo "Waiting for deployment to complete..."
+          sleep 30
+
+      - name: Health check
+        run: |
+          if [ -n "${{ secrets.API_URL }}" ]; then
+            echo "Checking API health at ${{ secrets.API_URL }}/healthcheck"
+
+            for i in {1..5}; do
+              response=$(curl -s -o /dev/null -w "%{http_code}" "${{ secrets.API_URL }}/healthcheck" || echo "000")
+
+              if [ "$response" = "200" ]; then
+                echo "::notice::Health check passed"
+                exit 0
+              fi
+
+              echo "Attempt $i: Health check returned $response, retrying in 10s..."
+              sleep 10
+            done
+
+            echo "::warning::Health check failed after 5 attempts"
+          else
+            echo "::notice::Skipping health check - API_URL not configured"
+          fi
