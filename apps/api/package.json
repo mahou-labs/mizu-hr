@@ -26,10 +26,9 @@
     "@react-email/components": "^1.0.4",
     "better-auth": "^1.4.10",
     "dotenv": "^17.2.3",
-    "drizzle-orm": "^0.45.1",
+    "drizzle-orm": "^1.0.0-beta.10",
     "hono": "^4.11.3",
     "hono-rate-limiter": "^0.5.3",
-    "pg": "^8.16.3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-email": "^5.2.1",
@@ -43,7 +42,7 @@
     "@types/pg": "^8.16.0",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
-    "drizzle-kit": "^0.31.8",
+    "drizzle-kit": "^1.0.0-beta.10",
     "typescript": "^5.9.3"
   }
 }
