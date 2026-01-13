@@ -1,6 +1,4 @@
-"use client";
-
-import { Toast } from "@base-ui-components/react/toast";
+import { Toast } from "@base-ui/react/toast";
 import {
   CircleAlertIcon,
   CircleCheckIcon,

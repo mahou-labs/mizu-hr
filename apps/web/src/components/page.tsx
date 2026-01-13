@@ -16,18 +16,12 @@ export function Page({ children, title, description, actions }: PageProps) {
   );
 }
 
-function PageHeader({
-  title,
-  description,
-  actions,
-}: Omit<PageProps, "children">) {
+function PageHeader({ title, description, actions }: Omit<PageProps, "children">) {
   return (
     <div className="flex items-center justify-between">
       <div>
         <h1 className="font-heading text-2xl">{title}</h1>
-        {description && (
-          <p className="text-muted-foreground text-sm">{description}</p>
-        )}
+        {description && <p className="text-muted-foreground text-sm">{description}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>

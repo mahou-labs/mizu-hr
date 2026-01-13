@@ -118,40 +118,38 @@ export const jobRouter = {
       return data[0];
     }),
 
-  update: protectedProcedure
-    .input(jobUpdateSchema)
-    .handler(async ({ input, context }) => {
-      const { id, ...updates } = input;
-      const orgId = context.session?.activeOrganizationId;
-      if (!orgId) {
-        throw new ORPCError("BAD_REQUEST", {
-          message: "No active organization selected",
-        });
-      }
+  update: protectedProcedure.input(jobUpdateSchema).handler(async ({ input, context }) => {
+    const { id, ...updates } = input;
+    const orgId = context.session?.activeOrganizationId;
+    if (!orgId) {
+      throw new ORPCError("BAD_REQUEST", {
+        message: "No active organization selected",
+      });
+    }
 
-      const { data, error } = await tryCatch(
-        db
-          .update(job)
-          .set(updates)
-          .where(and(eq(job.id, id), eq(job.organizationId, orgId)))
-          .returning(),
-      );
+    const { data, error } = await tryCatch(
+      db
+        .update(job)
+        .set(updates)
+        .where(and(eq(job.id, id), eq(job.organizationId, orgId)))
+        .returning(),
+    );
 
-      if (error) {
-        throw new ORPCError("INTERNAL_SERVER_ERROR", {
-          message: "Failed to update job posting",
-          cause: error,
-        });
-      }
+    if (error) {
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "Failed to update job posting",
+        cause: error,
+      });
+    }
 
-      if (!data[0]) {
-        throw new ORPCError("NOT_FOUND", {
-          message: "Job posting not found",
-        });
-      }
+    if (!data[0]) {
+      throw new ORPCError("NOT_FOUND", {
+        message: "Job posting not found",
+      });
+    }
 
-      return data[0];
-    }),
+    return data[0];
+  }),
 
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))

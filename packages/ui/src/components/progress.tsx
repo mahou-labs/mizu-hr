@@ -1,6 +1,4 @@
-"use client";
-
-import { Progress as ProgressPrimitive } from "@base-ui-components/react/progress";
+import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
 
 import { cn } from "@/utils/cn";
 

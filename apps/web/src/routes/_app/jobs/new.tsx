@@ -228,11 +228,7 @@ function NewJobRoute() {
                   <Combobox
                     disabled={isSubmitting}
                     multiple
-                    onValueChange={(values) =>
-                      field.handleChange(
-                        (values).map((v) => v.id),
-                      )
-                    }
+                    onValueChange={(values) => field.handleChange(values.map((v) => v.id))}
                     value={membersData?.members.filter((m) => field.state.value.includes(m.id))}
                   >
                     <ComboboxChips>
@@ -259,7 +255,9 @@ function NewJobRoute() {
                           <ComboboxItem key={member.id} value={member}>
                             <div className="flex flex-col">
                               <span>{member.user.name}</span>
-                              <span className="text-muted-foreground text-xs">{member.user.email}</span>
+                              <span className="text-muted-foreground text-xs">
+                                {member.user.email}
+                              </span>
                             </div>
                           </ComboboxItem>
                         ))}

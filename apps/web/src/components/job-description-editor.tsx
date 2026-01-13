@@ -31,7 +31,7 @@ export function JobDescriptionEditor({
   value,
   onChange,
   disabled = false,
-    placeholder = "Write a compelling job description...",
+  placeholder = "Write a compelling job description...",
 }: JobDescriptionEditorProps) {
   const editorRef = useRef<MDXEditorMethods>(null);
 

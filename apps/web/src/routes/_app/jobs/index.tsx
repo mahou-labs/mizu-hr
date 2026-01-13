@@ -119,7 +119,6 @@ function JobsRoute() {
         </Button>
       }
     >
-
       {jobs.isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <Loader2 className="size-8 animate-spin text-muted-foreground" />

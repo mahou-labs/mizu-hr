@@ -167,13 +167,7 @@ export function CreateOrgDialog({
           <DialogFooter>
             {allowClosing && (
               <DialogClose
-                render={
-                  <Button
-                    disabled={form.state.isSubmitting}
-                    type="button"
-                    variant="ghost"
-                  />
-                }
+                render={<Button disabled={form.state.isSubmitting} type="button" variant="ghost" />}
               >
                 Cancel
               </DialogClose>
