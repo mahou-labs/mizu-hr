@@ -32,6 +32,7 @@ bun db:studio                  # Open Drizzle Studio
 # Run commands in specific apps
 turbo -F api <command>         # Run in API app
 turbo -F web <command>         # Run in web app
+turbo -F @mizu-hr/ui <command> # Run in UI package
 ```
 
 ### Testing
@@ -42,46 +43,67 @@ Testing libraries installed but no tests exist yet. `@testing-library/react`, `j
 
 ### Linting & Formatting
 
-- **Linter**: OxLint (not ESLint) - config: `.oxlintrc.jsonc`
-- **Formatter**: OxFmt (not Prettier) - config: `.oxfmtrc.jsonc`
-- Ignore patterns: `**/*.gen.ts` (generated files)
+- **Linter**: OxLint (not ESLint) - config in `.oxlintrc.jsonc`
+- **Formatter**: OxFmt (not Prettier) - config in `.oxfmtrc.jsonc`
+- Type-aware linting enabled: `oxlint --type-aware`
+- Ignore patterns: `**/*.gen.ts` (generated files like `routeTree.gen.ts`)
 
 ### TypeScript Configuration
 
-- Target: ESNext with bundler module resolution, strict mode
-- Additional checks: `noUncheckedIndexedAccess`, `noImplicitOverride`, `noFallthroughCasesInSwitch`, `verbatimModuleSyntax`
-- Path aliases: `@/*` maps to `./src/*`
+- Target: ESNext with bundler module resolution
+- Strict mode enabled with additional checks:
+  - `noUncheckedIndexedAccess`: Array/object index access returns `T | undefined`
+  - `noImplicitOverride`: Require `override` keyword
+  - `noFallthroughCasesInSwitch`: Prevent switch fallthrough
+  - `verbatimModuleSyntax`: Explicit `type` imports required
+- Path aliases: `@/*` maps to `./src/*` in each app
 
 ### Import Organization
 
 ```typescript
-// 1. External packages
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
-// 2. Internal aliases
-import { orpc } from "@/utils/orpc-client";
+// 1. External packages (alphabetical)
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Briefcase, Plus } from "lucide-react";
+
+// 2. Internal monorepo packages
 import { Button } from "@mizu-hr/ui/button";
-// 3. Relative imports
+import { Card, CardContent, CardHeader } from "@mizu-hr/ui/card";
+
+// 3. Local aliases (@/)
+import { Page } from "@/components/page";
+import { orpc } from "@/utils/orpc-client";
+
+// 4. Relative imports
 import { protectedProcedure } from "../utils/orpc";
 ```
 
 ### Naming Conventions
 
-- **Files**: kebab-case (`job-router.ts`)
-- **Components/Types**: PascalCase (`JobsRoute`, `EmploymentType`)
-- **Functions/Variables**: camelCase (`formatSalary`)
-- **Database columns**: snake_case (`organization_id`, `created_at`)
+| Type | Convention | Example |
+|------|------------|---------|
+| Files | kebab-case | `job-router.ts`, `org-menu.tsx` |
+| Components | PascalCase | `JobsRoute`, `EmptyMedia` |
+| Types/Interfaces | PascalCase | `EmploymentType`, `RouterAppContext` |
+| Functions/Variables | camelCase | `formatSalary`, `jobsData` |
+| Constants (maps) | camelCase | `employmentTypeLabels` |
+| Database tables | snake_case | `organization_id`, `created_at` |
+| Route components | `*Route` suffix | `JobsRoute`, `SettingsRoute` |
 
 ### Error Handling
 
 Use the `tryCatch` utility (Result pattern) with `ORPCError`:
+
 ```typescript
 import { tryCatch } from "@/utils/try-catch";
 import { ORPCError } from "@orpc/server";
 
 const { data, error } = await tryCatch(db.select().from(table));
 if (error) {
-  throw new ORPCError("INTERNAL_SERVER_ERROR", { message: "Failed", cause: error });
+  throw new ORPCError("INTERNAL_SERVER_ERROR", {
+    message: "Failed to fetch data",
+    cause: error,
+  });
 }
 ```
 
@@ -89,43 +111,47 @@ Error codes: `UNAUTHORIZED`, `BAD_REQUEST`, `NOT_FOUND`, `INTERNAL_SERVER_ERROR`
 
 ### API Development (oRPC)
 
-Routes in `apps/api/src/routers/`:
+Routes in `apps/api/src/routers/`. Use `protectedProcedure` for authenticated routes:
+
 ```typescript
 import { protectedProcedure, publicProcedure } from "@/utils/orpc";
 import { z } from "zod";
 
 export const myRouter = {
-  list: publicProcedure.handler(async () => { ... }),
+  list: protectedProcedure.handler(async ({ context }) => {
+    // context.user, context.session available
+  }),
   create: protectedProcedure
     .input(z.object({ title: z.string().min(1) }))
-    .handler(async ({ input, context }) => {
-      // context.user, context.session available
-    }),
+    .handler(async ({ input, context }) => { ... }),
 };
 ```
 
 ### Database Schema (Drizzle)
 
-Tables in `apps/api/src/schema/`:
+Tables in `apps/api/src/schema/`. Use UUIDv7 for IDs, snake_case for columns:
+
 ```typescript
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { v7 as uuidv7 } from "uuid";
+import { randomUUIDv7 } from "bun";
 
 export const myTable = pgTable("my_table", {
-  id: text("id").primaryKey().$defaultFn(() => uuidv7()),
+  id: text("id").primaryKey().$defaultFn(() => randomUUIDv7()),
   name: text("name").notNull(),
+  organizationId: text("organization_id").notNull()
+    .references(() => organization.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow()
+    .$onUpdate(() => new Date()).notNull(),
 });
 ```
 
-Always use UUIDv7 for IDs, snake_case for column names.
-
 ### Frontend Routes (TanStack Start)
 
-File-based routing in `apps/web/src/routes/`. `_app/` prefix = protected routes.
+File-based routing in `apps/web/src/routes/`. `_app/` prefix = protected routes:
+
 ```typescript
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { orpc } from "@/utils/orpc-client";
 
@@ -135,38 +161,48 @@ export const Route = createFileRoute("/_app/jobs/")({
 
 function JobsRoute() {
   const jobs = useQuery(orpc.job.list.queryOptions());
+  // ...
 }
 ```
 
 ### UI Components
 
-Use shared UI package:
+Import from `@mizu-hr/ui/<component>`. Button uses `render` prop (not `asChild`):
+
 ```typescript
 import { Button } from "@mizu-hr/ui/button";
-import { Card, CardContent, CardHeader } from "@mizu-hr/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@mizu-hr/ui/card";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyMedia } from "@mizu-hr/ui/empty";
+
+// Link as button
+<Button render={<Link to="/jobs/new" />}>Create Job</Button>
+
+// Icon button
+<Button size="icon" variant="ghost"><MoreHorizontal /></Button>
 ```
 
-Components use CVA for variants, `cn()` for class merging.
+Use `cn()` for class merging, CVA for component variants. Icons from `lucide-react`.
 
 ## Project Structure
 
 ```
 mizu-hr/
 ├── apps/
-│   ├── api/              # Hono backend
+│   ├── api/              # Hono backend (port 3000)
 │   │   └── src/
 │   │       ├── routers/  # oRPC route handlers
 │   │       ├── schema/   # Drizzle table definitions
-│   │       └── utils/    # Auth, DB, procedures
-│   ├── web/              # TanStack Start frontend
+│   │       └── utils/    # Auth, DB, procedures, tryCatch
+│   ├── web/              # TanStack Start frontend (port 3001)
 │   │   └── src/
-│   │       ├── routes/   # File-based routing
+│   │       ├── routes/   # File-based routing (_app/ = protected)
 │   │       ├── components/
-│   │       └── utils/    # oRPC client, auth
-│   ├── docs/             # Astro Starlight docs
+│   │       └── utils/    # oRPC client, auth client
+│   ├── docs/             # Astro Starlight documentation
 │   └── site/             # Marketing site
 ├── packages/
-│   └── ui/               # Shared UI components
+│   └── ui/               # Shared UI components (@mizu-hr/ui)
+│       └── src/components/
 └── [config files]
 ```
 
@@ -182,3 +218,4 @@ mizu-hr/
 | UI Base | Base UI React |
 | Styling | Tailwind v4 + CVA |
 | Validation | Zod v4 |
+| Icons | lucide-react |
