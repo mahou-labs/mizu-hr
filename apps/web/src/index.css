@@ -73,7 +73,7 @@
 .dark {
   --accent: --alpha(var(--color-white) / 8%);
   --accent-foreground: var(--color-zinc-100);
-  --background: var(--color-zinc-950);
+  --background: #0e0e10;
   --border: --alpha(var(--color-white) / 12%);
   --card: color-mix(in srgb, var(--color-zinc-900) 80%, var(--color-zinc-950));
   --card-foreground: var(--color-zinc-100);
@@ -92,7 +92,7 @@
   --ring: var(--color-zinc-500);
   --secondary: --alpha(var(--color-white) / 8%);
   --secondary-foreground: var(--color-zinc-100);
-  --sidebar: #0e0e10;
+  --sidebar: var(--color-zinc-950);
   --success: var(--color-emerald-500);
   --success-foreground: var(--color-emerald-400);
   --warning: var(--color-amber-500);

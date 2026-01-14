@@ -33,36 +33,40 @@ export function Sidebar() {
     >
       <OrgMenu isCollapsed={isCollapsed} />
       <nav className="mt-4 flex flex-1 flex-col gap-1.5">
-        <SearchBar />
+        <SearchBar isCollapsed={isCollapsed} />
         <TooltipProvider delay={0} timeout={500}>
           <Tooltip disabled={!isCollapsed}>
-            <TooltipTrigger>
-              <SidebarItem
-                href="/"
-                icon={Home}
-                isActive={location.pathname === "/"}
-                isCollapsed={isCollapsed}
-                label="Dashboard"
-              />
-              <TooltipPopup side="right">
-                <span>Dashboard</span>
-              </TooltipPopup>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <SidebarItem
+                  href="/"
+                  icon={Home}
+                  isActive={location.pathname === "/"}
+                  isCollapsed={isCollapsed}
+                  label="Dashboard"
+                />
+              }
+            />
+            <TooltipPopup side="right">
+              <span>Dashboard</span>
+            </TooltipPopup>
           </Tooltip>
 
           <Tooltip disabled={!isCollapsed}>
-            <TooltipTrigger>
-              <SidebarItem
-                href="/jobs"
-                icon={Briefcase}
-                isActive={location.pathname.startsWith("/jobs")}
-                isCollapsed={isCollapsed}
-                label="Jobs"
-              />
-              <TooltipPopup side="right">
-                <span>Jobs</span>
-              </TooltipPopup>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <SidebarItem
+                  href="/jobs"
+                  icon={Briefcase}
+                  isActive={location.pathname.startsWith("/jobs")}
+                  isCollapsed={isCollapsed}
+                  label="Jobs"
+                />
+              }
+            />
+            <TooltipPopup side="right">
+              <span>Jobs</span>
+            </TooltipPopup>
           </Tooltip>
 
           <Separator className="mt-auto h-0 bg-transparent" orientation="horizontal" />
@@ -106,7 +110,7 @@ type SidebarItemProps = {
   badge?: string | number;
   isCollapsed?: boolean;
   onClick?: () => void;
-};
+} & Omit<React.ComponentProps<typeof Link>, "to" | "className" | "onClick">;
 
 function SidebarItem({
   icon: Icon,
@@ -116,9 +120,11 @@ function SidebarItem({
   badge,
   isCollapsed = false,
   onClick,
+  ...props
 }: SidebarItemProps) {
   return (
     <Link
+      {...props}
       className={cn(
         "group relative flex h-8 w-full items-center gap-3 rounded-lg px-2 font-medium text-foreground text-sm",
         "outline-border hover:bg-card hover:outline",
@@ -126,8 +132,10 @@ function SidebarItem({
         isActive && "bg-card outline",
       )}
       onClick={onClick}
-      title={isCollapsed ? label : undefined}
+      title={undefined}
+      aria-label={label}
       to={href}
+      preload="intent"
     >
       <Icon className="size-4 shrink-0 text-foreground-muted" />
 

@@ -33,9 +33,7 @@ function RouteComponent() {
       <Card>
         <CardHeader>
           <CardTitle>Appearance</CardTitle>
-          <CardDescription>
-            Customize how the application looks on your device.
-          </CardDescription>
+          <CardDescription>Customize how the application looks on your device.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3 sm:grid-cols-3">
