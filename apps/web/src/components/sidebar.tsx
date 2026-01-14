@@ -15,6 +15,7 @@ import {
   TooltipTrigger,
 } from "@mizu-hr/ui/tooltip";
 import { UserMenu } from "./user-menu";
+import { SearchBar } from "./search-bar";
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>();
 
@@ -31,7 +32,8 @@ export function Sidebar() {
       )}
     >
       <OrgMenu isCollapsed={isCollapsed} />
-      <nav className="mt-6 flex flex-1 flex-col gap-1.5">
+      <nav className="mt-4 flex flex-1 flex-col gap-1.5">
+        <SearchBar />
         <TooltipProvider delay={0} timeout={500}>
           <Tooltip disabled={!isCollapsed}>
             <TooltipTrigger>
