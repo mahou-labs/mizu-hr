@@ -74,7 +74,7 @@
   --accent: --alpha(var(--color-white) / 8%);
   --accent-foreground: var(--color-zinc-100);
   --background: #0e0e10;
-  --border: --alpha(var(--color-white) / 12%);
+  --border: --alpha(var(--color-white) / 7%);
   --card: color-mix(in srgb, var(--color-zinc-900) 80%, var(--color-zinc-950));
   --card-foreground: var(--color-zinc-100);
   --destructive: var(--color-red-500);

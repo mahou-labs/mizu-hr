@@ -85,7 +85,7 @@ export function SearchBar({ isCollapsed = false }: SearchBarProps) {
         render={
           <Button
             variant="ghost"
-            className="mb-2 justify-start border border-border px-2 max-h-4 aspect-square py-0 hover:bg-transparent text-muted-foreground"
+            className="mb-2 h-8 w-full justify-start gap-3 px-1.75 text-muted-foreground outline-solid outline outline-border hover:bg-transparent"
           />
         }
       >
