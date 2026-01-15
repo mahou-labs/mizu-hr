@@ -40,7 +40,6 @@ type RouterAppContext = {
 };
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
-  // ssr: "data-only",
   head: () => ({
     meta: [
       {

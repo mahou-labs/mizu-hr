@@ -127,9 +127,9 @@ function SidebarItem({
       {...props}
       className={cn(
         "group relative flex h-8 w-full items-center gap-3 rounded-lg px-2 font-medium text-foreground text-sm",
-        "outline-border hover:bg-card hover:outline",
+        "outline-border hover:bg-background hover:outline",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        isActive && "bg-card outline",
+        isActive && "bg-background outline",
       )}
       onClick={onClick}
       title={undefined}
