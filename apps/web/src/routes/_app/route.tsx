@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_app")({
     }
   },
   loader: ({ context }) => {
-    context.queryClient.ensureQueryData(orpc.organization.getOrgList.queryOptions());
+    void context.queryClient.ensureQueryData(orpc.organization.getOrgList.queryOptions());
   },
 });
 
