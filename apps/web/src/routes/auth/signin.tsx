@@ -1,9 +1,10 @@
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import z from "zod";
 import Loader from "@/components/loader";
 import { Button } from "@mizu-hr/ui/button";
+import { Checkbox } from "@mizu-hr/ui/checkbox";
 import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
 import { Input } from "@mizu-hr/ui/input";
 import { authClient } from "@/utils/auth-client";
@@ -25,26 +26,35 @@ function RouteComponent() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: true,
     },
     onSubmit: async ({ value }) => {
-      await authClient.signIn.email(value, {
-        onSuccess: async () => {
-          toastManager.add({ title: "Sign in successful", type: "success" });
-          await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
-          await navigate({ to: redirect ?? "/dashboard" });
+      await authClient.signIn.email(
+        {
+          email: value.email,
+          password: value.password,
+          rememberMe: value.rememberMe,
         },
-        onError: (error) => {
-          toastManager.add({
-            title: error.error.message || error.error.statusText,
-            type: "error",
-          });
+        {
+          onSuccess: async () => {
+            toastManager.add({ title: "Sign in successful", type: "success" });
+            await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
+            await navigate({ to: redirect ?? "/dashboard" });
+          },
+          onError: (error) => {
+            toastManager.add({
+              title: error.error.message || error.error.statusText,
+              type: "error",
+            });
+          },
         },
-      });
+      );
     },
     validators: {
       onSubmit: z.object({
         email: z.email("Invalid email address"),
         password: z.string().min(8, "Password must be at least 8 characters"),
+        rememberMe: z.boolean(),
       }),
     },
   });
@@ -105,6 +115,29 @@ function RouteComponent() {
               </Field>
             )}
           </form.Field>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <form.Field name="rememberMe">
+            {(field) => (
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <Checkbox
+                  checked={field.state.value}
+                  id={field.name}
+                  name={field.name}
+                  onCheckedChange={(checked) => field.handleChange(checked as boolean)}
+                />
+                <span className="text-muted-foreground">Remember me</span>
+              </label>
+            )}
+          </form.Field>
+          <Button
+            render={<Link to="/auth/forgot-password" />}
+            variant="link"
+            className="h-auto p-0"
+          >
+            Forgot password?
+          </Button>
         </div>
 
         <form.Subscribe>

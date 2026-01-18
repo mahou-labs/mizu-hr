@@ -6,7 +6,7 @@ import { organization } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import * as schema from "../schema/auth";
 import { db } from "./db";
-import { sendOrgInvite } from "./email";
+import { sendOrgInvite, sendPasswordResetEmail, sendVerificationEmail } from "./email";
 import { env } from "./env";
 
 const polarClient = new Polar({
@@ -52,6 +52,23 @@ export const auth = betterAuth({
     password: {
       hash: (password) => Bun.password.hash(password),
       verify: ({ hash, password }) => Bun.password.verify(password, hash),
+    },
+    sendResetPassword: async ({ user, url }) => {
+      void sendPasswordResetEmail({
+        email: user.email,
+        name: user.name,
+        resetLink: url,
+      });
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      void sendVerificationEmail({
+        email: user.email,
+        name: user.name,
+        verificationLink: url,
+      });
     },
   },
   secret: env.BETTER_AUTH_SECRET,
