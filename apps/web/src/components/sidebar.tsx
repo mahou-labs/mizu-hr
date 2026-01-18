@@ -27,7 +27,7 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col gap-3 bg-default bg-sidebar px-4 py-3 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
+        "relative flex h-full flex-col gap-3 bg-default bg-sidebar px-4 py-2 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64",
       )}
     >

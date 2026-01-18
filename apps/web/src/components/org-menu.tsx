@@ -94,7 +94,12 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
           </span>
         </div>
 
-        <ChevronDown className="ml-auto size-4 shrink-0 text-foreground-muted" />
+        <ChevronDown
+          className={cn(
+            "ml-auto size-4 shrink-0 text-foreground-muted transition-opacity",
+            isCollapsed && "opacity-0",
+          )}
+        />
       </MenuTrigger>
 
       <MenuPortal>
