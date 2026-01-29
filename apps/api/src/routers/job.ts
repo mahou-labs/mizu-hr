@@ -9,10 +9,15 @@ import { protectedProcedure } from "../utils/orpc";
 const jobSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
+  department: z.string().optional(),
   location: z.string().min(1, "Location is required"),
+  remote: z.boolean().default(false),
   employmentType: z.enum(["full-time", "part-time", "contract", "internship"]),
+  experienceLevel: z.enum(["entry", "mid", "senior", "lead"]).optional(),
   salaryMin: z.number().int().positive().optional(),
   salaryMax: z.number().int().positive().optional(),
+  salaryCurrency: z.string().default("USD"),
+  status: z.enum(["draft", "published", "closed", "archived"]).default("draft"),
   recruiters: z.array(z.string()).default([]),
 });
 
@@ -20,10 +25,15 @@ const jobUpdateSchema = z.object({
   id: z.string(),
   title: z.string().min(1, "Title is required").optional(),
   description: z.string().min(1, "Description is required").optional(),
+  department: z.string().nullable().optional(),
   location: z.string().min(1, "Location is required").optional(),
+  remote: z.boolean().optional(),
   employmentType: z.enum(["full-time", "part-time", "contract", "internship"]).optional(),
-  salaryMin: z.number().int().positive().optional(),
-  salaryMax: z.number().int().positive().optional(),
+  experienceLevel: z.enum(["entry", "mid", "senior", "lead"]).nullable().optional(),
+  salaryMin: z.number().int().positive().nullable().optional(),
+  salaryMax: z.number().int().positive().nullable().optional(),
+  salaryCurrency: z.string().optional(),
+  status: z.enum(["draft", "published", "closed", "archived"]).optional(),
   recruiters: z.array(z.string()).optional(),
 });
 
