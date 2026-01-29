@@ -18,7 +18,7 @@ import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
 import { ThemeProvider } from "better-themes";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
 import { Button } from "@mizu-hr/ui/button";
-import { CircleX } from "lucide-react";
+import { IconCircleXmarkOutline24 } from "nucleo-core-outline-24";
 
 const Posthog = () => {
   useEffect(() => {
@@ -78,7 +78,7 @@ function NotFoundPage() {
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <CircleX />
+            <IconCircleXmarkOutline24 />
           </EmptyMedia>
           <EmptyTitle>Page not found</EmptyTitle>
           <EmptyDescription>

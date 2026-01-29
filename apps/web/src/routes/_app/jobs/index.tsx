@@ -1,19 +1,19 @@
 import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Briefcase,
-  Building2,
-  Clock,
-  DollarSign,
-  Globe,
-  Loader2,
-  MapPin,
-  MoreHorizontal,
-  Pencil,
-  Plus,
-  Trash2,
-  Users,
-} from "lucide-react";
+  IconSuitcaseOutline24,
+  IconOfficeOutline24,
+  IconClock2Outline24,
+  IconCurrencyDollarOutline24,
+  IconGlobeOutline24,
+  IconSpinnerLoaderOutline24,
+  IconMapPinOutline24,
+  IconDotsOutline24,
+  IconPenOutline24,
+  IconCirclePlusOutline24,
+  IconTrashOutline24,
+  IconUsersPlusOutline24,
+} from "nucleo-core-outline-24";
 import { Page } from "@/components/page";
 import { orpc } from "@/utils/orpc-client";
 import { Badge } from "@mizu-hr/ui/badge";
@@ -79,12 +79,12 @@ function JobsRoute() {
       description="Manage your open positions and job listings"
       actions={
         <Button render={<Link to="/jobs/new" />}>
-          <Plus className="mr-2 size-4" />
+          <IconCirclePlusOutline24 className="mr-2 size-4" />
           Add Job
         </Button>
       }
     >
-      <Suspense fallback={<Loader2 />}>
+      <Suspense fallback={<IconSpinnerLoaderOutline24 />}>
         <JobsList />
       </Suspense>
     </Page>
@@ -119,7 +119,7 @@ function JobsList() {
     <Empty className="flex-1 border">
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <Briefcase />
+          <IconSuitcaseOutline24 />
         </EmptyMedia>
         <EmptyTitle>No job postings yet</EmptyTitle>
         <EmptyDescription>
@@ -127,7 +127,7 @@ function JobsList() {
         </EmptyDescription>
       </EmptyHeader>
       <Button render={<Link to="/jobs/new" />}>
-        <Plus className="mr-2 size-4" />
+        <IconCirclePlusOutline24 className="mr-2 size-4" />
         Create Job Posting
       </Button>
     </Empty>
@@ -141,7 +141,7 @@ function JobsList() {
                 <CardTitle className="line-clamp-1 text-lg">{job.title}</CardTitle>
                 {job.department && (
                   <CardDescription className="mt-1 flex items-center gap-1">
-                    <Building2 className="size-3" />
+                    <IconOfficeOutline24 className="size-3" />
                     {job.department}
                   </CardDescription>
                 )}
@@ -151,7 +151,7 @@ function JobsList() {
                   className="opacity-0 transition-opacity group-hover:opacity-100"
                   render={
                     <Button size="icon" variant="ghost">
-                      <MoreHorizontal className="size-4" />
+                      <IconDotsOutline24 className="size-4" />
                     </Button>
                   }
                 />
@@ -162,12 +162,12 @@ function JobsList() {
                       params={{ jobId: job.id }}
                       className="flex items-center"
                     >
-                      <Pencil className="mr-2 size-4" />
+                      <IconPenOutline24 className="mr-2 size-4" />
                       Edit
                     </Link>
                   </MenuItem>
                   <MenuItem className="text-destructive" onClick={() => handleDeleteJob(job.id)}>
-                    <Trash2 className="mr-2 size-4" />
+                    <IconTrashOutline24 className="mr-2 size-4" />
                     Delete
                   </MenuItem>
                 </MenuPopup>
@@ -184,7 +184,7 @@ function JobsList() {
               </Badge>
               {job.remote && (
                 <Badge variant="outline">
-                  <Globe className="mr-1 size-3" />
+                  <IconGlobeOutline24 className="mr-1 size-3" />
                   Remote
                 </Badge>
               )}
@@ -193,26 +193,26 @@ function JobsList() {
             <div className="space-y-1.5 text-muted-foreground text-sm">
               {job.location && (
                 <div className="flex items-center gap-2">
-                  <MapPin className="size-3.5" />
+                  <IconMapPinOutline24 className="size-3.5" />
                   <span>{job.location}</span>
                 </div>
               )}
               {job.experienceLevel && (
                 <div className="flex items-center gap-2">
-                  <Users className="size-3.5" />
+                  <IconUsersPlusOutline24 className="size-3.5" />
                   <span>{experienceLevelLabels[job.experienceLevel as ExperienceLevel]}</span>
                 </div>
               )}
               {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined) && (
                 <div className="flex items-center gap-2">
-                  <DollarSign className="size-3.5" />
+                  <IconCurrencyDollarOutline24 className="size-3.5" />
                   <span>
                     {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined)}
                   </span>
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <Clock className="size-3.5" />
+                <IconClock2Outline24 className="size-3.5" />
                 <span>
                   {job.publishedAt
                     ? `Published ${new Date(job.publishedAt).toLocaleDateString()}`

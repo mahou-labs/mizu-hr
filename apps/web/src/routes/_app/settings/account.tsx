@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useHydrated } from "@tanstack/react-router";
 import { useTheme } from "better-themes";
-import { Check, Laptop, Moon, Sun } from "lucide-react";
+import {
+  IconCheckOutline24,
+  IconLaptopOutline24,
+  IconDarkModeOutline24,
+  IconSunOutline24,
+} from "nucleo-core-outline-24";
 import { Button } from "@mizu-hr/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
 import { cn } from "@/utils/cn";
@@ -12,10 +17,10 @@ export const Route = createFileRoute("/_app/settings/account")({
 
 type ThemeOption = "light" | "dark" | "system";
 
-const themeConfig: Record<ThemeOption, { icon: typeof Sun; label: string; description: string }> = {
-  light: { icon: Sun, label: "Light", description: "A clean, bright appearance" },
-  dark: { icon: Moon, label: "Dark", description: "Easy on the eyes in low light" },
-  system: { icon: Laptop, label: "System", description: "Matches your device settings" },
+const themeConfig: Record<ThemeOption, { icon: typeof IconSunOutline24; label: string; description: string }> = {
+  light: { icon: IconSunOutline24, label: "Light", description: "A clean, bright appearance" },
+  dark: { icon: IconDarkModeOutline24, label: "Dark", description: "Easy on the eyes in low light" },
+  system: { icon: IconLaptopOutline24, label: "System", description: "Matches your device settings" },
 };
 
 const themeOptions: ThemeOption[] = ["light", "dark", "system"];
@@ -54,7 +59,7 @@ function RouteComponent() {
                 >
                   <div className="flex w-full items-center justify-between">
                     <Icon className="size-5" />
-                    {isActive && <Check className="size-4 text-primary" />}
+                    {isActive && <IconCheckOutline24 className="size-4 text-primary" />}
                   </div>
                   <div className="text-left">
                     <div className="font-medium">{themeConfig[themeOption].label}</div>

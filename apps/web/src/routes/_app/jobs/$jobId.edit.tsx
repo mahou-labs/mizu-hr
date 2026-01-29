@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { IconArrowLeftFromLineOutline24, IconSpinnerLoaderOutline24 } from "nucleo-core-outline-24";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
 import { Button } from "@mizu-hr/ui/button";
@@ -56,7 +56,7 @@ function EditJobRoute() {
   if (jobQuery.isLoading) {
     return (
       <div className="flex flex-1 items-center justify-center p-6">
-        <Loader2 className="size-8 animate-spin text-muted-foreground" />
+        <IconSpinnerLoaderOutline24 className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -123,7 +123,7 @@ function EditJobForm({ job, isSubmitting, onSubmit }: EditJobFormProps) {
     <div className="flex flex-1 flex-col gap-6 p-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" render={<Link to="/jobs" />}>
-          <ArrowLeft className="size-4" />
+          <IconArrowLeftFromLineOutline24 className="size-4" />
         </Button>
         <div>
           <h1 className="font-heading text-2xl">Edit Job Posting</h1>
@@ -409,7 +409,7 @@ function EditJobForm({ job, isSubmitting, onSubmit }: EditJobFormProps) {
           <Button disabled={isSubmitting} type="submit">
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 size-4 animate-spin" />
+                <IconSpinnerLoaderOutline24 className="mr-2 size-4 animate-spin" />
                 Updating...
               </>
             ) : (

@@ -1,4 +1,9 @@
-import { ArrowDownIcon, ArrowUpIcon, CornerDownLeftIcon, Search } from "lucide-react";
+import {
+  IconChevronDownOutline24,
+  IconChevronUpOutline24,
+  IconArrowCornerBottomLeftOutline24,
+  IconMagnifierOutline24,
+} from "nucleo-core-outline-24";
 import { Fragment, useMemo, useState } from "react";
 import { Button } from "@mizu-hr/ui/button";
 import {
@@ -89,7 +94,7 @@ export function SearchBar({ isCollapsed = false }: SearchBarProps) {
           />
         }
       >
-        <Search className="size-4 shrink-0" />
+        <IconMagnifierOutline24 className="size-4 shrink-0" />
         <div
           className={cn(
             "flex flex-1 items-center justify-between transition-opacity duration-200",
@@ -136,17 +141,17 @@ export function SearchBar({ isCollapsed = false }: SearchBarProps) {
               <div className="flex items-center gap-2">
                 <KbdGroup>
                   <Kbd>
-                    <ArrowUpIcon />
+                    <IconChevronUpOutline24 />
                   </Kbd>
                   <Kbd>
-                    <ArrowDownIcon />
+                    <IconChevronDownOutline24 />
                   </Kbd>
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
               <div className="flex items-center gap-2">
                 <Kbd>
-                  <CornerDownLeftIcon />
+                  <IconArrowCornerBottomLeftOutline24 />
                 </Kbd>
                 <span>Open</span>
               </div>

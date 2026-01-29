@@ -1,7 +1,12 @@
 import type { ToOptions } from "@tanstack/react-router";
 import { Link, useLocation } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
-import { Briefcase, Home, PanelLeftClose, PanelLeftOpen, Settings } from "lucide-react";
+import type { IconProps } from "nucleo-core-outline-24";
+import {
+  IconSuitcaseOutline24,
+  IconHouse6Outline24,
+  IconLayoutLeftOutline24,
+  IconGearOutline24,
+} from "nucleo-core-outline-24";
 import { useState } from "react";
 import { useKeyPress } from "@/hooks/useKeyPress";
 import { cn } from "@/utils/cn";
@@ -40,7 +45,7 @@ export function Sidebar() {
               render={
                 <SidebarItem
                   href="/"
-                  icon={Home}
+                  icon={IconHouse6Outline24}
                   isActive={location.pathname === "/"}
                   isCollapsed={isCollapsed}
                   label="Dashboard"
@@ -57,7 +62,7 @@ export function Sidebar() {
               render={
                 <SidebarItem
                   href="/jobs"
-                  icon={Briefcase}
+                  icon={IconSuitcaseOutline24}
                   isActive={location.pathname.startsWith("/jobs")}
                   isCollapsed={isCollapsed}
                   label="Jobs"
@@ -72,7 +77,7 @@ export function Sidebar() {
           <Separator className="mt-auto h-0 bg-transparent" orientation="horizontal" />
           <SidebarItem
             href="/settings"
-            icon={Settings}
+            icon={IconGearOutline24}
             isActive={location.pathname.startsWith("/settings")}
             isCollapsed={isCollapsed}
             label="Settings"
@@ -92,9 +97,9 @@ export function Sidebar() {
         type="button"
       >
         {isCollapsed ? (
-          <PanelLeftOpen className="h-4 w-4" />
+          <IconLayoutLeftOutline24 className="h-4 w-4" />
         ) : (
-          <PanelLeftClose className="h-4 w-4" />
+          <IconLayoutLeftOutline24 className="h-4 w-4" />
         )}
       </button>
       <UserMenu isCollapsed={isCollapsed} />
@@ -103,7 +108,7 @@ export function Sidebar() {
 }
 
 type SidebarItemProps = {
-  icon: LucideIcon;
+  icon: React.FC<IconProps>;
   label: string;
   href: ToOptions["to"];
   isActive?: boolean;

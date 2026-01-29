@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useRouteContext, useRouter } from "@tanstack/react-router";
-import { ChevronDown } from "lucide-react";
+import { IconChevronDownOutline24 } from "nucleo-core-outline-24";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
 import { getInitials } from "@/utils/initials";
@@ -52,7 +52,7 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
           </span>
         </div>
 
-        <ChevronDown className="ml-auto size-4 shrink-0 text-foreground-muted" />
+        <IconChevronDownOutline24 className="ml-auto size-4 shrink-0 text-foreground-muted" />
       </MenuTrigger>
 
       <MenuPortal>

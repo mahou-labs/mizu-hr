@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouteContext, useRouter } from "@tanstack/react-router";
-import { Check, ChevronDown, Plus } from "lucide-react";
+import {
+  IconCheckOutline24,
+  IconChevronDownOutline24,
+  IconCirclePlusOutline24,
+} from "nucleo-core-outline-24";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
 import { getInitials } from "@/utils/initials";
@@ -94,7 +98,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
           </span>
         </div>
 
-        <ChevronDown
+        <IconChevronDownOutline24
           className={cn(
             "ml-auto size-4 shrink-0 text-foreground-muted transition-opacity",
             isCollapsed && "opacity-0",
@@ -111,14 +115,14 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
                 <AvatarFallback className="rounded-sm">{getInitials(org.name)}</AvatarFallback>
               </Avatar>
               <span className="flex-1">{org.name}</span>
-              {org.id === session?.activeOrganizationId && <Check className="size-4" />}
+              {org.id === session?.activeOrganizationId && <IconCheckOutline24 className="size-4" />}
             </MenuItem>
           ))}
 
           <MenuSeparator />
 
           <MenuItem onClick={() => setIsCreateOrgDialogOpen(true)}>
-            <Plus className="size-4" />
+            <IconCirclePlusOutline24 className="size-4" />
             <span>Create Organization</span>
           </MenuItem>
         </MenuPopup>
