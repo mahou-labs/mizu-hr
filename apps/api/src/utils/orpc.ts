@@ -1,13 +1,20 @@
 import { os } from "@orpc/server";
+import { Polar } from "@polar-sh/sdk";
 import { redis } from "bun";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { organization } from "@/schema/auth";
-import { auth } from "./auth";
 import type { Context } from "./context";
 import { db } from "./db";
+import { env } from "./env";
+import { tryCatch } from "./try-catch";
 
-const TRIAL_PERIOD = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+const polar = new Polar({
+  accessToken: env.POLAR_ACCESS_TOKEN,
+  server: env.NODE_ENV === "production" ? "production" : "sandbox",
+});
+
+const TRIAL_PERIOD = 30 * 24 * 60 * 60 * 1000;
 
 export type CachedSubscriptionData = {
   plan: string;
@@ -44,96 +51,83 @@ const requireSubscription = o
   .middleware(async ({ context, errors, next }) => {
     const orgId = context?.session?.activeOrganizationId;
     if (!orgId) {
-      // user doesn't have an org yet (currently onboarding)
-      // return next();
       throw errors.NO_SUBSCRIPTION({ data: { missingSubscription: true } });
     }
 
-    // redis.del(orgId);
-
-    // Step 1: Check Redis for cached subscription data
-    const cachedData = await redis.get(orgId);
-    if (cachedData) {
-      try {
-        const subscriptionData = JSON.parse(cachedData) as CachedSubscriptionData;
-
-        // Validate that the cached subscription is still active and not expired
-        const isActive = subscriptionData.status === "active";
-        const currentPeriodEnd = subscriptionData.currentPeriodEnd
-          ? new Date(subscriptionData.currentPeriodEnd)
-          : null;
-
-        const isNotExpired = currentPeriodEnd ? currentPeriodEnd.getTime() > Date.now() : false;
-
-        if (isActive && isNotExpired) {
-          // Valid cached subscription, continue
-          return next();
-        }
-
-        // Cached data is invalid, delete it and continue to check Polar
-        await redis.del(orgId);
-      } catch (error) {
-        // Failed to parse cached data, delete it and continue
-        console.error(error);
-        await redis.del(orgId);
-      }
+    const { data: cachedData, error: redisError } = await tryCatch(redis.get(orgId));
+    if (redisError) {
+      console.error("Redis error:", redisError);
     }
 
-    // Step 2: Check Polar for active subscription
-    try {
-      const { result: subscriptions } = await auth.api.subscriptions({
-        headers: context.headers,
-        query: {
-          referenceId: orgId,
-          active: true,
-          limit: 10,
-          page: 1,
-        },
-      });
+    if (cachedData) {
+      const subscriptionData = JSON.parse(cachedData) as CachedSubscriptionData;
 
-      // Find the first active subscription
-      const activeSubscription = subscriptions.items.find((sub) => sub.status === "active");
+      const isActive = subscriptionData.status === "active";
+      const currentPeriodEnd = subscriptionData.currentPeriodEnd
+        ? new Date(subscriptionData.currentPeriodEnd)
+        : null;
+
+      const isNotExpired = currentPeriodEnd ? currentPeriodEnd.getTime() > Date.now() : false;
+
+      if (isActive && isNotExpired) {
+        return next();
+      }
+
+      await tryCatch(redis.del(orgId));
+    }
+
+    const { data: subscriptions, error: polarError } = await tryCatch(
+      polar.subscriptions.list({
+        metadata: { referenceId: orgId },
+        active: true,
+        limit: 10,
+        page: 1,
+      }),
+    );
+
+    if (polarError) {
+      console.error("Polar API error:", polarError);
+    }
+
+    if (subscriptions) {
+      const activeSubscription = subscriptions.result.items.find((sub) => sub.status === "active");
 
       if (activeSubscription) {
-        // Cache subscription details in Redis
         const subscriptionData: CachedSubscriptionData = {
           plan: activeSubscription.product.name,
           status: activeSubscription.status,
           currentPeriodEnd: activeSubscription.currentPeriodEnd,
         };
 
-        await redis.set(orgId, JSON.stringify(subscriptionData));
-        await redis.expire(orgId, TRIAL_PERIOD / 1000); // Convert ms to seconds
+        const { error: cacheError } = await tryCatch(redis.set(orgId, JSON.stringify(subscriptionData)));
+        if (!cacheError) {
+          await tryCatch(redis.expire(orgId, TRIAL_PERIOD / 1000));
+        }
 
         return next();
       }
-    } catch (error) {
-      console.error(error);
-      // Continue to check free trial if Polar check fails
     }
 
-    // Step 3: Check Postgres for org creation date (free trial)
-    const pgOrg = await db
-      .select()
-      .from(organization)
-      .where(eq(organization.id, orgId))
-      .then((org) => org[0]);
+    const { data: pgOrg, error: dbError } = await tryCatch(
+      db
+        .select()
+        .from(organization)
+        .where(eq(organization.id, orgId))
+        .then((org) => org[0]),
+    );
 
-    if (!pgOrg) {
+    if (dbError || !pgOrg) {
       throw errors.NO_SUBSCRIPTION({ data: { missingSubscription: true } });
     }
 
-    // Check if org is within trial period
     const orgCreatedAt = new Date(pgOrg.createdAt);
     const now = new Date();
     const timeSinceCreation = now.getTime() - orgCreatedAt.getTime();
 
     if (timeSinceCreation < TRIAL_PERIOD) {
-      // Organization is in free trial
       return next();
     }
 
-    // Step 4: No subscription or trial found
     throw errors.NO_SUBSCRIPTION({ data: { missingSubscription: true } });
   });
 
