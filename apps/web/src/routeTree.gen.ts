@@ -119,6 +119,7 @@ const AppJobsJobIdEditRoute = AppJobsJobIdEditRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AppIndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/invite': typeof InviteRoute
   '/onboarding': typeof OnboardingRoute
@@ -129,11 +130,10 @@ export interface FileRoutesByFullPath {
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
-  '/': typeof AppIndexRoute
   '/jobs/new': typeof AppJobsNewRoute
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/organization': typeof AppSettingsOrganizationRoute
-  '/jobs': typeof AppJobsIndexRoute
+  '/jobs/': typeof AppJobsIndexRoute
   '/settings/': typeof AppSettingsIndexRoute
   '/jobs/$jobId/edit': typeof AppJobsJobIdEditRoute
 }
@@ -179,6 +179,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/auth'
     | '/invite'
     | '/onboarding'
@@ -189,11 +190,10 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/auth/signup'
     | '/auth/verify-email'
-    | '/'
     | '/jobs/new'
     | '/settings/account'
     | '/settings/organization'
-    | '/jobs'
+    | '/jobs/'
     | '/settings/'
     | '/jobs/$jobId/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -277,7 +277,7 @@ declare module '@tanstack/react-router' {
     '/_app': {
       id: '/_app'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -340,7 +340,7 @@ declare module '@tanstack/react-router' {
     '/_app/jobs/': {
       id: '/_app/jobs/'
       path: '/jobs'
-      fullPath: '/jobs'
+      fullPath: '/jobs/'
       preLoaderRoute: typeof AppJobsIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
