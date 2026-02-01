@@ -1,5 +1,5 @@
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog";
-import { SearchIcon } from "lucide-react";
+import { IconMagnifierOutline24 } from "nucleo-core-outline-24";
 import type * as React from "react";
 import { cn } from "@/utils/cn";
 import {
@@ -101,7 +101,7 @@ function CommandInput({
         )}
         placeholder={placeholder}
         size="lg"
-        startAddon={<SearchIcon />}
+        startAddon={<IconMagnifierOutline24 />}
         {...props}
       />
     </div>

@@ -1,11 +1,11 @@
 import { Toast } from "@base-ui/react/toast";
 import {
-  CircleAlertIcon,
-  CircleCheckIcon,
-  InfoIcon,
-  LoaderCircleIcon,
-  TriangleAlertIcon,
-} from "lucide-react";
+  IconCircleCheckOutline24,
+  IconCircleInfoOutline24,
+  IconCircleWarningOutline24,
+  IconCircularLoaderOutline24,
+  IconTriangleWarningOutline24,
+} from "nucleo-core-outline-24";
 
 import { cn } from "@/utils/cn";
 import { buttonVariants } from "@/components/button";
@@ -14,11 +14,11 @@ const toastManager = Toast.createToastManager();
 const anchoredToastManager = Toast.createToastManager();
 
 const TOAST_ICONS = {
-  error: CircleAlertIcon,
-  info: InfoIcon,
-  loading: LoaderCircleIcon,
-  success: CircleCheckIcon,
-  warning: TriangleAlertIcon,
+  error: IconCircleWarningOutline24,
+  info: IconCircleInfoOutline24,
+  loading: IconCircularLoaderOutline24,
+  success: IconCircleCheckOutline24,
+  warning: IconTriangleWarningOutline24,
 } as const;
 
 type ToastPosition =

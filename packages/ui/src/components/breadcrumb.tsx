@@ -1,6 +1,6 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { IconChevronRightOutline24, IconDotsOutline24 } from "nucleo-core-outline-24";
 import type * as React from "react";
 
 import { cn } from "@/utils/cn";
@@ -67,7 +67,7 @@ function BreadcrumbSeparator({ children, className, ...props }: React.ComponentP
       role="presentation"
       {...props}
     >
-      {children ?? <ChevronRight />}
+      {children ?? <IconChevronRightOutline24 />}
     </li>
   );
 }
@@ -81,7 +81,7 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span"
       role="presentation"
       {...props}
     >
-      <MoreHorizontal className="size-4" />
+      <IconDotsOutline24 className="size-4" />
       <span className="sr-only">More</span>
     </span>
   );
