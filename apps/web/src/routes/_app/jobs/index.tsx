@@ -136,93 +136,93 @@ function JobsList() {
       {jobs?.map((job) => (
         <Link key={job.id} to="/jobs/$jobId/edit" params={{ jobId: job.id }}>
           <Card className="group relative transition-shadow hover:shadow-md">
-          <CardHeader className="pb-3">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0 flex-1">
-                <CardTitle className="line-clamp-1 text-lg">{job.title}</CardTitle>
-                {job.department && (
-                  <CardDescription className="mt-1 flex items-center gap-1">
-                    <IconOfficeOutline24 className="size-3" />
-                    {job.department}
-                  </CardDescription>
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="line-clamp-1 text-lg">{job.title}</CardTitle>
+                  {job.department && (
+                    <CardDescription className="mt-1 flex items-center gap-1">
+                      <IconOfficeOutline24 className="size-3" />
+                      {job.department}
+                    </CardDescription>
+                  )}
+                </div>
+                <Menu>
+                  <MenuTrigger
+                    className="opacity-0 transition-opacity group-hover:opacity-100"
+                    render={
+                      <Button size="icon" variant="ghost">
+                        <IconDotsOutline24 className="size-4" />
+                      </Button>
+                    }
+                  />
+                  <MenuPopup>
+                    <MenuItem onClick={() => {}}>
+                      <Link
+                        to="/jobs/$jobId/edit"
+                        params={{ jobId: job.id }}
+                        className="flex items-center"
+                      >
+                        <IconPenOutline24 className="mr-2 size-4" />
+                        Edit
+                      </Link>
+                    </MenuItem>
+                    <MenuItem className="text-destructive" onClick={() => handleDeleteJob(job.id)}>
+                      <IconTrashOutline24 className="mr-2 size-4" />
+                      Delete
+                    </MenuItem>
+                  </MenuPopup>
+                </Menu>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant={statusVariants[job.status as JobStatus]}>
+                  {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+                </Badge>
+                <Badge variant="outline">
+                  {employmentTypeLabels[job.employmentType as EmploymentType]}
+                </Badge>
+                {job.remote && (
+                  <Badge variant="outline">
+                    <IconGlobeOutline24 className="mr-1 size-3" />
+                    Remote
+                  </Badge>
                 )}
               </div>
-              <Menu>
-                <MenuTrigger
-                  className="opacity-0 transition-opacity group-hover:opacity-100"
-                  render={
-                    <Button size="icon" variant="ghost">
-                      <IconDotsOutline24 className="size-4" />
-                    </Button>
-                  }
-                />
-                <MenuPopup>
-                  <MenuItem onClick={() => {}}>
-                    <Link
-                      to="/jobs/$jobId/edit"
-                      params={{ jobId: job.id }}
-                      className="flex items-center"
-                    >
-                      <IconPenOutline24 className="mr-2 size-4" />
-                      Edit
-                    </Link>
-                  </MenuItem>
-                  <MenuItem className="text-destructive" onClick={() => handleDeleteJob(job.id)}>
-                    <IconTrashOutline24 className="mr-2 size-4" />
-                    Delete
-                  </MenuItem>
-                </MenuPopup>
-              </Menu>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant={statusVariants[job.status as JobStatus]}>
-                {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
-              </Badge>
-              <Badge variant="outline">
-                {employmentTypeLabels[job.employmentType as EmploymentType]}
-              </Badge>
-              {job.remote && (
-                <Badge variant="outline">
-                  <IconGlobeOutline24 className="mr-1 size-3" />
-                  Remote
-                </Badge>
-              )}
-            </div>
 
-            <div className="space-y-1.5 text-muted-foreground text-sm">
-              {job.location && (
+              <div className="space-y-1.5 text-muted-foreground text-sm">
+                {job.location && (
+                  <div className="flex items-center gap-2">
+                    <IconMapPinOutline24 className="size-3.5" />
+                    <span>{job.location}</span>
+                  </div>
+                )}
+                {job.experienceLevel && (
+                  <div className="flex items-center gap-2">
+                    <IconUsersPlusOutline24 className="size-3.5" />
+                    <span>{experienceLevelLabels[job.experienceLevel as ExperienceLevel]}</span>
+                  </div>
+                )}
+                {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined) && (
+                  <div className="flex items-center gap-2">
+                    <IconCurrencyDollarOutline24 className="size-3.5" />
+                    <span>
+                      {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined)}
+                    </span>
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
-                  <IconMapPinOutline24 className="size-3.5" />
-                  <span>{job.location}</span>
-                </div>
-              )}
-              {job.experienceLevel && (
-                <div className="flex items-center gap-2">
-                  <IconUsersPlusOutline24 className="size-3.5" />
-                  <span>{experienceLevelLabels[job.experienceLevel as ExperienceLevel]}</span>
-                </div>
-              )}
-              {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined) && (
-                <div className="flex items-center gap-2">
-                  <IconCurrencyDollarOutline24 className="size-3.5" />
+                  <IconClock2Outline24 className="size-3.5" />
                   <span>
-                    {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined)}
+                    {job.publishedAt
+                      ? `Published ${new Date(job.publishedAt).toLocaleDateString()}`
+                      : `Created ${new Date(job.createdAt).toLocaleDateString()}`}
                   </span>
                 </div>
-              )}
-              <div className="flex items-center gap-2">
-                <IconClock2Outline24 className="size-3.5" />
-                <span>
-                  {job.publishedAt
-                    ? `Published ${new Date(job.publishedAt).toLocaleDateString()}`
-                    : `Created ${new Date(job.createdAt).toLocaleDateString()}`}
-                </span>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
         </Link>
       ))}
     </div>
