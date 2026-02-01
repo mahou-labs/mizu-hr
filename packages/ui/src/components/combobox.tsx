@@ -2,9 +2,9 @@ import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox";
 import { IconChevronExpandYOutline24, IconXmarkOutline24 } from "nucleo-core-outline-24";
 import * as React from "react";
 
-import { cn } from "@/utils/cn";
-import { Input } from "@/components/input";
-import { ScrollArea } from "@/components/scroll-area";
+import { cn } from "../utils/cn";
+import { Input } from "./input";
+import { ScrollArea } from "./scroll-area";
 
 const ComboboxContext = React.createContext<{
   chipsRef: React.RefObject<HTMLDivElement | null> | null;

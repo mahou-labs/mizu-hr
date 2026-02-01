@@ -2,7 +2,7 @@ import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { IconCheckOutline24, IconChevronRightOutline24 } from "nucleo-core-outline-24";
 import type * as React from "react";
 
-import { cn } from "@/utils/cn";
+import { cn } from "../utils/cn";
 
 const Menu = MenuPrimitive.Root;
 

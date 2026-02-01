@@ -7,8 +7,8 @@ import {
 } from "nucleo-core-outline-24";
 import type * as React from "react";
 
-import { cn } from "@/utils/cn";
-import { type Button, buttonVariants } from "@/components/button";
+import { cn } from "../utils/cn";
+import { type Button, buttonVariants } from "./button";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (

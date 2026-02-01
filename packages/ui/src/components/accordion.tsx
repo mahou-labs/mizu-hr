@@ -1,7 +1,7 @@
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
 import { IconChevronDownOutline24 } from "nucleo-core-outline-24";
 
-import { cn } from "@/utils/cn";
+import { cn } from "../utils/cn";
 
 function Accordion(props: AccordionPrimitive.Root.Props) {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />;

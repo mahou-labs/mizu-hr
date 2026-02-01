@@ -26,7 +26,7 @@ function SuccessComponent() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          navigate({ to: "/dashboard" });
+          navigate({ to: "/" });
           return 0;
         }
         return prev - 1;
@@ -75,7 +75,7 @@ function SuccessComponent() {
             </p>
 
             <div className="flex flex-col gap-2">
-              <Button className="w-full" render={<Link to="/dashboard" />}>
+              <Button className="w-full" render={<Link to="/" />}>
                 Go to Dashboard
               </Button>
               <Button className="w-full" render={<Link to="/" />} variant="outline">

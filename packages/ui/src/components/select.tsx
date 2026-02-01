@@ -5,7 +5,7 @@ import {
   IconChevronUpOutline24,
 } from "nucleo-core-outline-24";
 
-import { cn } from "@/utils/cn";
+import { cn } from "../utils/cn";
 
 const Select = SelectPrimitive.Root;
 

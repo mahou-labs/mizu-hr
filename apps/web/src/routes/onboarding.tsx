@@ -29,7 +29,7 @@ export const Route = createFileRoute("/onboarding")({
   component: OnboardingComponent,
   beforeLoad: ({ context }) => {
     if (context.session?.activeOrganizationId) {
-      throw redirect({ to: "/dashboard" });
+      throw redirect({ to: "/" });
     }
   },
 });
@@ -55,7 +55,7 @@ function OnboardingComponent() {
           type: "success",
         });
         await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
-        navigate({ to: "/dashboard" });
+        navigate({ to: "/" });
       } else {
         toastManager.add({
           title: "Failed to create organization",

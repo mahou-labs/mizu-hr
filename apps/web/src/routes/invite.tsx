@@ -36,7 +36,7 @@ function RouteComponent() {
     await acceptInvitation({ id });
     toastManager.add({ title: "Invitation accepted", type: "success" });
     await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
-    await navigate({ to: "/dashboard" });
+    await navigate({ to: "/" });
   };
 
   return (

@@ -1,6 +1,6 @@
 import { Meter as MeterPrimitive } from "@base-ui/react/meter";
 
-import { cn } from "@/utils/cn";
+import { cn } from "../utils/cn";
 
 function Meter({ className, children, ...props }: MeterPrimitive.Root.Props) {
   return (

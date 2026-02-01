@@ -2,8 +2,8 @@ import { NumberField as NumberFieldPrimitive } from "@base-ui/react/number-field
 import { IconCircleMinusOutline24, IconCirclePlusOutline24 } from "nucleo-core-outline-24";
 import * as React from "react";
 
-import { cn } from "@/utils/cn";
-import { Label } from "@/components/label";
+import { cn } from "../utils/cn";
+import { Label } from "./label";
 
 const NumberFieldContext = React.createContext<{
   fieldId: string;

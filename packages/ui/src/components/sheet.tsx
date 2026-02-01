@@ -1,7 +1,7 @@
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog";
 import { IconXmarkOutline24 } from "nucleo-core-outline-24";
-import { cn } from "@/utils/cn";
-import { ScrollArea } from "@/components/scroll-area";
+import { cn } from "../utils/cn";
+import { ScrollArea } from "./scroll-area";
 
 const Sheet = SheetPrimitive.Root;
 

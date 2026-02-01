@@ -3,9 +3,9 @@ import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 
-import { cn } from "@/utils/cn";
-import { Separator } from "@/components/separator";
-import { Toggle as ToggleComponent, type toggleVariants } from "@/components/toggle";
+import { cn } from "../utils/cn";
+import { Separator } from "./separator";
+import { Toggle as ToggleComponent, type toggleVariants } from "./toggle";
 
 const ToggleGroupContext = React.createContext<VariantProps<typeof toggleVariants>>({
   size: "default",

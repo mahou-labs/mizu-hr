@@ -1,6 +1,6 @@
 import { IconCircularLoaderOutline24 } from "nucleo-core-outline-24";
 
-import { cn } from "@/utils/cn";
+import { cn } from "../utils/cn";
 
 function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (

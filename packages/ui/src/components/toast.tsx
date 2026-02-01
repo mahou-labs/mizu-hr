@@ -7,8 +7,8 @@ import {
   IconTriangleWarningOutline24,
 } from "nucleo-core-outline-24";
 
-import { cn } from "@/utils/cn";
-import { buttonVariants } from "@/components/button";
+import { cn } from "../utils/cn";
+import { buttonVariants } from "./button";
 
 const toastManager = Toast.createToastManager();
 const anchoredToastManager = Toast.createToastManager();

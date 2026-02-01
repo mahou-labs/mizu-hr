@@ -1,7 +1,7 @@
 import { Dialog as CommandDialogPrimitive } from "@base-ui/react/dialog";
 import { IconMagnifierOutline24 } from "nucleo-core-outline-24";
 import type * as React from "react";
-import { cn } from "@/utils/cn";
+import { cn } from "../utils/cn";
 import {
   Autocomplete,
   AutocompleteCollection,

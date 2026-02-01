@@ -107,7 +107,7 @@ export function Sidebar() {
 }
 
 type SidebarItemProps = {
-  icon: React.FC;
+  icon: React.FC<{ className?: string }>;
   label: string;
   href: ToOptions["to"];
   isActive?: boolean;

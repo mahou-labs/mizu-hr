@@ -3,7 +3,7 @@ import { useRender } from "@base-ui/react/use-render";
 import { IconChevronRightOutline24, IconDotsOutline24 } from "nucleo-core-outline-24";
 import type * as React from "react";
 
-import { cn } from "@/utils/cn";
+import { cn } from "../utils/cn";
 
 function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;

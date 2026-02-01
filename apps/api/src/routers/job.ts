@@ -73,27 +73,52 @@ export const jobRouter = {
     return data[0];
   }),
 
-  list: protectedProcedure.handler(async ({ context }) => {
-    const orgId = context.session?.activeOrganizationId;
-    if (!orgId) {
-      throw new ORPCError("BAD_REQUEST", {
-        message: "No active organization selected",
-      });
-    }
+  list: protectedProcedure
+    .output(
+      z.array(
+        z.object({
+          id: z.string(),
+          title: z.string(),
+          description: z.string(),
+          department: z.string().nullable(),
+          location: z.string(),
+          remote: z.boolean(),
+          employmentType: z.string(),
+          experienceLevel: z.string().nullable(),
+          salaryMin: z.number().nullable(),
+          salaryMax: z.number().nullable(),
+          salaryCurrency: z.string().nullable(),
+          status: z.string(),
+          recruiters: z.array(z.string()),
+          organizationId: z.string(),
+          createdBy: z.string(),
+          publishedAt: z.date().nullable(),
+          createdAt: z.date(),
+          updatedAt: z.date(),
+        }),
+      ),
+    )
+    .handler(async ({ context }) => {
+      const orgId = context.session?.activeOrganizationId;
+      if (!orgId) {
+        throw new ORPCError("BAD_REQUEST", {
+          message: "No active organization selected",
+        });
+      }
 
-    const { data, error } = await tryCatch(
-      db.select().from(job).where(eq(job.organizationId, orgId)).orderBy(desc(job.createdAt)),
-    );
+      const { data, error } = await tryCatch(
+        db.select().from(job).where(eq(job.organizationId, orgId)).orderBy(desc(job.createdAt)),
+      );
 
-    if (error) {
-      throw new ORPCError("INTERNAL_SERVER_ERROR", {
-        message: "Failed to fetch job listings",
-        cause: error,
-      });
-    }
+      if (error) {
+        throw new ORPCError("INTERNAL_SERVER_ERROR", {
+          message: "Failed to fetch job listings",
+          cause: error,
+        });
+      }
 
-    return data;
-  }),
+      return data;
+    }),
 
   get: protectedProcedure
     .input(z.object({ id: z.string() }))

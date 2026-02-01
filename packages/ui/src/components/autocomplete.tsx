@@ -1,9 +1,9 @@
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete";
 import { IconChevronExpandYOutline24, IconXmarkOutline24 } from "nucleo-core-outline-24";
 
-import { cn } from "@/utils/cn";
-import { Input } from "@/components/input";
-import { ScrollArea } from "@/components/scroll-area";
+import { cn } from "../utils/cn";
+import { Input } from "./input";
+import { ScrollArea } from "./scroll-area";
 
 const Autocomplete = AutocompletePrimitive.Root;
 

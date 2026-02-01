@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   IconSuitcaseOutline24,
@@ -115,7 +115,7 @@ function JobsList() {
     }
   };
 
-  return jobs.length === 0 ? (
+  return jobs?.length === 0 ? (
     <Empty className="flex-1 border">
       <EmptyHeader>
         <EmptyMedia variant="icon">
@@ -133,12 +133,9 @@ function JobsList() {
     </Empty>
   ) : (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {jobs.map((job) => (
-        <Card
-          key={job.id}
-          className="group relative transition-shadow hover:shadow-md"
-          render={<Link to="/jobs/$jobId" params={{ jobId: job.id }} />}
-        >
+      {jobs?.map((job) => (
+        <Link key={job.id} to="/jobs/$jobId/edit" params={{ jobId: job.id }}>
+          <Card className="group relative transition-shadow hover:shadow-md">
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0 flex-1">
@@ -226,6 +223,7 @@ function JobsList() {
             </div>
           </CardContent>
         </Card>
+        </Link>
       ))}
     </div>
   );
