@@ -38,7 +38,9 @@ export default function PasswordResetEmail({ name, resetLink }: PasswordResetEma
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
                   <span className="text-2xl">🔐</span>
                 </div>
-                <Heading className="mb-2 font-bold text-3xl text-gray-900">Reset Your Password</Heading>
+                <Heading className="mb-2 font-bold text-3xl text-gray-900">
+                  Reset Your Password
+                </Heading>
                 <Text className="text-gray-600 text-lg">Hi {name}, we received your request</Text>
               </div>
             </Section>

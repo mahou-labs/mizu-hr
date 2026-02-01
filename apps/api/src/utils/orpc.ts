@@ -99,7 +99,9 @@ const requireSubscription = o
           currentPeriodEnd: activeSubscription.currentPeriodEnd,
         };
 
-        const { error: cacheError } = await tryCatch(redis.set(orgId, JSON.stringify(subscriptionData)));
+        const { error: cacheError } = await tryCatch(
+          redis.set(orgId, JSON.stringify(subscriptionData)),
+        );
         if (!cacheError) {
           await tryCatch(redis.expire(orgId, TRIAL_PERIOD / 1000));
         }

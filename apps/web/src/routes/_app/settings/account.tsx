@@ -17,10 +17,21 @@ export const Route = createFileRoute("/_app/settings/account")({
 
 type ThemeOption = "light" | "dark" | "system";
 
-const themeConfig: Record<ThemeOption, { icon: typeof IconSunOutline24; label: string; description: string }> = {
+const themeConfig: Record<
+  ThemeOption,
+  { icon: typeof IconSunOutline24; label: string; description: string }
+> = {
   light: { icon: IconSunOutline24, label: "Light", description: "A clean, bright appearance" },
-  dark: { icon: IconDarkModeOutline24, label: "Dark", description: "Easy on the eyes in low light" },
-  system: { icon: IconLaptopOutline24, label: "System", description: "Matches your device settings" },
+  dark: {
+    icon: IconDarkModeOutline24,
+    label: "Dark",
+    description: "Easy on the eyes in low light",
+  },
+  system: {
+    icon: IconLaptopOutline24,
+    label: "System",
+    description: "Matches your device settings",
+  },
 };
 
 const themeOptions: ThemeOption[] = ["light", "dark", "system"];

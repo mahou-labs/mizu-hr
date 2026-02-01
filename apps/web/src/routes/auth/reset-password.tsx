@@ -92,10 +92,7 @@ function ResetPasswordRoute() {
         </div>
 
         <div className="space-y-4">
-          <Button
-            className="w-full"
-            onClick={() => navigate({ to: "/auth/forgot-password" })}
-          >
+          <Button className="w-full" onClick={() => navigate({ to: "/auth/forgot-password" })}>
             Request New Link
           </Button>
           <Button
@@ -147,10 +144,7 @@ function ResetPasswordRoute() {
         </div>
 
         <div className="space-y-4">
-          <Button
-            className="w-full"
-            onClick={() => navigate({ to: "/auth/forgot-password" })}
-          >
+          <Button className="w-full" onClick={() => navigate({ to: "/auth/forgot-password" })}>
             Request Password Reset
           </Button>
           <Button
@@ -168,9 +162,7 @@ function ResetPasswordRoute() {
   return (
     <div className="mx-auto mt-10 w-full max-w-md p-6">
       <h1 className="mb-2 text-center font-bold text-3xl text-foreground">Reset Your Password</h1>
-      <p className="mb-6 text-center text-muted-foreground">
-        Enter your new password below.
-      </p>
+      <p className="mb-6 text-center text-muted-foreground">Enter your new password below.</p>
 
       <form
         className="space-y-4"

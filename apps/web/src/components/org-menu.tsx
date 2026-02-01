@@ -115,7 +115,9 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
                 <AvatarFallback className="rounded-sm">{getInitials(org.name)}</AvatarFallback>
               </Avatar>
               <span className="flex-1">{org.name}</span>
-              {org.id === session?.activeOrganizationId && <IconCheckOutline24 className="size-4" />}
+              {org.id === session?.activeOrganizationId && (
+                <IconCheckOutline24 className="size-4" />
+              )}
             </MenuItem>
           ))}
 

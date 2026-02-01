@@ -250,7 +250,9 @@ function Member({ name, email, role, isPending = false, avatarUrl, className }: 
         <div className="relative">
           <Avatar>
             <AvatarImage alt={`${name}'s avatar`} src={avatarUrl} />
-            <AvatarFallback>{initials || <IconCircleUserOutline24 className="size-5" />}</AvatarFallback>
+            <AvatarFallback>
+              {initials || <IconCircleUserOutline24 className="size-5" />}
+            </AvatarFallback>
           </Avatar>
 
           {isPending && (
