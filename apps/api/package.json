@@ -21,28 +21,28 @@
     "db:down": "docker compose down"
   },
   "dependencies": {
-    "@orpc/server": "^1.13.2",
-    "@polar-sh/better-auth": "^1.6.3",
-    "@polar-sh/sdk": "^0.42.1",
-    "@react-email/components": "^1.0.4",
-    "better-auth": "^1.4.10",
+    "@orpc/server": "^1.13.4",
+    "@polar-sh/better-auth": "^1.6.4",
+    "@polar-sh/sdk": "^0.42.5",
+    "@react-email/components": "^1.0.6",
+    "better-auth": "^1.4.18",
     "dotenv": "^17.2.3",
-    "drizzle-orm": "^1.0.0-beta.10",
-    "hono": "^4.11.3",
+    "drizzle-orm": "^1.0.0-beta.9-e89174b",
+    "hono": "^4.11.7",
     "hono-rate-limiter": "^0.5.3",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-email": "^5.2.1",
-    "resend": "^6.7.0",
-    "zod": "^4.3.5"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-email": "^5.2.5",
+    "resend": "^6.9.1",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@react-email/preview-server": "^5.2.1",
-    "@types/bun": "^1.3.5",
+    "@react-email/preview-server": "^5.2.5",
+    "@types/bun": "^1.3.7",
     "@types/pg": "^8.16.0",
-    "@types/react": "^19.2.8",
+    "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
-    "drizzle-kit": "^1.0.0-beta.10",
+    "drizzle-kit": "^1.0.0-beta.9-e89174b",
     "typescript": "^5.9.3"
   }
 }
