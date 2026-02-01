@@ -1,6 +1,5 @@
 import type { ToOptions } from "@tanstack/react-router";
 import { Link, useLocation } from "@tanstack/react-router";
-import type { IconProps } from "nucleo-core-outline-24";
 import {
   IconSuitcaseOutline24,
   IconHouse6Outline24,
@@ -108,7 +107,7 @@ export function Sidebar() {
 }
 
 type SidebarItemProps = {
-  icon: React.FC<IconProps>;
+  icon: React.FC;
   label: string;
   href: ToOptions["to"];
   isActive?: boolean;

@@ -10,4 +10,9 @@
   "observability": {
     "enabled": true,
   },
+  "env": {
+    "staging": {
+      "name": "mizu-hr-web-staging",
+    },
+  },
 }
