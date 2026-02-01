@@ -15,7 +15,8 @@
   },
   "scripts": {
     "lint": "oxlint --type-aware",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",

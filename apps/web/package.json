@@ -10,7 +10,8 @@
     "deploy": "bun run build && wrangler deploy",
     "cf-typegen": "wrangler types --env-interface Env",
     "lint": "oxlint --type-aware",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "dependencies": {
     "@mdxeditor/editor": "^3.52.3",
