@@ -8,21 +8,27 @@ import {
   IconGlobeOutline24,
   IconSpinnerLoaderOutline24,
   IconMapPinOutline24,
-  IconDotsOutline24,
-  IconPenOutline24,
   IconCirclePlusOutline24,
   IconTrashOutline24,
   IconUsersPlusOutline24,
 } from "nucleo-core-outline-24";
+import { Suspense, useState } from "react";
 import { Page } from "@/components/page";
 import { orpc } from "@/utils/orpc-client";
+import {
+  AlertDialog,
+  AlertDialogClose,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogPopup,
+  AlertDialogTitle,
+} from "@mizu-hr/ui/alert-dialog";
 import { Badge } from "@mizu-hr/ui/badge";
 import { Button } from "@mizu-hr/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
-import { Menu, MenuItem, MenuPopup, MenuTrigger } from "@mizu-hr/ui/menu";
 import { toastManager } from "@mizu-hr/ui/toast";
-import { Suspense } from "react";
 
 export const Route = createFileRoute("/_app/jobs/")({
   component: JobsRoute,
@@ -90,18 +96,19 @@ function JobsRoute() {
     </Page>
   );
 }
-// <div className="flex flex-1 items-center justify-center">
-//   <Loader2 className="size-8 animate-spin text-muted-foreground" />
-// </div>
 
 function JobsList() {
   const { data: jobs, refetch } = useQuery(orpc.job.list.queryOptions());
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [jobToDelete, setJobToDelete] = useState<string | null>(null);
 
   const deleteMutation = useMutation(
     orpc.job.delete.mutationOptions({
       onSuccess: async () => {
         await refetch();
         toastManager.add({ title: "Job deleted successfully", type: "success" });
+        setDeleteDialogOpen(false);
+        setJobToDelete(null);
       },
       onError: (error: Error) => {
         toastManager.add({ title: error.message || "Failed to delete job", type: "error" });
@@ -109,9 +116,14 @@ function JobsList() {
     }),
   );
 
-  const handleDeleteJob = (jobId: string) => {
-    if (confirm("Are you sure you want to delete this job posting?")) {
-      deleteMutation.mutate({ id: jobId });
+  const handleDeleteClick = (jobId: string) => {
+    setJobToDelete(jobId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (jobToDelete) {
+      deleteMutation.mutate({ id: jobToDelete });
     }
   };
 
@@ -147,32 +159,17 @@ function JobsList() {
                     </CardDescription>
                   )}
                 </div>
-                <Menu>
-                  <MenuTrigger
-                    className="opacity-0 transition-opacity group-hover:opacity-100"
-                    render={
-                      <Button size="icon" variant="ghost">
-                        <IconDotsOutline24 className="size-4" />
-                      </Button>
-                    }
-                  />
-                  <MenuPopup>
-                    <MenuItem onClick={() => {}}>
-                      <Link
-                        to="/jobs/$jobId/edit"
-                        params={{ jobId: job.id }}
-                        className="flex items-center"
-                      >
-                        <IconPenOutline24 className="mr-2 size-4" />
-                        Edit
-                      </Link>
-                    </MenuItem>
-                    <MenuItem className="text-destructive" onClick={() => handleDeleteJob(job.id)}>
-                      <IconTrashOutline24 className="mr-2 size-4" />
-                      Delete
-                    </MenuItem>
-                  </MenuPopup>
-                </Menu>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="opacity-0 transition-all group-hover:opacity-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDeleteClick(job.id);
+                  }}
+                >
+                  <IconTrashOutline24 className="size-4" />
+                </Button>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -225,6 +222,37 @@ function JobsList() {
           </Card>
         </Link>
       ))}
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogPopup>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Job Posting</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this job posting? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogClose
+              render={
+                <Button
+                  disabled={deleteMutation.isPending}
+                  type="button"
+                  variant="ghost"
+                />
+              }
+            >
+              Cancel
+            </AlertDialogClose>
+            <Button
+              disabled={deleteMutation.isPending}
+              onClick={handleConfirmDelete}
+              variant="destructive"
+            >
+              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogPopup>
+      </AlertDialog>
     </div>
   );
 }
