@@ -52,7 +52,12 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
           </span>
         </div>
 
-        <IconChevronDownOutline24 className="ml-auto size-4 shrink-0 text-foreground-muted" />
+        <IconChevronDownOutline24
+          className={cn(
+            "ml-auto size-3 shrink-0 text-foreground-muted",
+            isCollapsed && "opacity-0",
+          )}
+        />
       </MenuTrigger>
 
       <MenuPortal>

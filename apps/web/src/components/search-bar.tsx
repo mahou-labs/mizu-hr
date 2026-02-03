@@ -73,12 +73,7 @@ type SearchBarProps = {
 export function SearchBar({ isCollapsed = false }: SearchBarProps) {
   const [open, setOpen] = useState(false);
   const modifierKey = useModifierKey();
-  useKeyPress("k", (e) => {
-    if (e.metaKey || e.ctrlKey) {
-      e.preventDefault();
-      setOpen((open) => !open);
-    }
-  });
+  useKeyPress("k", () => setOpen((open) => !open), { mod: true, preventDefault: true });
 
   function handleItemClick(_item: Item) {
     setOpen(false);

@@ -100,7 +100,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
 
         <IconChevronDownOutline24
           className={cn(
-            "ml-auto size-4 shrink-0 text-foreground-muted transition-opacity",
+            "ml-auto size-3 shrink-0 text-foreground-muted transition-opacity",
             isCollapsed && "opacity-0",
           )}
         />

@@ -26,7 +26,7 @@ const tooltipHandle = TooltipCreateHandle<React.ComponentType>();
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
-  useKeyPress("s", () => setIsCollapsed((prev) => !prev));
+  useKeyPress("b", () => setIsCollapsed((prev) => !prev), { mod: true, preventDefault: true });
 
   return (
     <div
