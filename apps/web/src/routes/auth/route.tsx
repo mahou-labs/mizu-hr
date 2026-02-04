@@ -11,7 +11,7 @@ export const Route = createFileRoute("/auth")({
   validateSearch: zodValidator(authSearchSchema),
   beforeLoad: ({ context }) => {
     if (context.session) {
-      throw redirect({ to: "/dashboard" });
+      throw redirect({ to: "/" });
     }
   },
 });

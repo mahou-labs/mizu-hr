@@ -5,9 +5,14 @@
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": "dist/client"
+    "directory": "dist/client",
   },
   "observability": {
-    "enabled": true
-  }
+    "enabled": true,
+  },
+  "env": {
+    "staging": {
+      "name": "mizu-hr-web-staging",
+    },
+  },
 }

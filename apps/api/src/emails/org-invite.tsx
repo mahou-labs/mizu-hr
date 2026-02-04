@@ -50,9 +50,7 @@ export default function OrgInviteEmail({
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
                   <span className="text-2xl">🎉</span>
                 </div>
-                <Heading className="mb-2 font-bold text-3xl text-gray-900">
-                  You're Invited!
-                </Heading>
+                <Heading className="mb-2 font-bold text-3xl text-gray-900">You're Invited!</Heading>
                 <Text className="text-gray-600 text-lg">
                   Welcome to {organization}, {name}
                 </Text>
@@ -62,9 +60,9 @@ export default function OrgInviteEmail({
             {/* Main Content */}
             <Section className="mb-6 rounded-lg border border-gray-200 bg-white p-8 shadow-sm">
               <Text className="mb-6 text-base text-gray-700 leading-relaxed">
-                <strong>{invitedBy}</strong> ({invitedByEmail}) has invited you
-                to join <strong>{organization}</strong> on Mizu HR. We're
-                excited to have you as part of the team!
+                <strong>{invitedBy}</strong> ({invitedByEmail}) has invited you to join{" "}
+                <strong>{organization}</strong> on Mizu HR. We're excited to have you as part of the
+                team!
               </Text>
 
               <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 p-6">
@@ -101,11 +99,9 @@ export default function OrgInviteEmail({
             {/* Footer */}
             <Section className="text-center">
               <Text className="text-gray-500 text-xs leading-relaxed">
-                This invitation was sent by {invitedBy} ({invitedByEmail}) from{" "}
-                {organization}.
+                This invitation was sent by {invitedBy} ({invitedByEmail}) from {organization}.
                 <br />
-                If you weren't expecting this invitation, you can safely ignore
-                this email.
+                If you weren't expecting this invitation, you can safely ignore this email.
               </Text>
             </Section>
           </Container>

@@ -1,28 +1,18 @@
-import { Avatar } from "@base-ui-components/react/avatar";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  useNavigate,
-  useRouteContext,
-  useRouter,
-} from "@tanstack/react-router";
-import { ChevronDown } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useRouteContext, useRouter } from "@tanstack/react-router";
+import { IconChevronDownOutline24 } from "nucleo-core-outline-24";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
-import { orpc } from "@/utils/orpc-client";
-import { Menu } from "./ui/menu";
-
-const WHITESPACE_REGEX = /\s+/;
-
-function getAvatarInitials(name?: string | null): string {
-  if (!name) return "";
-
-  const parts = name.trim().split(WHITESPACE_REGEX);
-  if (parts.length > 1) {
-    return (parts[0][0] + parts.at(-1)?.[0]).toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
-}
+import { getInitials } from "@/utils/initials";
+import { Avatar, AvatarFallback, AvatarImage } from "@mizu-hr/ui/avatar";
+import {
+  Menu,
+  MenuItem,
+  MenuPopup,
+  MenuPortal,
+  MenuSeparator,
+  MenuTrigger,
+} from "@mizu-hr/ui/menu";
 
 type UserMenuProps = {
   isCollapsed?: boolean;
@@ -32,123 +22,52 @@ export function UserMenu({ isCollapsed = false }: UserMenuProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { session, user } = useRouteContext({ from: "/_app" });
-  const {
-    data: organizations,
-    isPending,
-    isError,
-  } = useQuery(orpc.organization.getOrgList.queryOptions());
-
-  if (isPending) {
-    return <UserMenuSkeleton isCollapsed={isCollapsed} />;
-  }
-
-  if (isError) {
-    return <div>Error</div>;
-  }
+  const { user } = useRouteContext({ from: "/_app" });
 
   const signOut = async () => {
     await authClient.signOut();
     queryClient.clear();
-    router.invalidate();
+    await router.invalidate();
   };
 
-  const activeOrgId = session?.activeOrganizationId;
-  const activeOrg = organizations.find((org) => org.id === activeOrgId);
-
   return (
-    <Menu.Root>
-      <Menu.Trigger
-        className={cn(
-          "focus-visible:-outline-offset-1 flex w-full cursor-pointer select-none items-center rounded-lg p-2 transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-2 focus-visible:outline-sidebar-ring",
-          isCollapsed ? "justify-center" : "gap-3"
-        )}
-      >
-        <Avatar.Root className="inline-flex size-8 shrink-0 select-none items-center justify-center overflow-hidden rounded-full bg-sidebar-accent align-middle font-medium text-sidebar-accent-foreground text-sm">
-          <Avatar.Image
-            alt={user?.name ?? ""}
-            className="size-full object-cover"
-            height="32"
-            src={user?.image ?? undefined}
-            width="32"
-          />
-          <Avatar.Fallback className="flex size-full items-center justify-center text-sm">
-            {getAvatarInitials(user?.name)}
-          </Avatar.Fallback>
-        </Avatar.Root>
+    <Menu>
+      <MenuTrigger className="flex cursor-pointer select-none items-center gap-2 rounded-lg">
+        <Avatar>
+          <AvatarImage src={user?.image ?? undefined} />
+          <AvatarFallback>{getInitials(user?.name)}</AvatarFallback>
+        </Avatar>
+
         <div
           className={cn(
-            "flex flex-col items-start transition-all duration-200",
-            isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
+            "flex min-w-0 flex-col items-start overflow-hidden transition-opacity duration-300",
+            isCollapsed && "opacity-0",
           )}
         >
-          <span className="truncate font-medium text-foreground text-sm">
+          <span className="w-full truncate text-start font-semibold text-foreground text-sm">
             {user?.name}
           </span>
-          <span className="truncate text-foreground/60 text-xs">
-            {activeOrg?.name}
+          <span className="w-full truncate text-start text-foreground-muted text-xs">
+            {user?.email}
           </span>
         </div>
-        <ChevronDown
+
+        <IconChevronDownOutline24
           className={cn(
-            "size-4 transition-all duration-200",
-            isCollapsed ? "w-0 opacity-0" : "ml-auto w-auto opacity-100"
+            "ml-auto size-3 shrink-0 text-foreground-muted",
+            isCollapsed && "opacity-0",
           )}
         />
-      </Menu.Trigger>
-      <Menu.Portal>
-        <Menu.Positioner className="outline-none" sideOffset={8}>
-          <Menu.Popup className="origin-[var(--transform-origin)] rounded-md border border-border bg-popover py-1 text-popover-foreground shadow-lg transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[starting-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0">
-            {/* <Menu.Arrow className="data-[side=right]:-rotate-90 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=top]:bottom-[-8px] data-[side=right]:left-[-13px] data-[side=left]:rotate-90 data-[side=top]:rotate-180">
-                <ArrowSvg />
-              </Menu.Arrow> */}
-            <Menu.Item onClick={() => navigate({ to: "/settings" })}>
-              Settings
-            </Menu.Item>
-            <Menu.Separator />
-            <Menu.Item>Favorite</Menu.Item>
-            <Menu.Item
-              className="text-destructive data-[highlighted]:before:bg-destructive"
-              onClick={signOut}
-            >
-              Sign Out
-            </Menu.Item>
-          </Menu.Popup>
-        </Menu.Positioner>
-      </Menu.Portal>
-    </Menu.Root>
-  );
-}
+      </MenuTrigger>
 
-function UserMenuSkeleton({ isCollapsed = false }: { isCollapsed?: boolean }) {
-  return (
-    <div
-      className={cn(
-        "flex cursor-pointer select-none items-center rounded-lg p-2",
-        isCollapsed ? "justify-center" : "gap-3"
-      )}
-    >
-      {/* Avatar skeleton */}
-      <Skeleton className="size-8 shrink-0 rounded-full" />
-
-      {/* Text content skeleton */}
-      <div
-        className={cn(
-          "flex flex-col gap-1 transition-all duration-200",
-          isCollapsed ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"
-        )}
-      >
-        <Skeleton className="h-4 w-28" />
-        <Skeleton className="h-3 w-16" />
-      </div>
-
-      {/* Chevron icon skeleton */}
-      <Skeleton
-        className={cn(
-          "size-4 transition-all duration-200",
-          isCollapsed ? "w-0 opacity-0" : "ml-auto w-auto opacity-100"
-        )}
-      />
-    </div>
+      <MenuPortal>
+        <MenuPopup>
+          <MenuItem onClick={() => navigate({ to: "/settings/account" })}>Settings</MenuItem>
+          <MenuSeparator />
+          <MenuItem>Favorite</MenuItem>
+          <MenuItem onClick={signOut}>Sign Out</MenuItem>
+        </MenuPopup>
+      </MenuPortal>
+    </Menu>
   );
 }

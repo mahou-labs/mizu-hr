@@ -1,21 +1,26 @@
-/** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: input fields */
 import { useEffect, useRef } from "react";
 
 type UseKeyPressOptions = {
   preventDefault?: boolean;
   stopPropagation?: boolean;
   ignoreInputFields?: boolean;
+  mod?: boolean;
+  shift?: boolean;
+  alt?: boolean;
 };
 
 export function useKeyPress(
   key: string | string[],
   callback: (event: KeyboardEvent) => void,
-  options: UseKeyPressOptions = {}
+  options: UseKeyPressOptions = {},
 ) {
   const {
     preventDefault = false,
     stopPropagation = false,
     ignoreInputFields = true,
+    mod = false,
+    shift = false,
+    alt = false,
   } = options;
 
   const callbackRef = useRef(callback);
@@ -45,7 +50,18 @@ export function useKeyPress(
         }
       }
 
-      if (keysRef.current.has(event.key)) {
+      // Check modifier keys (mod = Ctrl or Cmd, cross-platform)
+      const modPressed = event.ctrlKey || event.metaKey;
+      if (mod && !modPressed) return;
+      if (shift && !event.shiftKey) return;
+      if (alt && !event.altKey) return;
+
+      // If no modifiers required but one is pressed, skip
+      if (!mod && !shift && !alt) {
+        if (event.ctrlKey || event.metaKey || event.altKey) return;
+      }
+
+      if (keysRef.current.has(event.key.toLowerCase())) {
         if (preventDefault) {
           event.preventDefault();
         }
@@ -62,5 +78,5 @@ export function useKeyPress(
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [preventDefault, stopPropagation, ignoreInputFields]);
+  }, [preventDefault, stopPropagation, ignoreInputFields, mod, shift, alt]);
 }

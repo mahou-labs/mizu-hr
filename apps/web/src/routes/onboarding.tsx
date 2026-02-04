@@ -2,19 +2,13 @@ import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
-import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Field } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Button } from "@mizu-hr/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@mizu-hr/ui/field";
+import { Input } from "@mizu-hr/ui/input";
 import { orpc } from "@/utils/orpc-client";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 const onboardingSchema = z.object({
   name: z.string().min(1, "Organization name is required"),
@@ -35,7 +29,7 @@ export const Route = createFileRoute("/onboarding")({
   component: OnboardingComponent,
   beforeLoad: ({ context }) => {
     if (context.session?.activeOrganizationId) {
-      throw redirect({ to: "/dashboard" });
+      throw redirect({ to: "/" });
     }
   },
 });
@@ -44,9 +38,7 @@ function OnboardingComponent() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { mutateAsync: createOrg } = useMutation(
-    orpc.organization.createOrg.mutationOptions()
-  );
+  const { mutateAsync: createOrg } = useMutation(orpc.organization.createOrg.mutationOptions());
 
   const form = useForm({
     defaultValues: { name: "", slug: "" },
@@ -58,11 +50,17 @@ function OnboardingComponent() {
       });
 
       if (org) {
-        toast.success("Organization created successfully!");
+        toastManager.add({
+          title: "Organization created successfully!",
+          type: "success",
+        });
         await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
-        navigate({ to: "/dashboard" });
+        navigate({ to: "/" });
       } else {
-        toast.error("Failed to create organization");
+        toastManager.add({
+          title: "Failed to create organization",
+          type: "error",
+        });
       }
     },
   });
@@ -75,7 +73,7 @@ function OnboardingComponent() {
     orpc.organization.checkSlugAvailability.queryOptions({
       input: debouncedSlug,
       enabled: isSlugValid && slug === debouncedSlug,
-    })
+    }),
   );
 
   return (
@@ -83,9 +81,7 @@ function OnboardingComponent() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle>Welcome to Mizu HR!</CardTitle>
-          <CardDescription>
-            Let's get you started by creating your organization
-          </CardDescription>
+          <CardDescription>Let's get you started by creating your organization</CardDescription>
         </CardHeader>
         <CardContent>
           <form
@@ -97,8 +93,8 @@ function OnboardingComponent() {
           >
             <form.Field name="name">
               {(field) => (
-                <Field.Root>
-                  <Field.Label>Organization Name</Field.Label>
+                <Field>
+                  <FieldLabel>Organization Name</FieldLabel>
                   <Input
                     disabled={form.state.isSubmitting}
                     onChange={(e) => field.handleChange(e.target.value)}
@@ -106,11 +102,9 @@ function OnboardingComponent() {
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <Field.Error key={error?.message}>
-                      {error?.message}
-                    </Field.Error>
+                    <FieldError key={error?.message}>{error?.message}</FieldError>
                   ))}
-                </Field.Root>
+                </Field>
               )}
             </form.Field>
 
@@ -124,8 +118,8 @@ function OnboardingComponent() {
                 const isTyping = field.state.value !== debouncedSlug;
 
                 return (
-                  <Field.Root>
-                    <Field.Label>Organization Slug</Field.Label>
+                  <Field>
+                    <FieldLabel>Organization Slug</FieldLabel>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -133,21 +127,18 @@ function OnboardingComponent() {
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <Field.Error key={error?.message}>
-                        {error?.message}
-                      </Field.Error>
+                      <FieldError key={error?.message}>{error?.message}</FieldError>
                     ))}
-                    {field.state.meta.errors.length === 0 &&
-                      field.state.value && (
-                        <Field.Description>
-                          {isTyping || isLoading
-                            ? "Checking availability..."
-                            : slugAvailable
-                              ? "✓ Available"
-                              : "✗ Taken"}
-                        </Field.Description>
-                      )}
-                  </Field.Root>
+                    {field.state.meta.errors.length === 0 && field.state.value && (
+                      <FieldDescription>
+                        {isTyping || isLoading
+                          ? "Checking availability..."
+                          : slugAvailable
+                            ? "✓ Available"
+                            : "✗ Taken"}
+                      </FieldDescription>
+                    )}
+                  </Field>
                 );
               }}
             </form.Field>

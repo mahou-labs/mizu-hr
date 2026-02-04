@@ -1,19 +1,24 @@
-/** biome-ignore-all assist/source/organizeImports: react-scan */
 import { scan } from "react-scan";
 import type { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
   HeadContent,
+  Link,
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
-import { Toaster } from "@/components/ui/sonner";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { orpc } from "@/utils/orpc-client";
 import appCss from "../index.css?url";
+import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
+// import { ThemeProvider } from "@/utils/theme-provider";
+import { ThemeProvider } from "better-themes";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
+import { Button } from "@mizu-hr/ui/button";
+import { IconCircleXmarkOutline24 } from "nucleo-core-outline-24";
 
 const Posthog = () => {
   useEffect(() => {
@@ -57,14 +62,34 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   }),
 
   component: RootDocument,
+  notFoundComponent: NotFoundPage,
   beforeLoad: async ({ context }) => {
     const authSession = await context.queryClient.ensureQueryData(
-      orpc.user.getSession.queryOptions()
+      orpc.user.getSession.queryOptions(),
     );
 
     return { session: authSession?.session, user: authSession?.user };
   },
 });
+
+function NotFoundPage() {
+  return (
+    <div className="flex h-svh items-center justify-center">
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconCircleXmarkOutline24 />
+          </EmptyMedia>
+          <EmptyTitle>Page not found</EmptyTitle>
+          <EmptyDescription>
+            The page you're looking for doesn't exist or has been moved.
+          </EmptyDescription>
+        </EmptyHeader>
+        <Button render={<Link to="/" />}>Go to Dashboard</Button>
+      </Empty>
+    </div>
+  );
+}
 
 function RootDocument() {
   useEffect(() => {
@@ -78,25 +103,15 @@ function RootDocument() {
       <head>
         <HeadContent />
       </head>
-      <body>
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: dark mode script
-          dangerouslySetInnerHTML={{
-            __html: `
-            let theme = localStorage.getItem('theme')
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-            if((theme === 'system' || theme === null) && prefersDark) {
-              theme = 'dark'
-            }
-            document.documentElement.classList.add(theme === 'dark' ? 'dark' : 'light');
-          `,
-          }}
-        />
-        <div className="h-svh bg-dark">
-          <Outlet />
-        </div>
+      <body className="h-svh">
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          <ToastProvider>
+            <AnchoredToastProvider>
+              <Outlet />
+            </AnchoredToastProvider>
+          </ToastProvider>
+        </ThemeProvider>
 
-        <Toaster richColors />
         <TanStackDevtools
           plugins={[
             {

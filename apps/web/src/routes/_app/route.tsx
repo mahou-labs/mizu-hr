@@ -1,10 +1,11 @@
-import { ScrollArea } from "@base-ui-components/react/scroll-area";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 // import { useWindowSize } from "@uidotdev/usehooks";
 import { Sidebar } from "@/components/sidebar";
+import { ScrollArea } from "@mizu-hr/ui/scroll-area";
 import { orpc } from "@/utils/orpc-client";
 
 export const Route = createFileRoute("/_app")({
+  ssr: "data-only",
   component: RouteComponent,
   beforeLoad: ({ context }) => {
     if (!context.session) {
@@ -16,9 +17,7 @@ export const Route = createFileRoute("/_app")({
     }
   },
   loader: ({ context }) => {
-    context.queryClient.ensureQueryData(
-      orpc.organization.getOrgList.queryOptions()
-    );
+    void context.queryClient.ensureQueryData(orpc.organization.getOrgList.queryOptions());
   },
 });
 
@@ -30,16 +29,17 @@ function RouteComponent() {
   // }
 
   return (
-    <div className="flex h-full gap-2 overflow-hidden py-2 pr-2">
+    <div className="flex h-full overflow-hidden bg-sidebar py-2 pr-2">
       <Sidebar />
-      <ScrollArea.Root className="h-full flex-1">
-        <ScrollArea.Viewport className="h-full overscroll-contain rounded-md border border-border bg-default p-4">
-          <Outlet />
-        </ScrollArea.Viewport>
-        <ScrollArea.Scrollbar className="m-2 flex w-1 justify-center rounded bg-border opacity-0 transition-opacity delay-300 data-[hovering]:opacity-100 data-[scrolling]:opacity-100 data-[hovering]:delay-0 data-[scrolling]:delay-0 data-[hovering]:duration-75 data-[scrolling]:duration-75">
-          <ScrollArea.Thumb className="w-full rounded bg-foreground-muted" />
-        </ScrollArea.Scrollbar>
-      </ScrollArea.Root>
+      {/* Native browser scroll implementation */}
+      {/*<div className="h-full flex-1 overflow-y-auto overscroll-contain rounded-md border border-border bg-background p-4">
+        <Outlet />
+      </div> */}
+
+      {/* Custom ScrollArea with themed scrollbar */}
+      <ScrollArea className="h-full flex-1 rounded-md border border-border/50 bg-background p-4">
+        <Outlet />
+      </ScrollArea>
     </div>
   );
 }

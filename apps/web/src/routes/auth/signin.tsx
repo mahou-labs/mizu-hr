@@ -1,18 +1,15 @@
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  createFileRoute,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
-import { toast } from "sonner";
+import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import z from "zod";
 import Loader from "@/components/loader";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Button } from "@mizu-hr/ui/button";
+import { Checkbox } from "@mizu-hr/ui/checkbox";
+import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
+import { Input } from "@mizu-hr/ui/input";
 import { authClient } from "@/utils/auth-client";
 import { orpc } from "@/utils/orpc-client";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 export const Route = createFileRoute("/auth/signin")({
   component: RouteComponent,
@@ -29,23 +26,35 @@ function RouteComponent() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: true,
     },
     onSubmit: async ({ value }) => {
-      await authClient.signIn.email(value, {
-        onSuccess: async () => {
-          toast.success("Sign in successful");
-          await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
-          await navigate({ to: redirect ?? "/dashboard" });
+      await authClient.signIn.email(
+        {
+          email: value.email,
+          password: value.password,
+          rememberMe: value.rememberMe,
         },
-        onError: (error) => {
-          toast.error(error.error.message || error.error.statusText);
+        {
+          onSuccess: async () => {
+            toastManager.add({ title: "Sign in successful", type: "success" });
+            await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
+            await navigate({ to: redirect ?? "/dashboard" });
+          },
+          onError: (error) => {
+            toastManager.add({
+              title: error.error.message || error.error.statusText,
+              type: "error",
+            });
+          },
         },
-      });
+      );
     },
     validators: {
       onSubmit: z.object({
         email: z.email("Invalid email address"),
         password: z.string().min(8, "Password must be at least 8 characters"),
+        rememberMe: z.boolean(),
       }),
     },
   });
@@ -56,23 +65,21 @@ function RouteComponent() {
 
   return (
     <div className="mx-auto mt-10 w-full max-w-md p-6">
-      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">
-        Welcome Back
-      </h1>
+      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">Welcome Back</h1>
 
       <form
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          form.handleSubmit();
+          void form.handleSubmit();
         }}
       >
         <div>
           <form.Field name="email">
             {(field) => (
-              <Field.Root>
-                <Field.Label htmlFor={field.name}>Email</Field.Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -82,11 +89,9 @@ function RouteComponent() {
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <Field.Error key={error?.message}>
-                    {error?.message}
-                  </Field.Error>
+                  <FieldError key={error?.message}>{error?.message}</FieldError>
                 ))}
-              </Field.Root>
+              </Field>
             )}
           </form.Field>
         </div>
@@ -94,8 +99,8 @@ function RouteComponent() {
         <div>
           <form.Field name="password">
             {(field) => (
-              <Field.Root>
-                <Field.Label htmlFor={field.name}>Password</Field.Label>
+              <Field>
+                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -105,13 +110,34 @@ function RouteComponent() {
                   value={field.state.value}
                 />
                 {field.state.meta.errors.map((error) => (
-                  <Field.Error key={error?.message}>
-                    {error?.message}
-                  </Field.Error>
+                  <FieldError key={error?.message}>{error?.message}</FieldError>
                 ))}
-              </Field.Root>
+              </Field>
             )}
           </form.Field>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <form.Field name="rememberMe">
+            {(field) => (
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <Checkbox
+                  checked={field.state.value}
+                  id={field.name}
+                  name={field.name}
+                  onCheckedChange={(checked) => field.handleChange(checked as boolean)}
+                />
+                <span className="text-muted-foreground">Remember me</span>
+              </label>
+            )}
+          </form.Field>
+          <Button
+            render={<Link to="/auth/forgot-password" />}
+            variant="link"
+            className="h-auto p-0"
+          >
+            Forgot password?
+          </Button>
         </div>
 
         <form.Subscribe>

@@ -1,22 +1,89 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertCircle } from "lucide-react";
+import { useHydrated } from "@tanstack/react-router";
+import { useTheme } from "better-themes";
+import {
+  IconCheckOutline24,
+  IconLaptopOutline24,
+  IconDarkModeOutline24,
+  IconSunOutline24,
+} from "nucleo-core-outline-24";
+import { Button } from "@mizu-hr/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
+import { cn } from "@/utils/cn";
 
 export const Route = createFileRoute("/_app/settings/account")({
   component: RouteComponent,
 });
 
+type ThemeOption = "light" | "dark" | "system";
+
+const themeConfig: Record<
+  ThemeOption,
+  { icon: typeof IconSunOutline24; label: string; description: string }
+> = {
+  light: { icon: IconSunOutline24, label: "Light", description: "A clean, bright appearance" },
+  dark: {
+    icon: IconDarkModeOutline24,
+    label: "Dark",
+    description: "Easy on the eyes in low light",
+  },
+  system: {
+    icon: IconLaptopOutline24,
+    label: "System",
+    description: "Matches your device settings",
+  },
+};
+
+const themeOptions: ThemeOption[] = ["light", "dark", "system"];
+
+function isValidTheme(theme: string | undefined): theme is ThemeOption {
+  return theme !== undefined && theme in themeConfig;
+}
+
 function RouteComponent() {
+  const hydrated = useHydrated();
+  const { theme, setTheme } = useTheme();
+
   return (
-    <div className="p-6">
-      <div className="mb-4 flex items-center gap-3">
-        <AlertCircle className="size-5 text-muted-foreground" />
-        <h2 className="font-semibold text-foreground text-xl">
-          Account Settings
-        </h2>
-      </div>
-      <p className="text-muted-foreground">
-        Manage your personal account settings and preferences.
-      </p>
+    <div className="space-y-6 pt-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Appearance</CardTitle>
+          <CardDescription>Customize how the application looks on your device.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {themeOptions.map((themeOption) => {
+              const Icon = themeConfig[themeOption].icon;
+              const isActive = isValidTheme(theme) && themeOption === theme;
+
+              return (
+                <Button
+                  key={themeOption}
+                  variant="outline"
+                  disabled={!hydrated}
+                  onClick={() => setTheme(themeOption)}
+                  className={cn(
+                    "h-auto flex-col items-start gap-2 p-4",
+                    isActive && "border-primary bg-primary/5",
+                  )}
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <Icon className="size-5" />
+                    {isActive && <IconCheckOutline24 className="size-4 text-primary" />}
+                  </div>
+                  <div className="text-left">
+                    <div className="font-medium">{themeConfig[themeOption].label}</div>
+                    <div className="font-normal text-muted-foreground text-xs">
+                      {themeConfig[themeOption].description}
+                    </div>
+                  </div>
+                </Button>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

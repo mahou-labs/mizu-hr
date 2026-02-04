@@ -25,6 +25,7 @@ First, install the dependencies:
 ```bash
 bun install
 ```
+
 ## Database Setup
 
 This project uses PostgreSQL with Drizzle ORM.
@@ -33,10 +34,10 @@ This project uses PostgreSQL with Drizzle ORM.
 2. Update your `apps/server/.env` file with your PostgreSQL connection details.
 
 3. Apply the schema to your database:
+
 ```bash
 bun db:push
 ```
-
 
 Then, run the development server:
 
@@ -46,8 +47,6 @@ bun dev
 
 Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
 The API is running at [http://localhost:3000](http://localhost:3000).
-
-
 
 ## Project Structure
 
@@ -65,7 +64,7 @@ mizu-hr/
 - `bun build`: Build all applications
 - `bun dev:web`: Start only the web application
 - `bun dev:api`: Start only the api
-- `bun check-types`: Check TypeScript types across all apps
+- `bun typecheck`: Check TypeScript types across all apps
 - `bun db:push`: Push schema changes to database
 - `bun db:studio`: Open database studio UI
 - `bun check`: Run Biome formatting and linting

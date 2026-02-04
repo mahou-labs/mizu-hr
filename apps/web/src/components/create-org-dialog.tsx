@@ -2,13 +2,23 @@ import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
-import { toast } from "sonner";
+import { IconCheckOutline24, IconXmarkOutline24 } from "nucleo-core-outline-24";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
-import { Button } from "./ui/button";
-import { Dialog } from "./ui/dialog";
-import { Field } from "./ui/field";
-import { Input } from "./ui/input";
+import { Button } from "@mizu-hr/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogFooter,
+  DialogHeader,
+  DialogPanel,
+  DialogPopup,
+  DialogTitle,
+} from "@mizu-hr/ui/dialog";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@mizu-hr/ui/field";
+import { Form } from "@mizu-hr/ui/form";
+import { Input } from "@mizu-hr/ui/input";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 type CreateOrgDialogProps = {
   allowClosing?: boolean;
@@ -41,9 +51,7 @@ export function CreateOrgDialog({
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const { mutateAsync: createOrg } = useMutation(
-    orpc.organization.createOrg.mutationOptions()
-  );
+  const { mutateAsync: createOrg } = useMutation(orpc.organization.createOrg.mutationOptions());
 
   const form = useForm({
     defaultValues: { name: "", slug: "" },
@@ -55,17 +63,21 @@ export function CreateOrgDialog({
       });
 
       if (org) {
-        toast.success("Organization created successfully!");
+        toastManager.add({
+          title: "Organization created successfully!",
+          type: "success",
+        });
 
-        await queryClient.invalidateQueries(
-          orpc.organization.getOrgList.queryOptions()
-        );
+        await queryClient.invalidateQueries(orpc.organization.getOrgList.queryOptions());
         await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         await router.invalidate();
         form.reset();
         onSuccess();
       } else {
-        toast.error("Failed to create organization");
+        toastManager.add({
+          title: "Failed to create organization",
+          type: "error",
+        });
       }
     },
   });
@@ -78,30 +90,26 @@ export function CreateOrgDialog({
     orpc.organization.checkSlugAvailability.queryOptions({
       input: debouncedSlug,
       enabled: isSlugValid && slug === debouncedSlug,
-    })
+    }),
   );
 
   return (
-    <Dialog.Root
-      dismissible={allowClosing}
-      onOpenChange={onOpenChange}
-      open={isOpen}
-    >
-      <Dialog.Portal>
-        <Dialog.Backdrop />
-        <Dialog.Popup>
-          <Dialog.Title>Create new organization</Dialog.Title>
-          <form
-            className="space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              form.handleSubmit();
-            }}
-          >
+    <Dialog disablePointerDismissal={!allowClosing} onOpenChange={onOpenChange} open={isOpen}>
+      <DialogPopup className="sm:max-w-md" showCloseButton={allowClosing}>
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            form.handleSubmit();
+          }}
+        >
+          <DialogHeader>
+            <DialogTitle>Create new organization</DialogTitle>
+          </DialogHeader>
+          <DialogPanel className="grid gap-4">
             <form.Field name="name">
               {(field) => (
-                <Field.Root>
-                  <Field.Label>Organization Name</Field.Label>
+                <Field>
+                  <FieldLabel>Organization Name</FieldLabel>
                   <Input
                     disabled={form.state.isSubmitting}
                     onChange={(e) => field.handleChange(e.target.value)}
@@ -109,11 +117,9 @@ export function CreateOrgDialog({
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
-                    <Field.Error key={error?.message}>
-                      {error?.message}
-                    </Field.Error>
+                    <FieldError key={error?.message}>{error?.message}</FieldError>
                   ))}
-                </Field.Root>
+                </Field>
               )}
             </form.Field>
 
@@ -127,8 +133,8 @@ export function CreateOrgDialog({
                 const isTyping = field.state.value !== debouncedSlug;
 
                 return (
-                  <Field.Root>
-                    <Field.Label>Organization Slug</Field.Label>
+                  <Field>
+                    <FieldLabel>Organization Slug</FieldLabel>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -136,27 +142,37 @@ export function CreateOrgDialog({
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <Field.Error key={error?.message}>
-                        {error?.message}
-                      </Field.Error>
+                      <FieldError key={error?.message}>{error?.message}</FieldError>
                     ))}
-                    {field.state.meta.errors.length === 0 &&
-                      field.state.value && (
-                        <Field.Description>
-                          {isTyping || isLoading
-                            ? "Checking availability..."
-                            : slugAvailable
-                              ? "✓ Available"
-                              : "✗ Taken"}
-                        </Field.Description>
-                      )}
-                  </Field.Root>
+                    {field.state.meta.errors.length === 0 && field.state.value && (
+                      <FieldDescription>
+                        {isTyping || isLoading ? (
+                          "Checking availability..."
+                        ) : slugAvailable ? (
+                          <span className="flex gap-1 text-success">
+                            <IconCheckOutline24 className="size-4" /> Available
+                          </span>
+                        ) : (
+                          <span className="flex gap-1 text-destructive">
+                            <IconXmarkOutline24 className="size-4" /> Taken
+                          </span>
+                        )}
+                      </FieldDescription>
+                    )}
+                  </Field>
                 );
               }}
             </form.Field>
-
+          </DialogPanel>
+          <DialogFooter>
+            {allowClosing && (
+              <DialogClose
+                render={<Button disabled={form.state.isSubmitting} type="button" variant="ghost" />}
+              >
+                Cancel
+              </DialogClose>
+            )}
             <Button
-              className="w-full"
               disabled={
                 !form.state.canSubmit ||
                 form.state.isSubmitting ||
@@ -168,109 +184,9 @@ export function CreateOrgDialog({
             >
               {form.state.isSubmitting ? "Creating..." : "Create Organization"}
             </Button>
-          </form>
-
-          {/* <Dialog.Close>Close</Dialog.Close> */}
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+          </DialogFooter>
+        </Form>
+      </DialogPopup>
+    </Dialog>
   );
-
-  // return (
-  // <div className="flex h-full items-center justify-center p-4">
-  //   <Card className="w-full max-w-md">
-  //     <CardHeader className="text-center">
-  //       <CardTitle>Welcome to Mizu HR!</CardTitle>
-  //       <CardDescription>
-  //         Let's get you started by creating your organization
-  //       </CardDescription>
-  //     </CardHeader>
-  //     <CardContent>
-  //       <form
-  //         className="space-y-4"
-  //         onSubmit={(e) => {
-  //           e.preventDefault();
-  //           form.handleSubmit();
-  //         }}
-  //       >
-  //         <form.Field name="name">
-  //           {(field) => (
-  //             <div className="space-y-2">
-  //               <Label>Organization Name</Label>
-  //               <Input
-  //                 disabled={form.state.isSubmitting}
-  //                 onChange={(e) => field.handleChange(e.target.value)}
-  //                 placeholder="Enter your organization name"
-  //                 value={field.state.value}
-  //               />
-  //               {field.state.meta.errors.map((error) => (
-  //                 <p
-  //                   className="text-destructive text-sm"
-  //                   key={error?.message}
-  //                 >
-  //                   {error?.message}
-  //                 </p>
-  //               ))}
-  //             </div>
-  //           )}
-  //         </form.Field>
-
-  //         <form.Field
-  //           name="slug"
-  //           validators={{
-  //             onChange: onboardingSchema.shape.slug,
-  //           }}
-  //         >
-  //           {(field) => {
-  //             const isTyping = field.state.value !== debouncedSlug;
-
-  //             return (
-  //               <div className="space-y-2">
-  //                 <Label>Organization Slug</Label>
-  //                 <Input
-  //                   disabled={form.state.isSubmitting}
-  //                   onChange={(e) => field.handleChange(e.target.value)}
-  //                   placeholder="your-organization-slug"
-  //                   value={field.state.value}
-  //                 />
-  //                 {field.state.meta.errors.map((error) => (
-  //                   <p
-  //                     className="text-destructive text-sm"
-  //                     key={error?.message}
-  //                   >
-  //                     {error?.message}
-  //                   </p>
-  //                 ))}
-  //                 {field.state.meta.errors.length === 0 &&
-  //                   field.state.value && (
-  //                     <p className="text-muted-foreground text-sm">
-  //                       {isTyping || isLoading
-  //                         ? "Checking availability..."
-  //                         : slugAvailable
-  //                           ? "✓ Available"
-  //                           : "✗ Taken"}
-  //                     </p>
-  //                   )}
-  //               </div>
-  //             );
-  //           }}
-  //         </form.Field>
-
-  //         <Button
-  //           className="w-full"
-  //           disabled={
-  //             !form.state.canSubmit ||
-  //             form.state.isSubmitting ||
-  //             slug !== debouncedSlug ||
-  //             (debouncedSlug.length >= 4 && isLoading) ||
-  //             !slugAvailable
-  //           }
-  //           type="submit"
-  //         >
-  //           {form.state.isSubmitting ? "Creating..." : "Create Organization"}
-  //         </Button>
-  //       </form>
-  //     </CardContent>
-  //   </Card>
-  // </div>
 }

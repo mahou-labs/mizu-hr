@@ -91,7 +91,7 @@ export default function ParticleBackground() {
         0,
         particle.x,
         particle.y,
-        particle.size
+        particle.size,
       );
       gradient.addColorStop(0, "rgba(59, 130, 246, 0.8)");
       gradient.addColorStop(1, "rgba(59, 130, 246, 0)");
@@ -128,9 +128,7 @@ export default function ParticleBackground() {
     const particles: Particle[] = [];
 
     for (let i = 0; i < particleCount; i++) {
-      particles.push(
-        createParticle(Math.random() * width, Math.random() * height)
-      );
+      particles.push(createParticle(Math.random() * width, Math.random() * height));
     }
 
     particlesRef.current = particles;

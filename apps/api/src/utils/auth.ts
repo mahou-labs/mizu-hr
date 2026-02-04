@@ -1,10 +1,4 @@
-import {
-  checkout,
-  polar,
-  portal,
-  usage,
-  webhooks,
-} from "@polar-sh/better-auth";
+import { checkout, polar, portal, usage, webhooks } from "@polar-sh/better-auth";
 import { Polar } from "@polar-sh/sdk";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -12,14 +6,11 @@ import { organization } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import * as schema from "../schema/auth";
 import { db } from "./db";
-import { sendOrgInvite } from "./email";
+import { sendOrgInvite, sendPasswordResetEmail, sendVerificationEmail } from "./email";
 import { env } from "./env";
 
 const polarClient = new Polar({
   accessToken: env.POLAR_ACCESS_TOKEN,
-  // Use 'sandbox' if you're using the Polar Sandbox environment
-  // Remember that access tokens, products, etc. are completely separated between environments.
-  // Access tokens obtained in Production are for instance not usable in the Sandbox environment.
   server: "sandbox",
 });
 
@@ -28,10 +19,7 @@ export const getActiveOrganization = async (userId: string) => {
     const userOrganizations = await db
       .select({ id: schema.organization.id })
       .from(schema.member)
-      .innerJoin(
-        schema.organization,
-        eq(schema.member.organizationId, schema.organization.id)
-      )
+      .innerJoin(schema.organization, eq(schema.member.organizationId, schema.organization.id))
       .where(eq(schema.member.userId, userId));
 
     if (userOrganizations.length === 0) {
@@ -44,7 +32,7 @@ export const getActiveOrganization = async (userId: string) => {
     return activeOrg?.id;
   } catch (error) {
     throw new Error(
-      `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`
+      `Failed to fetch active organization: ${error instanceof Error ? error.message : "Unknown error"}`,
     );
   }
 };
@@ -62,6 +50,23 @@ export const auth = betterAuth({
       hash: (password) => Bun.password.hash(password),
       verify: ({ hash, password }) => Bun.password.verify(password, hash),
     },
+    sendResetPassword: async ({ user, url }) => {
+      void sendPasswordResetEmail({
+        email: user.email,
+        name: user.name,
+        resetLink: url,
+      });
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      void sendVerificationEmail({
+        email: user.email,
+        name: user.name,
+        verificationLink: url,
+      });
+    },
   },
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
@@ -71,6 +76,16 @@ export const auth = betterAuth({
     cookieCache: {
       enabled: true,
       maxAge: 60 * 5,
+    },
+  },
+  user: {
+    deleteUser: {
+      enabled: true,
+      afterDelete: async (user) => {
+        await polarClient.customers.deleteExternal({
+          externalId: user.id,
+        });
+      },
     },
   },
   advanced: {
@@ -88,62 +103,61 @@ export const auth = betterAuth({
     },
   },
   databaseHooks: {
-    user: {
-      create: {
-        before: async (user) => {
-          try {
-            // Check if a Polar customer already exists with this email
-            const { result: existingCustomers } =
-              await polarClient.customers.list({
-                email: user.email,
-              });
+    // user: {
+    //   create: {
+    //     before: async (user) => {
+    //       try {
+    //         // Check if a Polar customer already exists with this email
+    //         const { result: existingCustomers } = await polarClient.customers.list({
+    //           email: user.email,
+    //         });
 
-            const existingCustomer = existingCustomers.items[0];
+    //         const existingCustomer = existingCustomers.items[0];
 
-            if (existingCustomer?.externalId) {
-              // Use the existing external ID as the user ID
-              return {
-                data: {
-                  ...user,
-                  id: existingCustomer.externalId,
-                },
-              };
-            }
-          } catch (error) {
-            console.error(error);
-          }
+    //         if (existingCustomer?.externalId) {
+    //           // Use the existing external ID as the user ID
+    //           return {
+    //             data: {
+    //               ...user,
+    //               id: existingCustomer.externalId,
+    //             },
+    //           };
+    //         }
+    //       } catch (error) {
+    //         console.error(error);
+    //       }
 
-          // No existing customer, proceed with normal user creation
-          return {
-            data: user,
-          };
-        },
-        after: async (user) => {
-          try {
-            // Check if customer already exists
-            const { result: existingCustomers } =
-              await polarClient.customers.list({
-                email: user.email,
-              });
+    //       // No existing customer, proceed with normal user creation
+    //       return {
+    //         data: user,
+    //       };
+    //     },
+    //     after: async (user) => {
+    //       try {
+    //         // Check if customer already exists
+    //         const { result: existingCustomers } = await polarClient.customers.list({
+    //           email: user.email,
+    //         });
 
-            const existingCustomer = existingCustomers.items[0];
+    //         const existingCustomer = existingCustomers.items[0];
 
-            if (existingCustomer) {
-              return;
-            }
+    //         if (existingCustomer) {
+    //           return;
+    //         }
 
-            // Create new customer
-            await polarClient.customers.create({
-              email: user.email,
-              name: user.name,
-              externalId: user.id,
-            });
-          } catch (error) {
-            // Don't throw - we don't want to fail user creation if Polar fails
-          }
-        },
-      },
-    },
+    //         // Create new customer
+    //         await polarClient.customers.create({
+    //           email: user.email,
+    //           name: user.name,
+    //           externalId: user.id,
+    //         });
+    //       } catch (error) {
+    //         console.error(error);
+    //         // Don't throw - we don't want to fail user creation if Polar fails
+    //       }
+    //     },
+    //   },
+    // },
     session: {
       create: {
         before: async (session) => {
@@ -175,8 +189,7 @@ export const auth = betterAuth({
     }),
     polar({
       client: polarClient,
-      createCustomerOnSignUp: false, // We handle customer creation manually in databaseHooks
-      enableCustomerPortal: true,
+      createCustomerOnSignUp: true,
       use: [
         checkout({
           products: [

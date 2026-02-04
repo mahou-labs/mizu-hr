@@ -1,13 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Button } from "@mizu-hr/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
 
 type SuccessSearch = {
   checkout_id?: string;
@@ -32,7 +26,7 @@ function SuccessComponent() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          navigate({ to: "/dashboard" });
+          navigate({ to: "/" });
           return 0;
         }
         return prev - 1;
@@ -81,16 +75,11 @@ function SuccessComponent() {
             </p>
 
             <div className="flex flex-col gap-2">
-              <Button asChild className="w-full" type="button">
-                <Link to="/dashboard">Go to Dashboard</Link>
+              <Button className="w-full" render={<Link to="/" />}>
+                Go to Dashboard
               </Button>
-              <Button
-                asChild
-                className="w-full"
-                type="button"
-                variant="outline"
-              >
-                <Link to="/">Back to Home</Link>
+              <Button className="w-full" render={<Link to="/" />} variant="outline">
+                Back to Home
               </Button>
             </div>
           </div>

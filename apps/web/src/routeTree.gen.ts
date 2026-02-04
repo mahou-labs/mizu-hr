@@ -15,15 +15,18 @@ import { Route as InviteRouteImport } from './routes/invite'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AuthVerifyEmailRouteImport } from './routes/auth/verify-email'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
-import { Route as AppTodosRouteImport } from './routes/_app/todos'
-import { Route as AppJobsRouteImport } from './routes/_app/jobs'
-import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as AppSettingsRouteRouteImport } from './routes/_app/settings/route'
 import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
+import { Route as AppJobsIndexRouteImport } from './routes/_app/jobs/index'
 import { Route as AppSettingsOrganizationRouteImport } from './routes/_app/settings/organization'
 import { Route as AppSettingsAccountRouteImport } from './routes/_app/settings/account'
+import { Route as AppJobsNewRouteImport } from './routes/_app/jobs/new'
+import { Route as AppJobsJobIdEditRouteImport } from './routes/_app/jobs/$jobId.edit'
 
 const SuccessRoute = SuccessRouteImport.update({
   id: '/success',
@@ -54,6 +57,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -64,20 +72,15 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const AppTodosRoute = AppTodosRouteImport.update({
-  id: '/todos',
-  path: '/todos',
-  getParentRoute: () => AppRouteRoute,
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
-const AppJobsRoute = AppJobsRouteImport.update({
-  id: '/jobs',
-  path: '/jobs',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppDashboardRoute = AppDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AppRouteRoute,
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const AppSettingsRouteRoute = AppSettingsRouteRouteImport.update({
   id: '/settings',
@@ -89,6 +92,11 @@ const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppSettingsRouteRoute,
 } as any)
+const AppJobsIndexRoute = AppJobsIndexRouteImport.update({
+  id: '/jobs/',
+  path: '/jobs/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppSettingsOrganizationRoute = AppSettingsOrganizationRouteImport.update({
   id: '/organization',
   path: '/organization',
@@ -99,37 +107,53 @@ const AppSettingsAccountRoute = AppSettingsAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AppSettingsRouteRoute,
 } as any)
+const AppJobsNewRoute = AppJobsNewRouteImport.update({
+  id: '/jobs/new',
+  path: '/jobs/new',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppJobsJobIdEditRoute = AppJobsJobIdEditRouteImport.update({
+  id: '/jobs/$jobId/edit',
+  path: '/jobs/$jobId/edit',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AppIndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/invite': typeof InviteRoute
   '/onboarding': typeof OnboardingRoute
   '/success': typeof SuccessRoute
   '/settings': typeof AppSettingsRouteRouteWithChildren
-  '/dashboard': typeof AppDashboardRoute
-  '/jobs': typeof AppJobsRoute
-  '/todos': typeof AppTodosRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/': typeof AppIndexRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
+  '/jobs/new': typeof AppJobsNewRoute
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/organization': typeof AppSettingsOrganizationRoute
+  '/jobs/': typeof AppJobsIndexRoute
   '/settings/': typeof AppSettingsIndexRoute
+  '/jobs/$jobId/edit': typeof AppJobsJobIdEditRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/invite': typeof InviteRoute
   '/onboarding': typeof OnboardingRoute
   '/success': typeof SuccessRoute
-  '/dashboard': typeof AppDashboardRoute
-  '/jobs': typeof AppJobsRoute
-  '/todos': typeof AppTodosRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/': typeof AppIndexRoute
+  '/jobs/new': typeof AppJobsNewRoute
   '/settings/account': typeof AppSettingsAccountRoute
   '/settings/organization': typeof AppSettingsOrganizationRoute
+  '/jobs': typeof AppJobsIndexRoute
   '/settings': typeof AppSettingsIndexRoute
+  '/jobs/$jobId/edit': typeof AppJobsJobIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -139,48 +163,57 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingRoute
   '/success': typeof SuccessRoute
   '/_app/settings': typeof AppSettingsRouteRouteWithChildren
-  '/_app/dashboard': typeof AppDashboardRoute
-  '/_app/jobs': typeof AppJobsRoute
-  '/_app/todos': typeof AppTodosRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/signin': typeof AuthSigninRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/jobs/new': typeof AppJobsNewRoute
   '/_app/settings/account': typeof AppSettingsAccountRoute
   '/_app/settings/organization': typeof AppSettingsOrganizationRoute
+  '/_app/jobs/': typeof AppJobsIndexRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
+  '/_app/jobs/$jobId/edit': typeof AppJobsJobIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/auth'
     | '/invite'
     | '/onboarding'
     | '/success'
     | '/settings'
-    | '/dashboard'
-    | '/jobs'
-    | '/todos'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/auth/signin'
     | '/auth/signup'
-    | '/'
+    | '/auth/verify-email'
+    | '/jobs/new'
     | '/settings/account'
     | '/settings/organization'
+    | '/jobs/'
     | '/settings/'
+    | '/jobs/$jobId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
     | '/invite'
     | '/onboarding'
     | '/success'
-    | '/dashboard'
-    | '/jobs'
-    | '/todos'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/auth/signin'
     | '/auth/signup'
+    | '/auth/verify-email'
     | '/'
+    | '/jobs/new'
     | '/settings/account'
     | '/settings/organization'
+    | '/jobs'
     | '/settings'
+    | '/jobs/$jobId/edit'
   id:
     | '__root__'
     | '/_app'
@@ -189,15 +222,18 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/success'
     | '/_app/settings'
-    | '/_app/dashboard'
-    | '/_app/jobs'
-    | '/_app/todos'
+    | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/auth/signin'
     | '/auth/signup'
+    | '/auth/verify-email'
     | '/_app/'
+    | '/_app/jobs/new'
     | '/_app/settings/account'
     | '/_app/settings/organization'
+    | '/_app/jobs/'
     | '/_app/settings/'
+    | '/_app/jobs/$jobId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -241,7 +277,7 @@ declare module '@tanstack/react-router' {
     '/_app': {
       id: '/_app'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -251,6 +287,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/auth/verify-email': {
+      id: '/auth/verify-email'
+      path: '/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthVerifyEmailRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/auth/signup': {
       id: '/auth/signup'
@@ -266,26 +309,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSigninRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_app/todos': {
-      id: '/_app/todos'
-      path: '/todos'
-      fullPath: '/todos'
-      preLoaderRoute: typeof AppTodosRouteImport
-      parentRoute: typeof AppRouteRoute
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
-    '/_app/jobs': {
-      id: '/_app/jobs'
-      path: '/jobs'
-      fullPath: '/jobs'
-      preLoaderRoute: typeof AppJobsRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/_app/dashboard': {
-      id: '/_app/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AppDashboardRouteImport
-      parentRoute: typeof AppRouteRoute
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_app/settings': {
       id: '/_app/settings'
@@ -301,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsIndexRouteImport
       parentRoute: typeof AppSettingsRouteRoute
     }
+    '/_app/jobs/': {
+      id: '/_app/jobs/'
+      path: '/jobs'
+      fullPath: '/jobs/'
+      preLoaderRoute: typeof AppJobsIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/settings/organization': {
       id: '/_app/settings/organization'
       path: '/organization'
@@ -314,6 +357,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/account'
       preLoaderRoute: typeof AppSettingsAccountRouteImport
       parentRoute: typeof AppSettingsRouteRoute
+    }
+    '/_app/jobs/new': {
+      id: '/_app/jobs/new'
+      path: '/jobs/new'
+      fullPath: '/jobs/new'
+      preLoaderRoute: typeof AppJobsNewRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/jobs/$jobId/edit': {
+      id: '/_app/jobs/$jobId/edit'
+      path: '/jobs/$jobId/edit'
+      fullPath: '/jobs/$jobId/edit'
+      preLoaderRoute: typeof AppJobsJobIdEditRouteImport
+      parentRoute: typeof AppRouteRoute
     }
   }
 }
@@ -335,18 +392,18 @@ const AppSettingsRouteRouteWithChildren =
 
 interface AppRouteRouteChildren {
   AppSettingsRouteRoute: typeof AppSettingsRouteRouteWithChildren
-  AppDashboardRoute: typeof AppDashboardRoute
-  AppJobsRoute: typeof AppJobsRoute
-  AppTodosRoute: typeof AppTodosRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppJobsNewRoute: typeof AppJobsNewRoute
+  AppJobsIndexRoute: typeof AppJobsIndexRoute
+  AppJobsJobIdEditRoute: typeof AppJobsJobIdEditRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppSettingsRouteRoute: AppSettingsRouteRouteWithChildren,
-  AppDashboardRoute: AppDashboardRoute,
-  AppJobsRoute: AppJobsRoute,
-  AppTodosRoute: AppTodosRoute,
   AppIndexRoute: AppIndexRoute,
+  AppJobsNewRoute: AppJobsNewRoute,
+  AppJobsIndexRoute: AppJobsIndexRoute,
+  AppJobsJobIdEditRoute: AppJobsJobIdEditRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -354,13 +411,19 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 )
 
 interface AuthRouteRouteChildren {
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthSigninRoute: typeof AuthSigninRoute
   AuthSignupRoute: typeof AuthSignupRoute
+  AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthSigninRoute: AuthSigninRoute,
   AuthSignupRoute: AuthSignupRoute,
+  AuthVerifyEmailRoute: AuthVerifyEmailRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(

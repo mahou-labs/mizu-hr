@@ -1,13 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouteContext, useRouter } from "@tanstack/react-router";
-import { Building2, Check, ChevronDown, Plus } from "lucide-react";
+import {
+  IconCheckOutline24,
+  IconChevronDownOutline24,
+  IconCirclePlusOutline24,
+} from "nucleo-core-outline-24";
 import { useState } from "react";
 import { cn } from "@/utils/cn";
+import { getInitials } from "@/utils/initials";
 import { orpc } from "@/utils/orpc-client";
 import { CreateOrgDialog } from "./create-org-dialog";
-import { Avatar } from "./ui/avatar";
-import { Menu } from "./ui/menu";
-import { Skeleton } from "./ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@mizu-hr/ui/avatar";
+import {
+  Menu,
+  MenuItem,
+  MenuPopup,
+  MenuPortal,
+  MenuSeparator,
+  MenuTrigger,
+} from "@mizu-hr/ui/menu";
+import { Skeleton } from "@mizu-hr/ui/skeleton";
 
 type OrgMenuProps = {
   isCollapsed?: boolean;
@@ -26,15 +38,13 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
         await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
         await router.invalidate();
       },
-    })
+    }),
   );
 
-  const activeOrg = orgs?.find(
-    (org) => org.id === session?.activeOrganizationId
-  );
+  const activeOrg = orgs?.find((org) => org.id === session?.activeOrganizationId);
 
   const { data: subscription, isPending } = useQuery(
-    orpc.organization.getSubscription.queryOptions()
+    orpc.organization.getSubscription.queryOptions(),
   );
 
   const handleOrgChange = async (id: string) => {
@@ -55,7 +65,7 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
         <div
           className={cn(
             "flex flex-col gap-1.5 transition-opacity duration-300",
-            isCollapsed && "opacity-0"
+            isCollapsed && "opacity-0",
           )}
         >
           <Skeleton className="h-4 w-24" />
@@ -67,53 +77,58 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
   }
 
   return (
-    <Menu.Root>
-      <Menu.Trigger className="flex cursor-pointer select-none items-center gap-2">
-        <Avatar.Root className="rounded-md outline outline-border">
-          <Avatar.Image src={activeOrg?.logo ?? undefined} />
-          <Avatar.Fallback>{activeOrg?.name?.[0]}</Avatar.Fallback>
-        </Avatar.Root>
+    <Menu>
+      <MenuTrigger className="flex cursor-pointer select-none items-center gap-2 rounded-lg">
+        <Avatar className="rounded-md">
+          <AvatarImage src={activeOrg?.logo ?? undefined} />
+          <AvatarFallback className="rounded-md">{getInitials(activeOrg?.name)}</AvatarFallback>
+        </Avatar>
 
         <div
           className={cn(
-            "flex flex-col items-start transition-opacity duration-300",
-            isCollapsed && "opacity-0"
+            "flex min-w-0 flex-col items-start overflow-hidden transition-opacity duration-300",
+            isCollapsed && "opacity-0",
           )}
         >
-          <span className="truncate font-semibold text-foreground text-sm">
+          <span className="w-full truncate text-start font-semibold text-foreground text-sm">
             {activeOrg?.name}
           </span>
-          <span className="truncate text-foreground/60 text-xs">
+          <span className="w-full truncate text-start text-foreground-muted text-xs">
             {subscriptionLabel}
           </span>
         </div>
 
-        <ChevronDown className="ml-auto size-4" />
-      </Menu.Trigger>
+        <IconChevronDownOutline24
+          className={cn(
+            "ml-auto size-3 shrink-0 text-foreground-muted transition-opacity",
+            isCollapsed && "opacity-0",
+          )}
+        />
+      </MenuTrigger>
 
-      <Menu.Portal>
-        <Menu.Positioner>
-          <Menu.Popup>
-            {/* <Menu.Arrow /> */}
-            {orgs?.map((org) => (
-              <Menu.Item key={org.id} onClick={() => handleOrgChange(org.id)}>
-                <Building2 className="size-4" />
-                <span className="flex-1">{org.name}</span>
-                {org.id === session?.activeOrganizationId && (
-                  <Check className="size-4" />
-                )}
-              </Menu.Item>
-            ))}
+      <MenuPortal>
+        <MenuPopup>
+          {orgs?.map((org) => (
+            <MenuItem key={org.id} onClick={() => handleOrgChange(org.id)}>
+              <Avatar className="size-4 rounded-sm text-[8px]">
+                <AvatarImage src={org.logo ?? undefined} />
+                <AvatarFallback className="rounded-sm">{getInitials(org.name)}</AvatarFallback>
+              </Avatar>
+              <span className="flex-1">{org.name}</span>
+              {org.id === session?.activeOrganizationId && (
+                <IconCheckOutline24 className="size-4" />
+              )}
+            </MenuItem>
+          ))}
 
-            <Menu.Separator className="mx-1 my-1 h-px bg-sidebar-border" />
+          <MenuSeparator />
 
-            <Menu.Item onClick={() => setIsCreateOrgDialogOpen(true)}>
-              <Plus className="size-4" />
-              <span>Create Organization</span>
-            </Menu.Item>
-          </Menu.Popup>
-        </Menu.Positioner>
-      </Menu.Portal>
+          <MenuItem onClick={() => setIsCreateOrgDialogOpen(true)}>
+            <IconCirclePlusOutline24 className="size-4" />
+            <span>Create Organization</span>
+          </MenuItem>
+        </MenuPopup>
+      </MenuPortal>
 
       <CreateOrgDialog
         allowClosing
@@ -123,6 +138,6 @@ export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
           setIsCreateOrgDialogOpen(false);
         }}
       />
-    </Menu.Root>
+    </Menu>
   );
 }

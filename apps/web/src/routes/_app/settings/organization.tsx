@@ -1,18 +1,27 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { User, UserPlus } from "lucide-react";
+import { IconCircleUserOutline24, IconUserPlusOutline24 } from "nucleo-core-outline-24";
 import { useState } from "react";
-import { toast } from "sonner";
 import { z } from "zod";
-import { Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
-import { Field } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@mizu-hr/ui/avatar";
+import { Button } from "@mizu-hr/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogFooter,
+  DialogHeader,
+  DialogPanel,
+  DialogPopup,
+  DialogTitle,
+} from "@mizu-hr/ui/dialog";
+import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
+import { Form } from "@mizu-hr/ui/form";
+import { Input } from "@mizu-hr/ui/input";
+import { Skeleton } from "@mizu-hr/ui/skeleton";
 import { cn } from "@/utils/cn";
 import { orpc } from "@/utils/orpc-client";
+import { toastManager } from "@mizu-hr/ui/toast";
 
 const inviteSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -26,29 +35,33 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data, isPending } = useQuery(
-    orpc.organization.getMembers.queryOptions()
+  const { data: membersData, isPending: isMembersPending } = useQuery(
+    orpc.organization.getMembers.queryOptions(),
+  );
+  const { data: invitesData, isPending: isInvitesPending } = useQuery(
+    orpc.orgInvite.list.queryOptions(),
   );
 
-  const { mutateAsync: inviteMember } = useMutation(
-    orpc.organization.inviteMember.mutationOptions()
-  );
+  const isPending = isMembersPending || isInvitesPending;
+
+  const { mutateAsync: createInvite } = useMutation(orpc.orgInvite.create.mutationOptions());
 
   const form = useForm({
     defaultValues: { email: "" },
     validators: { onSubmit: inviteSchema },
     onSubmit: async ({ value }) => {
       try {
-        await inviteMember({ email: value.email, role: "member" });
-        await queryClient.invalidateQueries(
-          orpc.organization.getMembers.queryOptions()
-        );
-        toast.success("Invitation sent");
+        await createInvite({ email: value.email, role: "member" });
+        await queryClient.invalidateQueries(orpc.orgInvite.list.queryOptions());
+        toastManager.add({ title: "Invitation sent", type: "success" });
         setIsDialogOpen(false);
         form.reset();
       } catch (error) {
         console.error(error);
-        toast.error("Failed to invite member, try again later");
+        toastManager.add({
+          title: "Failed to invite member, try again later",
+          type: "error",
+        });
       }
     },
   });
@@ -62,7 +75,7 @@ function RouteComponent() {
           <MemberSkeleton />
         ) : (
           <>
-            {data?.members?.members.map((member) => (
+            {membersData?.members?.map((member) => (
               <Member
                 email={member.user.email}
                 key={member.id}
@@ -71,7 +84,7 @@ function RouteComponent() {
               />
             ))}
 
-            {data?.invites
+            {invitesData
               ?.filter((invite) => invite.status === "pending")
               .map((invite) => (
                 <Member
@@ -86,36 +99,31 @@ function RouteComponent() {
         )}
       </div>
 
-      <Button
-        className="mt-4"
-        onClick={() => setIsDialogOpen(true)}
-        variant="outline"
-      >
-        <UserPlus className="mr-2 size-4" />
+      <Button className="mt-4" onClick={() => setIsDialogOpen(true)} variant="outline">
+        <IconUserPlusOutline24 className="mr-2 size-4" />
         Invite Member
       </Button>
 
-      <Dialog.Root onOpenChange={setIsDialogOpen} open={isDialogOpen}>
-        <Dialog.Portal>
-          <Dialog.Backdrop className="fixed inset-0 bg-black/50" />
-          <Dialog.Popup className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-full max-w-md rounded-lg border bg-card p-6 shadow-lg">
-            <Dialog.Title className="mb-4 font-semibold text-lg">
-              Invite Team Member
-            </Dialog.Title>
-            <form
-              className="space-y-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                form.handleSubmit();
-              }}
-            >
-              <form.Field
-                name="email"
-                validators={{ onChange: inviteSchema.shape.email }}
-              >
+      <Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
+        {/*<DialogTrigger render={<Button variant="outline" />}>Open Dialog</DialogTrigger>*/}
+        <DialogPopup className="sm:max-w-sm">
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit();
+            }}
+          >
+            <DialogHeader>
+              <DialogTitle>Invite Team Member</DialogTitle>
+              {/*<DialogDescription>
+              Make changes to your profile here. Click save when you&apos;re done.
+            </DialogDescription>*/}
+            </DialogHeader>
+            <DialogPanel className="grid gap-4">
+              <form.Field name="email" validators={{ onChange: inviteSchema.shape.email }}>
                 {(field) => (
-                  <Field.Root>
-                    <Field.Label>Email Address</Field.Label>
+                  <Field>
+                    <FieldLabel>Email Address</FieldLabel>
                     <Input
                       disabled={form.state.isSubmitting}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -124,34 +132,78 @@ function RouteComponent() {
                       value={field.state.value}
                     />
                     {field.state.meta.errors.map((error) => (
-                      <Field.Error key={error?.message}>
-                        {error?.message}
-                      </Field.Error>
+                      <FieldError key={error?.message}>{error?.message}</FieldError>
                     ))}
-                  </Field.Root>
+                  </Field>
                 )}
               </form.Field>
+            </DialogPanel>
+            <DialogFooter>
+              <DialogClose
+                render={
+                  <Button
+                    disabled={form.state.isSubmitting}
+                    onClick={() => setIsDialogOpen(false)}
+                    type="button"
+                    variant="ghost"
+                  />
+                }
+              >
+                Cancel
+              </DialogClose>
+              <Button disabled={!form.state.canSubmit || form.state.isSubmitting} type="submit">
+                {form.state.isSubmitting ? "Sending..." : "Send Invite"}
+              </Button>
+            </DialogFooter>
+          </Form>
+        </DialogPopup>
+      </Dialog>
 
-              <div className="flex justify-end gap-2">
-                <Button
-                  disabled={form.state.isSubmitting}
-                  onClick={() => setIsDialogOpen(false)}
-                  type="button"
-                  variant="outline"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  disabled={!form.state.canSubmit || form.state.isSubmitting}
-                  type="submit"
-                >
-                  {form.state.isSubmitting ? "Sending..." : "Send Invite"}
-                </Button>
-              </div>
-            </form>
-          </Dialog.Popup>
-        </Dialog.Portal>
-      </Dialog.Root>
+      {/*<Dialog onOpenChange={setIsDialogOpen} open={isDialogOpen}>
+        <DialogBackdrop />
+        <DialogPopup>
+          <DialogTitle>Invite Team Member</DialogTitle>
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit();
+            }}
+          >
+            <form.Field name="email" validators={{ onChange: inviteSchema.shape.email }}>
+              {(field) => (
+                <Field>
+                  <FieldLabel>Email Address</FieldLabel>
+                  <Input
+                    disabled={form.state.isSubmitting}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="member@example.com"
+                    type="email"
+                    value={field.state.value}
+                  />
+                  {field.state.meta.errors.map((error) => (
+                    <FieldError key={error?.message}>{error?.message}</FieldError>
+                  ))}
+                </Field>
+              )}
+            </form.Field>
+
+            <div className="flex justify-end gap-2">
+              <Button
+                disabled={form.state.isSubmitting}
+                onClick={() => setIsDialogOpen(false)}
+                type="button"
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button disabled={!form.state.canSubmit || form.state.isSubmitting} type="submit">
+                {form.state.isSubmitting ? "Sending..." : "Send Invite"}
+              </Button>
+            </div>
+          </form>
+        </DialogPopup>
+      </Dialog>*/}
     </div>
   );
 }
@@ -179,14 +231,7 @@ const roleLabels = {
   member: "Member",
 } as const;
 
-function Member({
-  name,
-  email,
-  role,
-  isPending = false,
-  avatarUrl,
-  className,
-}: MemberProps) {
+function Member({ name, email, role, isPending = false, avatarUrl, className }: MemberProps) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -198,17 +243,17 @@ function Member({
     <div
       className={cn(
         "flex h-20 flex-col gap-3 rounded-lg border border-border bg-card p-4 shadow-sm transition-colors sm:flex-row sm:items-center sm:justify-between sm:gap-0",
-        className
+        className,
       )}
     >
       <div className="flex items-center gap-3">
         <div className="relative">
-          <Avatar.Root>
-            <Avatar.Image alt={`${name}'s avatar`} src={avatarUrl} />
-            <Avatar.Fallback>
-              {initials || <User className="size-5" />}
-            </Avatar.Fallback>
-          </Avatar.Root>
+          <Avatar>
+            <AvatarImage alt={`${name}'s avatar`} src={avatarUrl} />
+            <AvatarFallback>
+              {initials || <IconCircleUserOutline24 className="size-5" />}
+            </AvatarFallback>
+          </Avatar>
 
           {isPending && (
             <div className="-bottom-1 -right-1 absolute size-4 rounded-full border-2 border-card bg-chart-4" />
@@ -217,18 +262,14 @@ function Member({
 
         <div className="flex min-w-0 flex-1 flex-col sm:flex-1">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
-            <span className="truncate font-medium text-card-foreground">
-              {name}
-            </span>
+            <span className="truncate font-medium text-card-foreground">{name}</span>
             {isPending && (
               <span className="inline-flex w-fit items-center rounded-full border border-chart-4 bg-chart-4/10 px-2 py-0.5 font-medium text-chart-4 text-xs">
                 Pending
               </span>
             )}
           </div>
-          <span className="truncate text-muted-foreground text-sm">
-            {email}
-          </span>
+          <span className="truncate text-muted-foreground text-sm">{email}</span>
         </div>
       </div>
 
@@ -237,7 +278,7 @@ function Member({
         <span
           className={cn(
             "inline-flex items-center rounded-full border px-2.5 py-0.5 font-medium text-xs",
-            roleColors[role]
+            roleColors[role],
           )}
         >
           {roleLabels[role]}

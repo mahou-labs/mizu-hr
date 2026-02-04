@@ -1,21 +1,24 @@
 {
   "name": "docs",
-  "type": "module",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "dev": "astro dev --port=3003",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "oxlint --type-aware",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.35.3",
-    "astro": "^5.14.4",
-    "sharp": "^0.34.4",
-    "starlight-theme-rapide": "^0.5.1"
+    "@astrojs/starlight": "^0.37.5",
+    "astro": "^5.17.1",
+    "sharp": "^0.34.5",
+    "starlight-theme-rapide": "^0.5.2"
   },
   "devDependencies": {
-    "wrangler": "^4.42.2"
+    "wrangler": "^4.61.1"
   }
 }
