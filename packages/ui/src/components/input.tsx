@@ -39,12 +39,11 @@ function Input({
       data-slot="input-control"
     >
       {nativeInput ? (
-        // @ts-expect-error fix later
         <input
           className={inputClassName}
           data-slot="input"
           size={typeof size === "number" ? size : undefined}
-          {...props}
+          {...(props as React.ComponentProps<"input">)}
         />
       ) : (
         <InputPrimitive
