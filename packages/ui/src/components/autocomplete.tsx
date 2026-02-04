@@ -195,7 +195,7 @@ function AutocompleteClear({ className, ...props }: AutocompletePrimitive.Clear.
       data-slot="autocomplete-clear"
       {...props}
     >
-      <XIcon />
+      <IconXmarkOutline24 />
     </AutocompletePrimitive.Clear>
   );
 }

@@ -1,8 +1,10 @@
 import { IconCircularLoaderOutline24 } from "nucleo-core-outline-24";
-
+import type { ComponentProps } from "react";
 import { cn } from "../utils/cn";
 
-function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
+type IconProps = ComponentProps<typeof IconCircularLoaderOutline24>;
+
+function Spinner({ className, ...props }: IconProps) {
   return (
     <IconCircularLoaderOutline24
       aria-label="Loading"

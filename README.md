@@ -64,7 +64,7 @@ mizu-hr/
 - `bun build`: Build all applications
 - `bun dev:web`: Start only the web application
 - `bun dev:api`: Start only the api
-- `bun check-types`: Check TypeScript types across all apps
+- `bun typecheck`: Check TypeScript types across all apps
 - `bun db:push`: Push schema changes to database
 - `bun db:studio`: Open database studio UI
 - `bun check`: Run Biome formatting and linting

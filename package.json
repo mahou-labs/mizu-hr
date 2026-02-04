@@ -16,7 +16,7 @@
     "dev": "turbo dev db:studio --parallel",
     "dev:email": "turbo dev email db:studio --parallel",
     "build": "turbo build",
-    "check-types": "turbo check-types",
+    "typecheck": "turbo typecheck",
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
     "dev:api": "turbo -F api dev",

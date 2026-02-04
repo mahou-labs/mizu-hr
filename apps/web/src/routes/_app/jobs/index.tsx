@@ -233,13 +233,7 @@ function JobsList() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogClose
-              render={
-                <Button
-                  disabled={deleteMutation.isPending}
-                  type="button"
-                  variant="ghost"
-                />
-              }
+              render={<Button disabled={deleteMutation.isPending} type="button" variant="ghost" />}
             >
               Cancel
             </AlertDialogClose>

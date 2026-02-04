@@ -73,28 +73,27 @@ export const jobRouter = {
     return data[0];
   }),
 
-  list: protectedProcedure
-    .handler(async ({ context }) => {
-      const orgId = context.session?.activeOrganizationId;
-      if (!orgId) {
-        throw new ORPCError("BAD_REQUEST", {
-          message: "No active organization selected",
-        });
-      }
+  list: protectedProcedure.handler(async ({ context }) => {
+    const orgId = context.session?.activeOrganizationId;
+    if (!orgId) {
+      throw new ORPCError("BAD_REQUEST", {
+        message: "No active organization selected",
+      });
+    }
 
-      const { data, error } = await tryCatch(
-        db.select().from(job).where(eq(job.organizationId, orgId)).orderBy(desc(job.createdAt)),
-      );
+    const { data, error } = await tryCatch(
+      db.select().from(job).where(eq(job.organizationId, orgId)).orderBy(desc(job.createdAt)),
+    );
 
-      if (error) {
-        throw new ORPCError("INTERNAL_SERVER_ERROR", {
-          message: "Failed to fetch job listings",
-          cause: error,
-        });
-      }
+    if (error) {
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "Failed to fetch job listings",
+        cause: error,
+      });
+    }
 
-      return data;
-    }),
+    return data;
+  }),
 
   get: protectedProcedure
     .input(z.object({ id: z.string() }))

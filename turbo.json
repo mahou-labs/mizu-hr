@@ -16,8 +16,8 @@
     "format:check": {
       "dependsOn": ["^format:check"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
     },
     "dev": {
       "cache": false,

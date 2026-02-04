@@ -37,10 +37,7 @@ function RouteComponent() {
       </div> */}
 
       {/* Custom ScrollArea with themed scrollbar */}
-      <ScrollArea
-        orientation="vertical"
-        className="h-full flex-1 rounded-md border border-border/50 bg-background p-4"
-      >
+      <ScrollArea className="h-full flex-1 rounded-md border border-border/50 bg-background p-4">
         <Outlet />
       </ScrollArea>
     </div>

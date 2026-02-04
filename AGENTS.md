@@ -19,7 +19,7 @@ bun dev:web                    # Start frontend only
 bun dev:api                    # Start API only
 bun lint                       # Run OxLint across all apps
 bun format                     # Run OxFmt across all apps
-bun check-types                # TypeScript type checking
+bun typecheck                # TypeScript type checking
 bun build                      # Build all apps for production
 
 # Database
