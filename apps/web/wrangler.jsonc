@@ -13,6 +13,7 @@
   "env": {
     "staging": {
       "name": "mizu-hr-web-staging",
+      ""
     },
   },
 }
