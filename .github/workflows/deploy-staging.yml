@@ -45,14 +45,14 @@ jobs:
               - 'apps/api/**'
               - 'bun.lock'
 
-  deploy-web:
-    name: Deploy Web (Staging)
+  deploy-app:
+    name: Deploy App (Staging)
     runs-on: ubuntu-latest
     needs: [ci, changes]
     if: needs.changes.outputs.web == 'true'
     environment:
       name: staging
-      url: ${{ vars.WEB_STAGING_URL }}
+      url: ${{ vars.APP_STAGING_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
