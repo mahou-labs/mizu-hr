@@ -16,7 +16,7 @@ jobs:
 
   changes:
     name: Detect Changes
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     outputs:
       web: ${{ steps.filter.outputs.web }}
       docs: ${{ steps.filter.outputs.docs }}
@@ -47,7 +47,7 @@ jobs:
 
   deploy-app:
     name: Deploy App (Staging)
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: [ci, changes]
     if: needs.changes.outputs.web == 'true'
     environment:
@@ -79,7 +79,7 @@ jobs:
 
   deploy-api:
     name: Deploy API (Staging)
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: [ci, changes]
     if: needs.changes.outputs.api == 'true'
     environment:
