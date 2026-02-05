@@ -40,6 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.docs == 'true'
+    outputs:
+      url: ${{ steps.deploy.outputs.version-preview-url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,13 +65,15 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: apps/docs
-          command: versions upload --preview-alias pr-${{ github.event.pull_request.number }}
+          command: versions upload
 
   deploy-site-preview:
     name: Deploy Site Preview
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.site == 'true'
+    outputs:
+      url: ${{ steps.deploy.outputs.version-preview-url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -93,7 +97,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: apps/site
-          command: versions upload --preview-alias pr-${{ github.event.pull_request.number }}
+          command: versions upload
 
   comment-preview-urls:
     name: Comment Preview URLs
@@ -111,25 +115,20 @@ jobs:
 
       - name: Build comment body
         id: build-comment
-        env:
-          CF_SUBDOMAIN: ${{ vars.CLOUDFLARE_SUBDOMAIN }}
         run: |
-          PR_NUM="${{ github.event.pull_request.number }}"
-          SUBDOMAIN="${CF_SUBDOMAIN:-your-subdomain}"
-
           BODY="## Preview Deployments"
           BODY="$BODY"$'\n\n'"| App | URL |"
           BODY="$BODY"$'\n'"| --- | --- |"
 
           if [ "${{ needs.deploy-docs-preview.result }}" == "success" ]; then
-            BODY="$BODY"$'\n'"| Docs | https://pr-${PR_NUM}-mizu-hr-docs.${SUBDOMAIN}.workers.dev |"
+            BODY="$BODY"$'\n'"| Docs | ${{ needs.deploy-docs-preview.outputs.url }} |"
           fi
 
           if [ "${{ needs.deploy-site-preview.result }}" == "success" ]; then
-            BODY="$BODY"$'\n'"| Site | https://pr-${PR_NUM}-mizu-hr-site.${SUBDOMAIN}.workers.dev |"
+            BODY="$BODY"$'\n'"| Site | ${{ needs.deploy-site-preview.outputs.url }} |"
           fi
 
-          BODY="$BODY"$'\n\n'"_Commit: \`${{ github.event.pull_request.head.sha }}\` | $(date -u '+%Y-%m-%d %H:%M:%S UTC')_"
+          BODY="$BODY"$'\n\n'"_Commit: \`${{ github.event.pull_request.head.sha }}\`_"
 
           echo "body<<EOF" >> $GITHUB_OUTPUT
           echo "$BODY" >> $GITHUB_OUTPUT
