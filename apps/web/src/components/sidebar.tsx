@@ -23,7 +23,7 @@ import { SearchBar } from "./search-bar";
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>();
 
 export function Sidebar() {
-  const { isCollapsed  } = useSidebar();
+  const { isCollapsed } = useSidebar();
   const location = useLocation();
 
   return (

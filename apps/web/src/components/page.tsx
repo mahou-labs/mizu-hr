@@ -38,10 +38,8 @@ function PageHeader() {
           <IconLayoutLeftOutline24 className="h-4 w-4" />
         )}
       </button>
-      
-      <div className="flex items-center justify-center ml-4 text-sm">
-        breadcrumbs/will/go-here
-      </div>
+
+      <div className="flex items-center justify-center ml-4 text-sm">breadcrumbs/will/go-here</div>
     </div>
   );
 }
