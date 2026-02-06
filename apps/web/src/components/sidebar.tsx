@@ -3,7 +3,6 @@ import { Link, useLocation } from "@tanstack/react-router";
 import {
   IconSuitcaseOutline24,
   IconHouse6Outline24,
-  IconLayoutLeftOutline24,
   IconGearOutline24,
 } from "nucleo-core-outline-24";
 import { useSidebar } from "@/contexts/sidebar-context";
