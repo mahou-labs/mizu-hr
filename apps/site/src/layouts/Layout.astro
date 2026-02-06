@@ -1,26 +1,33 @@
 ---
-import '@fontsource-variable/pixelify-sans';
+import "@fontsource-variable/pixelify-sans";
 import "../styles/global.css";
-import PostHog from '../components/posthog.astro';
+import PostHog from "../components/posthog.astro";
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<PostHog />
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content="The future of hiring is open source. Join our waitlist for updates." />
-		<title>Mizu HR - The Future of Hiring</title>
-		<script>
-			if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-				document.documentElement.classList.add('dark')
-			}
-		</script>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="The future of hiring is open source. Join our waitlist for updates."
+    />
+    <title>Mizu HR - The Future of Hiring</title>
+    <PostHog />
+    <script>
+      if (
+        localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
 </html>

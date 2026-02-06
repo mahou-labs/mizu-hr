@@ -11,6 +11,7 @@ export const waitlistRouter = {
     });
 
     if (error) {
+      console.error(error);
       throw new ORPCError("Failed to add email to waitlist");
     }
 
