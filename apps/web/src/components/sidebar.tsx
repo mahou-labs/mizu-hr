@@ -3,11 +3,9 @@ import { Link, useLocation } from "@tanstack/react-router";
 import {
   IconSuitcaseOutline24,
   IconHouse6Outline24,
-  IconLayoutLeftOutline24,
   IconGearOutline24,
 } from "nucleo-core-outline-24";
-import { useState } from "react";
-import { useKeyPress } from "@/hooks/useKeyPress";
+import { useSidebar } from "@/contexts/sidebar-context";
 import { cn } from "@/utils/cn";
 import { OrgMenu } from "./org-menu";
 import { Separator } from "@mizu-hr/ui/separator";
@@ -24,9 +22,8 @@ import { SearchBar } from "./search-bar";
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>();
 
 export function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { isCollapsed } = useSidebar();
   const location = useLocation();
-  useKeyPress("b", () => setIsCollapsed((prev) => !prev), { mod: true, preventDefault: true });
 
   return (
     <div
@@ -35,9 +32,9 @@ export function Sidebar() {
         isCollapsed ? "w-16" : "w-64",
       )}
     >
-      <OrgMenu isCollapsed={isCollapsed} />
+      <OrgMenu />
       <nav className="mt-4 flex flex-1 flex-col gap-1.5">
-        <SearchBar isCollapsed={isCollapsed} />
+        <SearchBar />
         <TooltipProvider delay={0} timeout={500}>
           <Tooltip disabled={!isCollapsed}>
             <TooltipTrigger
@@ -46,7 +43,6 @@ export function Sidebar() {
                   href="/"
                   icon={IconHouse6Outline24}
                   isActive={location.pathname === "/"}
-                  isCollapsed={isCollapsed}
                   label="Dashboard"
                 />
               }
@@ -63,7 +59,6 @@ export function Sidebar() {
                   href="/jobs"
                   icon={IconSuitcaseOutline24}
                   isActive={location.pathname.startsWith("/jobs")}
-                  isCollapsed={isCollapsed}
                   label="Jobs"
                 />
               }
@@ -78,7 +73,6 @@ export function Sidebar() {
             href="/settings"
             icon={IconGearOutline24}
             isActive={location.pathname.startsWith("/settings")}
-            isCollapsed={isCollapsed}
             label="Settings"
           />
 
@@ -89,19 +83,7 @@ export function Sidebar() {
           </Tooltip>
         </TooltipProvider>
       </nav>
-      <button
-        className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-light text-foreground transition-all hover:bg-default"
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        type="button"
-      >
-        {isCollapsed ? (
-          <IconLayoutLeftOutline24 className="h-4 w-4" />
-        ) : (
-          <IconLayoutLeftOutline24 className="h-4 w-4" />
-        )}
-      </button>
-      <UserMenu isCollapsed={isCollapsed} />
+      <UserMenu />
     </div>
   );
 }
@@ -112,7 +94,6 @@ type SidebarItemProps = {
   href: ToOptions["to"];
   isActive?: boolean;
   badge?: string | number;
-  isCollapsed?: boolean;
   onClick?: () => void;
 } & Omit<React.ComponentProps<typeof Link>, "to" | "className" | "onClick">;
 
@@ -122,10 +103,11 @@ function SidebarItem({
   href,
   isActive = false,
   badge,
-  isCollapsed = false,
   onClick,
   ...props
 }: SidebarItemProps) {
+  const { isCollapsed } = useSidebar();
+
   return (
     <Link
       {...props}

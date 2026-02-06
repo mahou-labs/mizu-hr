@@ -6,6 +6,7 @@ import {
   IconCirclePlusOutline24,
 } from "nucleo-core-outline-24";
 import { useState } from "react";
+import { useSidebar } from "@/contexts/sidebar-context";
 import { cn } from "@/utils/cn";
 import { getInitials } from "@/utils/initials";
 import { orpc } from "@/utils/orpc-client";
@@ -21,11 +22,8 @@ import {
 } from "@mizu-hr/ui/menu";
 import { Skeleton } from "@mizu-hr/ui/skeleton";
 
-type OrgMenuProps = {
-  isCollapsed?: boolean;
-};
-
-export function OrgMenu({ isCollapsed = false }: OrgMenuProps) {
+export function OrgMenu() {
+  const { isCollapsed } = useSidebar();
   const [isCreateOrgDialogOpen, setIsCreateOrgDialogOpen] = useState(false);
   const { session } = useRouteContext({ from: "/_app" });
   const queryClient = useQueryClient();

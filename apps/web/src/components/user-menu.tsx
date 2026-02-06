@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useRouteContext, useRouter } from "@tanstack/react-router";
 import { IconChevronDownOutline24 } from "nucleo-core-outline-24";
+import { useSidebar } from "@/contexts/sidebar-context";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
 import { getInitials } from "@/utils/initials";
@@ -14,11 +15,8 @@ import {
   MenuTrigger,
 } from "@mizu-hr/ui/menu";
 
-type UserMenuProps = {
-  isCollapsed?: boolean;
-};
-
-export function UserMenu({ isCollapsed = false }: UserMenuProps) {
+export function UserMenu() {
+  const { isCollapsed } = useSidebar();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const router = useRouter();

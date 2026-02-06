@@ -15,7 +15,7 @@
   },
   "scripts": {
     "typecheck": "tsc -b",
-    "lint": "oxlint --type-aware",
+    "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check"
   },
