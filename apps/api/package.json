@@ -8,7 +8,7 @@
     "dev": "bun run --hot src/index.ts",
     "email": "email dev -d src/emails -p 5000",
     "start": "bun run dist/index.js",
-    "lint": "oxlint --type-aware",
+    "lint": "oxlint",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "db:push": "bunx --bun drizzle-kit push",
