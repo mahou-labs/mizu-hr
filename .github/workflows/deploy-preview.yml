@@ -15,7 +15,7 @@ permissions:
 jobs:
   changes:
     name: Detect Changes
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     outputs:
       docs: ${{ steps.filter.outputs.docs }}
       site: ${{ steps.filter.outputs.site }}
@@ -37,7 +37,7 @@ jobs:
 
   deploy-docs-preview:
     name: Deploy Docs Preview
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: changes
     if: needs.changes.outputs.docs == 'true'
     outputs:
@@ -69,7 +69,7 @@ jobs:
 
   deploy-site-preview:
     name: Deploy Site Preview
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: changes
     if: needs.changes.outputs.site == 'true'
     outputs:
@@ -101,7 +101,7 @@ jobs:
 
   comment-preview-urls:
     name: Comment Preview URLs
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: [changes, deploy-docs-preview, deploy-site-preview]
     if: always() && (needs.deploy-docs-preview.result == 'success' || needs.deploy-site-preview.result == 'success')
     steps:
