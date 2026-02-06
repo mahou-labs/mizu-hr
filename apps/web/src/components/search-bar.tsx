@@ -5,6 +5,9 @@ import {
   IconMagnifierOutline24,
 } from "nucleo-core-outline-24";
 import { Fragment, useMemo, useState } from "react";
+import { useSidebar } from "@/contexts/sidebar-context";
+import { useKeyPress } from "@/hooks/use-key-press";
+import { cn } from "@/utils/cn";
 import { Button } from "@mizu-hr/ui/button";
 import {
   Command,
@@ -24,8 +27,6 @@ import {
   CommandShortcut,
 } from "@mizu-hr/ui/command";
 import { Kbd, KbdGroup } from "@mizu-hr/ui/kbd";
-import { cn } from "@/utils/cn";
-import { useKeyPress } from "@/hooks/useKeyPress";
 
 type Item = {
   value: string;
@@ -66,11 +67,8 @@ function useModifierKey() {
   }, []);
 }
 
-type SearchBarProps = {
-  isCollapsed?: boolean;
-};
-
-export function SearchBar({ isCollapsed = false }: SearchBarProps) {
+export function SearchBar() {
+  const { isCollapsed } = useSidebar();
   const [open, setOpen] = useState(false);
   const modifierKey = useModifierKey();
   useKeyPress("k", () => setOpen((open) => !open), { mod: true, preventDefault: true });
