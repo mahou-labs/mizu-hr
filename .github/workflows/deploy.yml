@@ -179,7 +179,8 @@ jobs:
               sleep 10
             done
 
-            echo "::warning::Health check failed after 5 attempts"
+            echo "::error::Health check failed after 5 attempts"
+            exit 1
           else
             echo "::notice::Skipping health check - API_URL not configured"
           fi
