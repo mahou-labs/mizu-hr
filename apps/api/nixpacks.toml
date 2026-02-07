@@ -12,7 +12,7 @@ cmds = ["bun install --frozen-lockfile"]
 cmds = ["bun run build"]
 
 [start]
-cmd = "bun run db:push --force && bun run dist/index.js"
+cmd = "bunx --bun drizzle-kit push --force && ./server"
 
 [healthcheck]
 path = "/healthcheck"
