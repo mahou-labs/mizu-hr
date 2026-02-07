@@ -63,6 +63,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
   component: RootDocument,
   notFoundComponent: NotFoundPage,
+  errorComponent: (e) => <pre>{JSON.stringify(e, null, 2)}</pre>,
   beforeLoad: async ({ context }) => {
     const authSession = await context.queryClient.ensureQueryData(
       orpc.user.getSession.queryOptions(),

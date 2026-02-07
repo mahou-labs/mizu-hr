@@ -68,6 +68,10 @@ jobs:
       - name: Build web app
         run: bun run build
         working-directory: apps/web
+        env:
+          VITE_API_URL: ${{ vars.API_STAGING_URL }}
+          VITE_POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
+          VITE_POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
 
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
