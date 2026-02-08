@@ -1,72 +1,68 @@
-# mizu-hr
+# Mizu HR
 
-This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Start, Hono, ORPC, and more.
+Mizu HR is an open-source applicant tracking system (ATS) and hiring platform. Built for modern teams who want full control over their recruitment process without vendor lock-in or per-seat pricing.
 
-## Features
+## Running Locally
 
-- **TypeScript** - For type safety and improved developer experience
-- **TanStack Start** - SSR framework with TanStack Router
-- **TailwindCSS** - Utility-first CSS for rapid UI development
-- **shadcn/ui** - Reusable UI components
-- **Hono** - Lightweight, performant server framework
-- **oRPC** - End-to-end type-safe APIs with OpenAPI integration
-- **workers** - Runtime environment
-- **Drizzle** - TypeScript-first ORM
-- **PostgreSQL** - Database engine
-- **Authentication** - Email & password authentication with Better Auth
-- **Turborepo** - Optimized monorepo build system
-- **Starlight** - Documentation site with Astro
-- **Biome** - Linting and formatting
+### Prerequisites
 
-## Getting Started
+- [Bun](https://bun.sh/) (v1.0+)
+- [Docker](https://www.docker.com/) (for PostgreSQL)
 
-First, install the dependencies:
+### Setup
+
+1. Clone the repository and install dependencies:
 
 ```bash
+git clone https://github.com/mahou-labs/mizu-hr.git
+cd mizu-hr
 bun install
 ```
 
-## Database Setup
+2. Start the PostgreSQL database:
 
-This project uses PostgreSQL with Drizzle ORM.
+```bash
+bun db:start
+```
 
-1. Make sure you have a PostgreSQL database set up.
-2. Update your `apps/server/.env` file with your PostgreSQL connection details.
+3. Copy the environment files and configure them:
 
-3. Apply the schema to your database:
+```bash
+cp apps/api/.env.example apps/api/.env
+cp apps/web/.env.example apps/web/.env
+```
+
+4. Push the database schema:
 
 ```bash
 bun db:push
 ```
 
-Then, run the development server:
+5. Start the development servers:
 
 ```bash
 bun dev
 ```
 
-Open [http://localhost:3001](http://localhost:3001) in your browser to see the web application.
-The API is running at [http://localhost:3000](http://localhost:3000).
+| App | URL |
+|-----|-----|
+| API | [http://localhost:3000](http://localhost:3000) |
+| Web | [http://localhost:3001](http://localhost:3001) |
+| Site | [http://localhost:3002](http://localhost:3002) |
+| Docs | [http://localhost:3003](http://localhost:3003) |
 
-## Project Structure
+### Useful Commands
 
-```
-mizu-hr/
-├── apps/
-│   ├── web/         # Frontend application (React + TanStack Start)
-│   ├── docs/        # Documentation site (Astro Starlight)
-│   └── api/      # Backend API (Hono, ORPC)
-```
+| Command | Description |
+|---------|-------------|
+| `bun dev` | Start all services |
+| `bun build` | Build for production |
+| `bun lint` | Run linter |
+| `bun typecheck` | Check TypeScript types |
+| `bun db:studio` | Open Drizzle Studio |
 
-## Available Scripts
+## Contributors
 
-- `bun dev`: Start all applications in development mode
-- `bun build`: Build all applications
-- `bun dev:web`: Start only the web application
-- `bun dev:api`: Start only the api
-- `bun typecheck`: Check TypeScript types across all apps
-- `bun db:push`: Push schema changes to database
-- `bun db:studio`: Open database studio UI
-- `bun check`: Run Biome formatting and linting
-- `cd apps/docs && bun dev`: Start documentation site
-- `cd apps/docs && bun build`: Build documentation site
+<a href="https://github.com/mahou-labs/mizu-hr/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mahou-labs/mizu-hr" />
+</a>
