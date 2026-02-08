@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
-    "@fontsource-variable/pixelify-sans": "^5.2.7",
     "@orpc/client": "^1.13.4",
     "@tailwindcss/vite": "^4.1.14",
     "@types/react": "catalog:",
