@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   IconSuitcaseOutline24,
@@ -14,7 +13,6 @@ import {
 } from "nucleo-core-outline-24";
 import { Suspense, useState } from "react";
 import { Page } from "@/components/page";
-import { orpc } from "@/utils/orpc-client";
 import {
   AlertDialog,
   AlertDialogClose,
@@ -28,13 +26,11 @@ import { Badge } from "@mizu-hr/ui/badge";
 import { Button } from "@mizu-hr/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
-import { toastManager } from "@mizu-hr/ui/toast";
+import { useLiveQuery } from "@tanstack/react-db";
+import { jobsCollection } from "@/utils/collections";
 
 export const Route = createFileRoute("/_app/jobs/")({
   component: JobsRoute,
-  loader: ({ context }) => {
-    void context.queryClient.ensureQueryData(orpc.job.list.queryOptions());
-  },
 });
 
 type EmploymentType = "full-time" | "part-time" | "contract" | "internship";
@@ -98,23 +94,23 @@ function JobsRoute() {
 }
 
 function JobsList() {
-  const { data: jobs, refetch } = useQuery(orpc.job.list.queryOptions());
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState<string | null>(null);
+  const { data: jobs, isLoading } = useLiveQuery((q) => q.from({ jobs: jobsCollection }));
 
-  const deleteMutation = useMutation(
-    orpc.job.delete.mutationOptions({
-      onSuccess: async () => {
-        await refetch();
-        toastManager.add({ title: "Job deleted successfully", type: "success" });
-        setDeleteDialogOpen(false);
-        setJobToDelete(null);
-      },
-      onError: (error: Error) => {
-        toastManager.add({ title: error.message || "Failed to delete job", type: "error" });
-      },
-    }),
-  );
+  // const deleteMutation = useMutation(
+  //   orpc.job.delete.mutationOptions({
+  //     onSuccess: async () => {
+  //       // await refetch();
+  //       toastManager.add({ title: "Job deleted successfully", type: "success" });
+  //       setDeleteDialogOpen(false);
+  //       setJobToDelete(null);
+  //     },
+  //     onError: (error: Error) => {
+  //       toastManager.add({ title: error.message || "Failed to delete job", type: "error" });
+  //     },
+  //   }),
+  // );
 
   const handleDeleteClick = (jobId: string) => {
     setJobToDelete(jobId);
@@ -123,8 +119,11 @@ function JobsList() {
 
   const handleConfirmDelete = () => {
     if (jobToDelete) {
-      deleteMutation.mutate({ id: jobToDelete });
+      jobsCollection.delete(jobToDelete);
     }
+
+    setJobToDelete(null);
+    setDeleteDialogOpen(false);
   };
 
   return jobs?.length === 0 ? (
@@ -233,16 +232,12 @@ function JobsList() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogClose
-              render={<Button disabled={deleteMutation.isPending} type="button" variant="ghost" />}
+              render={<Button disabled={isLoading} type="button" variant="ghost" />}
             >
               Cancel
             </AlertDialogClose>
-            <Button
-              disabled={deleteMutation.isPending}
-              onClick={handleConfirmDelete}
-              variant="destructive"
-            >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            <Button disabled={isLoading} onClick={handleConfirmDelete} variant="destructive">
+              {isLoading ? "Deleting..." : "Delete"}
             </Button>
           </AlertDialogFooter>
         </AlertDialogPopup>

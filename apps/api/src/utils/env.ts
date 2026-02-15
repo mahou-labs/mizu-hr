@@ -11,6 +11,7 @@ const envSchema = z.object({
   POLAR_WEBHOOK_SECRET: z.string().min(1, "POLAR_WEBHOOK_SECRET is required"),
   NODE_ENV: z.enum(["development", "production"]).default("production"),
   RESEND_API_KEY: z.string().min(1, "RESEND_API_KEY is required"),
+  ELECTRIC_SQL_URL: z.url(),
 });
 
 export type Environment = z.infer<typeof envSchema>;
@@ -26,4 +27,5 @@ export const env: Environment = envSchema.parse({
   POLAR_WEBHOOK_SECRET: Bun.env.POLAR_WEBHOOK_SECRET,
   NODE_ENV: Bun.env.NODE_ENV,
   RESEND_API_KEY: Bun.env.RESEND_API_KEY,
+  ELECTRIC_SQL_URL: Bun.env.ELECTRIC_SQL_URL,
 });

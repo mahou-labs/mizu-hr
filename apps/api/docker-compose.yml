@@ -1,9 +1,12 @@
 name: mizu-hr
-
 services:
   postgres:
-    image: postgres
+    image: postgres:18.1
     container_name: mizu-hr-postgres
+    command:
+      - postgres
+      - -c
+      - wal_level=logical
     environment:
       POSTGRES_DB: mizu-hr
       POSTGRES_USER: postgres
@@ -11,7 +14,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - mizu-hr_postgres_data:/var/lib/postgresql/data
+      - mizu-hr_postgres_data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -30,6 +33,19 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+
+  electric:
+    image: docker.io/electricsql/electric:latest
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/mizu-hr?sslmode=disable
+      # Not suitable for production. Only use insecure mode in development or if you've otherwise secured the Electric API.
+      # See https://electric-sql.com/docs/guides/security
+      ELECTRIC_INSECURE: true
+    ports:
+      - "4000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   mizu-hr_postgres_data:

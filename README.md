@@ -65,4 +65,4 @@ bun dev
 
 <a href="https://github.com/mahou-labs/mizu-hr/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=mahou-labs/mizu-hr" />
-</a>
+</

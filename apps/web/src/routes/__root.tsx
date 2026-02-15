@@ -12,7 +12,6 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { orpc } from "@/utils/orpc-client";
-import appCss from "../index.css?url";
 import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
 // import { ThemeProvider } from "@/utils/theme-provider";
 import { ThemeProvider } from "better-themes";
@@ -51,12 +50,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
       },
       {
         title: "My App",
-      },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
       },
     ],
   }),
@@ -100,7 +93,7 @@ function RootDocument() {
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

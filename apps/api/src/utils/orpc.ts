@@ -3,7 +3,7 @@ import { Polar } from "@polar-sh/sdk";
 import { redis } from "bun";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { organization } from "@/schema/auth";
+import { organizations } from "@mizu-hr/schemas/auth";
 import type { Context } from "./context";
 import { db } from "./db";
 import { env } from "./env";
@@ -113,8 +113,8 @@ const requireSubscription = o
     const { data: pgOrg, error: dbError } = await tryCatch(
       db
         .select()
-        .from(organization)
-        .where(eq(organization.id, orgId))
+        .from(organizations)
+        .where(eq(organizations.id, orgId))
         .then((org) => org[0]),
     );
 

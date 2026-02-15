@@ -20,8 +20,9 @@ import {
 import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
 import { Input } from "@mizu-hr/ui/input";
 import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@mizu-hr/ui/select";
-import { toastManager } from "@mizu-hr/ui/toast";
 import { JobDescriptionEditor } from "@/components/job-description-editor";
+import { jobsCollection } from "@/utils/collections";
+import { Form } from "@mizu-hr/ui/form";
 
 export const Route = createFileRoute("/_app/jobs/new")({
   component: NewJobRoute,
@@ -34,8 +35,8 @@ type JobFormValues = {
   description: string;
   location: string;
   employmentType: EmploymentType;
-  salaryMin: number | undefined;
-  salaryMax: number | undefined;
+  salaryMin: number | null;
+  salaryMax: number | null;
   recruiters: string[];
 };
 
@@ -44,8 +45,8 @@ const defaultFormValues: JobFormValues = {
   description: "",
   location: "",
   employmentType: "full-time",
-  salaryMin: undefined,
-  salaryMax: undefined,
+  salaryMin: null,
+  salaryMax: null,
   recruiters: [],
 };
 
@@ -54,26 +55,47 @@ function NewJobRoute() {
 
   const { data: membersData } = useQuery(orpc.organization.getMembers.queryOptions());
 
-  const createMutation = useMutation(
-    orpc.job.create.mutationOptions({
-      onSuccess: () => {
-        toastManager.add({ title: "Job created successfully", type: "success" });
-        router.navigate({ to: "/jobs" });
-      },
-      onError: (error: Error) => {
-        toastManager.add({ title: error.message || "Failed to create job", type: "error" });
-      },
-    }),
-  );
+  // const createMutation = useMutation(
+  //   orpc.job.create.mutationOptions({
+  //     onsuccess: async () => {
+  //       toastmanager.add({ title: "job created successfully", type: "success" });
+  //       await router.navigate({ to: "/jobs" });
+  //     },
+  //     onerror: (error: error) => {
+  //       toastmanager.add({ title: error.message || "failed to create job", type: "error" });
+  //     },
+  //   }),
+  // );
+  //
+  const createJob = (value: JobFormValues) => {
+    jobsCollection.insert({
+      ...value,
+      id: "019c6399-c5ba-7974-a17c-5834bce99e98",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      publishedAt: new Date(),
+      department: "",
+      remote: true,
+      experienceLevel: "",
+      salaryCurrency: "USD",
+      status: "",
+      organizationId: "",
+      createdBy: "",
+    });
+  };
 
   const form = useForm({
     defaultValues: defaultFormValues,
     onSubmit: async ({ value }) => {
-      createMutation.mutate(value as JobFormValues);
+      console.log("--- SUBMIT ---");
+      createJob(value as JobFormValues);
     },
   });
 
-  const isSubmitting = createMutation.isPending;
+  console.log(form.getAllErrors());
+
+  // const isSubmitting = createMutation.isPending;
+  const isSubmitting = false;
 
   return (
     <div className="flex flex-1 flex-col gap-6 p-6">
@@ -89,10 +111,11 @@ function NewJobRoute() {
         </div>
       </div>
 
-      <form
+      <Form
         className="flex flex-col gap-6"
         onSubmit={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           form.handleSubmit();
         }}
       >
@@ -285,7 +308,7 @@ function NewJobRoute() {
                     <Input
                       disabled={isSubmitting}
                       onChange={(e) =>
-                        field.handleChange(e.target.value ? Number(e.target.value) : undefined)
+                        field.handleChange(e.target.value ? Number(e.target.value) : null)
                       }
                       placeholder="50000"
                       type="number"
@@ -302,7 +325,7 @@ function NewJobRoute() {
                     <Input
                       disabled={isSubmitting}
                       onChange={(e) =>
-                        field.handleChange(e.target.value ? Number(e.target.value) : undefined)
+                        field.handleChange(e.target.value ? Number(e.target.value) : null)
                       }
                       placeholder="80000"
                       type="number"
@@ -331,7 +354,7 @@ function NewJobRoute() {
             )}
           </Button>
         </div>
-      </form>
+      </Form>
     </div>
   );
 }
