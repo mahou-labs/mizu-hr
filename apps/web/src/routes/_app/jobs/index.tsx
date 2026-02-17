@@ -98,20 +98,6 @@ function JobsList() {
   const [jobToDelete, setJobToDelete] = useState<string | null>(null);
   const { data: jobs, isLoading } = useLiveQuery((q) => q.from({ jobs: jobsCollection }));
 
-  // const deleteMutation = useMutation(
-  //   orpc.job.delete.mutationOptions({
-  //     onSuccess: async () => {
-  //       // await refetch();
-  //       toastManager.add({ title: "Job deleted successfully", type: "success" });
-  //       setDeleteDialogOpen(false);
-  //       setJobToDelete(null);
-  //     },
-  //     onError: (error: Error) => {
-  //       toastManager.add({ title: error.message || "Failed to delete job", type: "error" });
-  //     },
-  //   }),
-  // );
-
   const handleDeleteClick = (jobId: string) => {
     setJobToDelete(jobId);
     setDeleteDialogOpen(true);

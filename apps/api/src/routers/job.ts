@@ -2,7 +2,7 @@ import { ORPCError } from "@orpc/server";
 import { and, eq, sql } from "drizzle-orm";
 import z from "zod";
 import { job, jobCreateSchema, jobUpdateSchema } from "@mizu-hr/schemas/job";
-import { db } from "@/utils/db";
+import { db, getTxid } from "@/utils/db";
 import { tryCatch } from "@/utils/try-catch";
 import { protectedProcedure } from "../utils/orpc";
 
@@ -25,20 +25,9 @@ export const jobRouter = {
 
       const userId = context.user.id;
 
-      // const { data, error } = await tryCatch(
-      //   db.transaction(async (tx) => {
-      //     const [row] = await tx.insert(
-      //       job.values({ ...input, organizationId: orgId, createdBy: context.user.id }).returning,
-      //     );
-
-      //     const [{ txId }] = await tx.execute(sql`SELECT txid_current()::int`);
-      //     return { row, txId };
-      //   }),
-      // );
-
       const { data, error } = await tryCatch(
         db.transaction(async (tx) => {
-          const result = tx
+          const result = await tx
             .insert(job)
             .values({
               ...input,
@@ -47,22 +36,10 @@ export const jobRouter = {
             })
             .returning();
 
-          const [txId] = await tx.execute(sql`SELECT txid_current()::int`);
-
-          return { result, txId };
+          const txid = await getTxid(tx);
+          return { result, txid };
         }),
       );
-
-      // const { data: data2, error: error2 } = await tryCatch(
-      //   db
-      //     .insert(job)
-      //     .values({
-      //       ...input,
-      //       organizationId: orgId,
-      //       createdBy: context.user.id,
-      //     })
-      //     .returning(),
-      // );
 
       if (error) {
         throw new ORPCError("INTERNAL_SERVER_ERROR", {
@@ -86,11 +63,16 @@ export const jobRouter = {
       }
 
       const { data, error } = await tryCatch(
-        db
-          .update(job)
-          .set(updates)
-          .where(and(eq(job.id, id), eq(job.organizationId, orgId)))
-          .returning(),
+        db.transaction(async (tx) => {
+          const result = await tx
+            .update(job)
+            .set(updates)
+            .where(and(eq(job.id, id), eq(job.organizationId, orgId)))
+            .returning();
+
+          const txid = await getTxid(tx);
+          return { result, txid };
+        }),
       );
 
       if (error) {
@@ -100,13 +82,13 @@ export const jobRouter = {
         });
       }
 
-      if (!data[0]) {
+      if (!data.result[0]) {
         throw new ORPCError("NOT_FOUND", {
           message: "Job posting not found",
         });
       }
 
-      return data[0];
+      return data;
     }),
 
   delete: protectedProcedure
@@ -119,8 +101,12 @@ export const jobRouter = {
         });
       }
 
-      const { error } = await tryCatch(
-        db.delete(job).where(and(eq(job.id, input.id), eq(job.organizationId, orgId))),
+      const { data: txid, error } = await tryCatch(
+        db.transaction(async (tx) => {
+          await tx.delete(job).where(and(eq(job.id, input.id), eq(job.organizationId, orgId)));
+          const txid = await getTxid(tx);
+          return txid;
+        }),
       );
 
       if (error) {
@@ -130,6 +116,6 @@ export const jobRouter = {
         });
       }
 
-      return { success: true };
+      return { txid };
     }),
 };

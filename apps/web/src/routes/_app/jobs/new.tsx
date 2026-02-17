@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { IconArrowLeftFromLineOutline24, IconSpinnerLoaderOutline24 } from "nucleo-core-outline-24";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
@@ -23,6 +23,7 @@ import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@mi
 import { JobDescriptionEditor } from "@/components/job-description-editor";
 import { jobsCollection } from "@/utils/collections";
 import { Form } from "@mizu-hr/ui/form";
+import { v7 as uuidv7 } from "uuid";
 
 export const Route = createFileRoute("/_app/jobs/new")({
   component: NewJobRoute,
@@ -51,26 +52,13 @@ const defaultFormValues: JobFormValues = {
 };
 
 function NewJobRoute() {
-  const router = useRouter();
-
+  const navigate = useNavigate();
   const { data: membersData } = useQuery(orpc.organization.getMembers.queryOptions());
 
-  // const createMutation = useMutation(
-  //   orpc.job.create.mutationOptions({
-  //     onsuccess: async () => {
-  //       toastmanager.add({ title: "job created successfully", type: "success" });
-  //       await router.navigate({ to: "/jobs" });
-  //     },
-  //     onerror: (error: error) => {
-  //       toastmanager.add({ title: error.message || "failed to create job", type: "error" });
-  //     },
-  //   }),
-  // );
-  //
-  const createJob = (value: JobFormValues) => {
+  const createJob = async (value: JobFormValues) => {
     jobsCollection.insert({
       ...value,
-      id: "019c6399-c5ba-7974-a17c-5834bce99e98",
+      id: uuidv7(),
       createdAt: new Date(),
       updatedAt: new Date(),
       publishedAt: new Date(),
@@ -82,20 +70,14 @@ function NewJobRoute() {
       organizationId: "",
       createdBy: "",
     });
+
+    await navigate({ to: "/jobs" });
   };
 
   const form = useForm({
     defaultValues: defaultFormValues,
-    onSubmit: async ({ value }) => {
-      console.log("--- SUBMIT ---");
-      createJob(value as JobFormValues);
-    },
+    onSubmit: async ({ value }) => createJob(value as JobFormValues),
   });
-
-  console.log(form.getAllErrors());
-
-  // const isSubmitting = createMutation.isPending;
-  const isSubmitting = false;
 
   return (
     <div className="flex flex-1 flex-col gap-6 p-6">
@@ -136,7 +118,6 @@ function NewJobRoute() {
                 <Field>
                   <FieldLabel>Job Title *</FieldLabel>
                   <Input
-                    disabled={isSubmitting}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                     placeholder="e.g. Senior Software Engineer"
@@ -161,7 +142,6 @@ function NewJobRoute() {
                 <Field>
                   <FieldLabel>Job Description *</FieldLabel>
                   <JobDescriptionEditor
-                    disabled={isSubmitting}
                     onChange={(value) => field.handleChange(value)}
                     value={field.state.value}
                   />
@@ -194,7 +174,6 @@ function NewJobRoute() {
                   <Field>
                     <FieldLabel>Location *</FieldLabel>
                     <Input
-                      disabled={isSubmitting}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       placeholder="e.g. San Francisco, CA"
@@ -214,7 +193,6 @@ function NewJobRoute() {
                   <Field>
                     <FieldLabel>Employment Type *</FieldLabel>
                     <Select
-                      disabled={isSubmitting}
                       onValueChange={(value) => field.handleChange(value as EmploymentType)}
                       value={field.state.value}
                     >
@@ -249,7 +227,6 @@ function NewJobRoute() {
                 <Field>
                   <FieldLabel>Assigned Recruiters</FieldLabel>
                   <Combobox
-                    disabled={isSubmitting}
                     multiple
                     onValueChange={(values) => field.handleChange(values.map((v) => v.id))}
                     value={membersData?.members.filter((m) => field.state.value.includes(m.id))}
@@ -306,7 +283,6 @@ function NewJobRoute() {
                   <Field>
                     <FieldLabel>Min Salary</FieldLabel>
                     <Input
-                      disabled={isSubmitting}
                       onChange={(e) =>
                         field.handleChange(e.target.value ? Number(e.target.value) : null)
                       }
@@ -323,7 +299,6 @@ function NewJobRoute() {
                   <Field>
                     <FieldLabel>Max Salary</FieldLabel>
                     <Input
-                      disabled={isSubmitting}
                       onChange={(e) =>
                         field.handleChange(e.target.value ? Number(e.target.value) : null)
                       }
@@ -340,19 +315,10 @@ function NewJobRoute() {
 
         {/* Actions */}
         <div className="flex justify-end gap-3">
-          <Button variant="outline" disabled={isSubmitting} render={<Link to="/jobs" />}>
+          <Button variant="outline" render={<Link to="/jobs" />}>
             Cancel
           </Button>
-          <Button disabled={isSubmitting} type="submit">
-            {isSubmitting ? (
-              <>
-                <IconSpinnerLoaderOutline24 className="mr-2 size-4 animate-spin" />
-                Creating...
-              </>
-            ) : (
-              "Create Job"
-            )}
-          </Button>
+          <Button type="submit">Create Job</Button>
         </div>
       </Form>
     </div>

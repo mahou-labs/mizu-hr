@@ -12,6 +12,9 @@ import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@mi
 import { Switch } from "@mizu-hr/ui/switch";
 import { toastManager } from "@mizu-hr/ui/toast";
 import { JobDescriptionEditor } from "@/components/job-description-editor";
+import { eq, useLiveQuery } from "@tanstack/react-db";
+import { jobsCollection } from "@/utils/collections";
+import { jobSelectSchema } from "@mizu-hr/schemas/job";
 
 export const Route = createFileRoute("/_app/jobs/$jobId/edit")({
   component: EditJobRoute,
@@ -38,63 +41,57 @@ type JobFormValues = {
 function EditJobRoute() {
   const router = useRouter();
   const { jobId } = Route.useParams();
-
-  const jobQuery = useQuery(orpc.job.get.queryOptions({ input: { id: jobId } }));
-
-  const updateMutation = useMutation(
-    orpc.job.update.mutationOptions({
-      onSuccess: () => {
-        toastManager.add({ title: "Job updated successfully", type: "success" });
-        router.navigate({ to: "/jobs" });
-      },
-      onError: (error: Error) => {
-        toastManager.add({ title: error.message || "Failed to update job", type: "error" });
-      },
-    }),
+  const { data: job } = useLiveQuery((q) =>
+    q
+      .from({ jobs: jobsCollection })
+      .where(({ jobs }) => eq(jobs.id, jobId))
+      .findOne(),
   );
 
-  if (jobQuery.isLoading) {
-    return (
-      <div className="flex flex-1 items-center justify-center p-6">
-        <IconSpinnerLoaderOutline24 className="size-8 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
+  // const jobQuery = useQuery(orpc.job.get.queryOptions({ input: { id: jobId } }));
 
-  if (jobQuery.error || !jobQuery.data) {
-    return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6">
-        <p className="text-muted-foreground">Job not found</p>
-        <Button variant="outline" render={<Link to="/jobs" />}>
-          Back to Jobs
-        </Button>
-      </div>
-    );
-  }
+  // const updateMutation = useMutation(
+  //   orpc.job.update.mutationOptions({
+  //     onSuccess: () => {
+  //       toastManager.add({ title: "Job updated successfully", type: "success" });
+  //       router.navigate({ to: "/jobs" });
+  //     },
+  //     onError: (error: Error) => {
+  //       toastManager.add({ title: error.message || "Failed to update job", type: "error" });
+  //     },
+  //   }),
+  // );
+
+  // if (jobQuery.isLoading) {
+  //   return (
+  //     <div className="flex flex-1 items-center justify-center p-6">
+  //       <IconSpinnerLoaderOutline24 className="size-8 animate-spin text-muted-foreground" />
+  //     </div>
+  //   );
+  // }
+
+  // if (jobQuery.error || !jobQuery.data) {
+  //   return (
+  //     <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6">
+  //       <p className="text-muted-foreground">Job not found</p>
+  //       <Button variant="outline" render={<Link to="/jobs" />}>
+  //         Back to Jobs
+  //       </Button>
+  //     </div>
+  //   );
+  // }
 
   return (
     <EditJobForm
-      job={jobQuery.data}
-      isSubmitting={updateMutation.isPending}
+      job={job}
+      isSubmitting={false}
       onSubmit={(values) => updateMutation.mutate({ id: jobId, ...values })}
     />
   );
 }
 
 type EditJobFormProps = {
-  job: {
-    title: string;
-    description: string;
-    department: string | null;
-    location: string | null;
-    employmentType: string;
-    experienceLevel: string | null;
-    salaryMin: number | null;
-    salaryMax: number | null;
-    salaryCurrency: string | null;
-    remote: boolean;
-    status: string;
-  };
+  job: any;
   isSubmitting: boolean;
   onSubmit: (values: JobFormValues) => void;
 };

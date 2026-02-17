@@ -6,7 +6,7 @@ This file provides guidance for AI coding agents working in this repository.
 
 TypeScript monorepo (Turborepo + Bun) for a full-stack HR application:
 - **Frontend**: React 19 + TanStack Start (SSR) + TailwindCSS v4
-- **Backend**: Hono + oRPC (type-safe APIs) + Better Auth
+- **Backend**: Hono + RPC (type-safe APIs) + Better Auth
 - **Database**: PostgreSQL + Drizzle ORM
 - **UI Package**: Base UI + CVA + Tailwind Merge
 
