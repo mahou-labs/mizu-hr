@@ -132,7 +132,7 @@ function JobsList() {
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {jobs?.map((job) => (
         <Link key={job.id} to="/jobs/$jobId/edit" params={{ jobId: job.id }}>
-          <Card className="group relative transition-shadow hover:shadow-md">
+          <Card className="group relative h-full transition-shadow hover:shadow-md">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
