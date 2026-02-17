@@ -75,11 +75,7 @@ type JobFormProps = {
   mode: "create" | "edit";
 };
 
-export function JobForm({
-  defaultValues = defaultJobFormValues,
-  onSubmit,
-  mode,
-}: JobFormProps) {
+export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }: JobFormProps) {
   const { data: membersData } = useQuery(orpc.organization.getMembers.queryOptions());
 
   const form = useForm({
@@ -299,18 +295,24 @@ export function JobForm({
                   <Combobox
                     multiple
                     onValueChange={(values) => field.handleChange(values.map((v) => v.id))}
-                    value={membersData?.members.filter((m) =>
-                      field.state.value.includes(m.id),
-                    )}
+                    value={membersData?.members.filter((m) => field.state.value.includes(m.id))}
                   >
                     <ComboboxChips>
                       <ComboboxValue>
-                        {(value: { id: string; user: { name: string; email: string; image?: string | null } }[]) => (
+                        {(
+                          value: {
+                            id: string;
+                            user: { name: string; email: string; image?: string | null };
+                          }[],
+                        ) => (
                           <>
                             {value?.map((item) => (
                               <ComboboxChip aria-label={item.user.name} key={item.id}>
                                 <Avatar className="mr-1.5 size-5">
-                                  <AvatarImage src={item.user.image ?? undefined} alt={item.user.name} />
+                                  <AvatarImage
+                                    src={item.user.image ?? undefined}
+                                    alt={item.user.name}
+                                  />
                                   <AvatarFallback className="text-[10px]">
                                     {getInitials(item.user.name || item.user.email)}
                                   </AvatarFallback>
@@ -333,7 +335,10 @@ export function JobForm({
                           <ComboboxItem key={member.id} value={member}>
                             <div className="flex items-center gap-2">
                               <Avatar className="size-6">
-                                <AvatarImage src={member.user.image ?? undefined} alt={member.user.name} />
+                                <AvatarImage
+                                  src={member.user.image ?? undefined}
+                                  alt={member.user.name}
+                                />
                                 <AvatarFallback className="text-[10px]">
                                   {getInitials(member.user.name || member.user.email)}
                                 </AvatarFallback>
@@ -458,9 +463,7 @@ export function JobForm({
           <Button variant="outline" render={<Link to="/jobs" />}>
             Cancel
           </Button>
-          <Button type="submit">
-            {isCreate ? "Create Job" : "Update Job"}
-          </Button>
+          <Button type="submit">{isCreate ? "Create Job" : "Update Job"}</Button>
         </div>
       </Form>
     </div>
