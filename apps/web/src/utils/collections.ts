@@ -5,9 +5,12 @@ import { jobSelectSchema } from "@mizu-hr/schemas/job";
 import { orpc } from "./orpc-client";
 
 const electricUrl = `${import.meta.env.VITE_API_URL}/electric/jobs`;
-const fetchClient = Object.assign((input: RequestInfo | URL, init?: RequestInit) => {
-  return (fetch(input, { ...init, credentials: "include" }), { preconnect: fetch.preconnect });
-});
+const fetchClient = Object.assign(
+  (input: RequestInfo | URL, init?: RequestInit) => {
+    return fetch(input, { ...init, credentials: "include" });
+  },
+  { preconnect: fetch.preconnect },
+);
 
 export const jobsCollection = createCollection(
   electricCollectionOptions({

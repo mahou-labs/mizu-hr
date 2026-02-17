@@ -1,20 +1,16 @@
-import { useForm } from "@tanstack/react-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { IconArrowLeftFromLineOutline24, IconSpinnerLoaderOutline24 } from "nucleo-core-outline-24";
-import { z } from "zod";
-import { orpc } from "@/utils/orpc-client";
+import { JobDescriptionEditor } from "@/components/job-description-editor";
+import { jobsCollection } from "@/utils/collections";
 import { Button } from "@mizu-hr/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
 import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
 import { Input } from "@mizu-hr/ui/input";
 import { Select, SelectItem, SelectPopup, SelectTrigger, SelectValue } from "@mizu-hr/ui/select";
 import { Switch } from "@mizu-hr/ui/switch";
-import { toastManager } from "@mizu-hr/ui/toast";
-import { JobDescriptionEditor } from "@/components/job-description-editor";
 import { eq, useLiveQuery } from "@tanstack/react-db";
-import { jobsCollection } from "@/utils/collections";
-import { jobSelectSchema } from "@mizu-hr/schemas/job";
+import { useForm } from "@tanstack/react-form";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { IconArrowLeftFromLineOutline24, IconSpinnerLoaderOutline24 } from "nucleo-core-outline-24";
+import { z } from "zod";
 
 export const Route = createFileRoute("/_app/jobs/$jobId/edit")({
   component: EditJobRoute,
@@ -39,7 +35,7 @@ type JobFormValues = {
 };
 
 function EditJobRoute() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { jobId } = Route.useParams();
   const { data: job } = useLiveQuery((q) =>
     q
@@ -48,46 +44,12 @@ function EditJobRoute() {
       .findOne(),
   );
 
-  // const jobQuery = useQuery(orpc.job.get.queryOptions({ input: { id: jobId } }));
+  const updateJob = async (values: JobFormValues) => {
+    jobsCollection.update({ id: jobId }, (draft) => Object.assign(draft, values));
+    await navigate({ to: "/jobs" });
+  };
 
-  // const updateMutation = useMutation(
-  //   orpc.job.update.mutationOptions({
-  //     onSuccess: () => {
-  //       toastManager.add({ title: "Job updated successfully", type: "success" });
-  //       router.navigate({ to: "/jobs" });
-  //     },
-  //     onError: (error: Error) => {
-  //       toastManager.add({ title: error.message || "Failed to update job", type: "error" });
-  //     },
-  //   }),
-  // );
-
-  // if (jobQuery.isLoading) {
-  //   return (
-  //     <div className="flex flex-1 items-center justify-center p-6">
-  //       <IconSpinnerLoaderOutline24 className="size-8 animate-spin text-muted-foreground" />
-  //     </div>
-  //   );
-  // }
-
-  // if (jobQuery.error || !jobQuery.data) {
-  //   return (
-  //     <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6">
-  //       <p className="text-muted-foreground">Job not found</p>
-  //       <Button variant="outline" render={<Link to="/jobs" />}>
-  //         Back to Jobs
-  //       </Button>
-  //     </div>
-  //   );
-  // }
-
-  return (
-    <EditJobForm
-      job={job}
-      isSubmitting={false}
-      onSubmit={(values) => updateMutation.mutate({ id: jobId, ...values })}
-    />
-  );
+  return <EditJobForm job={job} isSubmitting={false} onSubmit={updateJob} />;
 }
 
 type EditJobFormProps = {
