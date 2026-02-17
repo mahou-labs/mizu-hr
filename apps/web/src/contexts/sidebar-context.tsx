@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { useKeyPress } from "@/hooks/use-key-press";
+import { useHotkey } from "@tanstack/react-hotkeys";
 
 type SidebarContextValue = {
   isCollapsed: boolean;
@@ -11,7 +11,7 @@ const SidebarContext = createContext<SidebarContextValue | null>(null);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  useKeyPress("b", () => setIsCollapsed((prev) => !prev), { mod: true, preventDefault: true });
+  useHotkey("Mod+B", () => setIsCollapsed((prev) => !prev));
 
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 

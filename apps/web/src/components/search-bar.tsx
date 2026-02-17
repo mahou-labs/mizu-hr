@@ -1,12 +1,4 @@
-import {
-  IconChevronDownOutline24,
-  IconChevronUpOutline24,
-  IconArrowCornerBottomLeftOutline24,
-  IconMagnifierOutline24,
-} from "nucleo-core-outline-24";
-import { Fragment, useMemo, useState } from "react";
 import { useSidebar } from "@/contexts/sidebar-context";
-import { useKeyPress } from "@/hooks/use-key-press";
 import { cn } from "@/utils/cn";
 import { Button } from "@mizu-hr/ui/button";
 import {
@@ -27,6 +19,14 @@ import {
   CommandShortcut,
 } from "@mizu-hr/ui/command";
 import { Kbd, KbdGroup } from "@mizu-hr/ui/kbd";
+import { useHotkey } from "@tanstack/react-hotkeys";
+import {
+  IconArrowCornerBottomLeftOutline24,
+  IconChevronDownOutline24,
+  IconChevronUpOutline24,
+  IconMagnifierOutline24,
+} from "nucleo-core-outline-24";
+import { Fragment, useMemo, useState } from "react";
 
 type Item = {
   value: string;
@@ -71,7 +71,7 @@ export function SearchBar() {
   const { isCollapsed } = useSidebar();
   const [open, setOpen] = useState(false);
   const modifierKey = useModifierKey();
-  useKeyPress("k", () => setOpen((open) => !open), { mod: true, preventDefault: true });
+  useHotkey("Mod+K", () => setOpen((open) => !open));
 
   function handleItemClick(_item: Item) {
     setOpen(false);

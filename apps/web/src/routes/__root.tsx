@@ -1,5 +1,10 @@
-import { scan } from "react-scan";
+import { orpc } from "@/utils/orpc-client";
+import { Button } from "@mizu-hr/ui/button";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
+import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
+import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -7,16 +12,12 @@ import {
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
-import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
-import { TanStackDevtools } from "@tanstack/react-devtools";
-import { orpc } from "@/utils/orpc-client";
-import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
-// import { ThemeProvider } from "@/utils/theme-provider";
+import { scan } from "react-scan";
+// import { hotkeysDevtoolsPlugin } from "@tanstack/react-hotkeys-devtools";
+// import { formDevtoolsPlugin } from "@tanstack/react-form-devtools";
 import { ThemeProvider } from "better-themes";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
-import { Button } from "@mizu-hr/ui/button";
 import { IconCircleXmarkOutline24 } from "nucleo-core-outline-24";
 
 const Posthog = () => {
@@ -116,6 +117,8 @@ function RootDocument() {
               name: "TanStack Router",
               render: <TanStackRouterDevtoolsPanel />,
             },
+            // formDevtoolsPlugin(),
+            // hotkeysDevtoolsPlugin(),
           ]}
         />
         <Scripts />
