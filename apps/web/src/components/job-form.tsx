@@ -1,7 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { IconArrowLeftFromLineOutline24 } from "nucleo-core-outline-24";
 import { z } from "zod";
 import { Avatar, AvatarFallback, AvatarImage } from "@mizu-hr/ui/avatar";
 import { Button } from "@mizu-hr/ui/button";
@@ -77,6 +76,7 @@ type JobFormProps = {
 
 export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }: JobFormProps) {
   const { data: membersData } = useQuery(orpc.organization.getMembers.queryOptions());
+  const members = membersData?.members ?? [];
 
   const form = useForm({
     defaultValues,
@@ -88,51 +88,72 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
   const isCreate = mode === "create";
 
   return (
-    <div className="flex flex-1 flex-col gap-6 p-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" render={<Link to="/jobs" />}>
-          <IconArrowLeftFromLineOutline24 className="size-4" />
-        </Button>
-        <div>
-          <h1 className="font-heading text-2xl">
-            {isCreate ? "Create Job Posting" : "Edit Job Posting"}
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            {isCreate
-              ? "Fill in the details to create a new job posting"
-              : "Update the job posting details"}
-          </p>
-        </div>
-      </div>
+    <Form
+      className="flex flex-col gap-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        form.handleSubmit();
+      }}
+    >
+      {/* Basic Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Basic Information</CardTitle>
+          <CardDescription>The main details about this position</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <form.Field
+            name="title"
+            validators={{
+              onBlur: z.string().min(1, "Job title is required"),
+            }}
+          >
+            {(field) => (
+              <Field>
+                <FieldLabel>Job Title *</FieldLabel>
+                <Input
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="e.g. Senior Software Engineer"
+                  value={field.state.value}
+                />
+                {field.state.meta.errors.map((error) => (
+                  <FieldError key={typeof error === "string" ? error : error?.message}>
+                    {typeof error === "string" ? error : error?.message}
+                  </FieldError>
+                ))}
+              </Field>
+            )}
+          </form.Field>
 
-      <Form
-        className="flex flex-col gap-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
-        }}
-      >
-        {/* Basic Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
-            <CardDescription>The main details about this position</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <form.Field name="department">
+              {(field) => (
+                <Field>
+                  <FieldLabel>Department</FieldLabel>
+                  <Input
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    placeholder="e.g. Engineering"
+                    value={field.state.value}
+                  />
+                </Field>
+              )}
+            </form.Field>
+
             <form.Field
-              name="title"
+              name="location"
               validators={{
-                onBlur: z.string().min(1, "Job title is required"),
+                onBlur: z.string().min(1, "Location is required"),
               }}
             >
               {(field) => (
                 <Field>
-                  <FieldLabel>Job Title *</FieldLabel>
+                  <FieldLabel>Location *</FieldLabel>
                   <Input
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="e.g. Senior Software Engineer"
+                    placeholder="e.g. San Francisco, CA"
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
@@ -143,71 +164,34 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
                 </Field>
               )}
             </form.Field>
+          </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <form.Field name="department">
-                {(field) => (
-                  <Field>
-                    <FieldLabel>Department</FieldLabel>
-                    <Input
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="e.g. Engineering"
-                      value={field.state.value}
-                    />
-                  </Field>
-                )}
-              </form.Field>
+          <form.Field
+            name="description"
+            validators={{
+              onBlur: z.string().min(1, "Job description is required"),
+            }}
+          >
+            {(field) => (
+              <Field>
+                <FieldLabel>Job Description *</FieldLabel>
+                <JobDescriptionEditor
+                  onChange={(value) => field.handleChange(value)}
+                  value={field.state.value}
+                />
+                {field.state.meta.errors.map((error) => (
+                  <FieldError key={typeof error === "string" ? error : error?.message}>
+                    {typeof error === "string" ? error : error?.message}
+                  </FieldError>
+                ))}
+              </Field>
+            )}
+          </form.Field>
+        </CardContent>
+      </Card>
 
-              <form.Field
-                name="location"
-                validators={{
-                  onBlur: z.string().min(1, "Location is required"),
-                }}
-              >
-                {(field) => (
-                  <Field>
-                    <FieldLabel>Location *</FieldLabel>
-                    <Input
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="e.g. San Francisco, CA"
-                      value={field.state.value}
-                    />
-                    {field.state.meta.errors.map((error) => (
-                      <FieldError key={typeof error === "string" ? error : error?.message}>
-                        {typeof error === "string" ? error : error?.message}
-                      </FieldError>
-                    ))}
-                  </Field>
-                )}
-              </form.Field>
-            </div>
-
-            <form.Field
-              name="description"
-              validators={{
-                onBlur: z.string().min(1, "Job description is required"),
-              }}
-            >
-              {(field) => (
-                <Field>
-                  <FieldLabel>Job Description *</FieldLabel>
-                  <JobDescriptionEditor
-                    onChange={(value) => field.handleChange(value)}
-                    value={field.state.value}
-                  />
-                  {field.state.meta.errors.map((error) => (
-                    <FieldError key={typeof error === "string" ? error : error?.message}>
-                      {typeof error === "string" ? error : error?.message}
-                    </FieldError>
-                  ))}
-                </Field>
-              )}
-            </form.Field>
-          </CardContent>
-        </Card>
-
-        {/* Employment Details */}
+      {/* Employment Details + Recruiters */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Employment Details</CardTitle>
@@ -264,7 +248,9 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
               <div className="flex items-center justify-between rounded-lg border border-border p-4">
                 <div>
                   <FieldLabel className="mb-0">Remote Position</FieldLabel>
-                  <p className="text-muted-foreground text-sm">This position allows remote work</p>
+                  <p className="text-muted-foreground text-sm">
+                    This position allows remote work
+                  </p>
                 </div>
                 <form.Field name="remote">
                   {(field) => (
@@ -279,7 +265,6 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
           </CardContent>
         </Card>
 
-        {/* Recruiters */}
         <Card>
           <CardHeader>
             <CardTitle>Recruiters</CardTitle>
@@ -295,7 +280,7 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
                   <Combobox
                     multiple
                     onValueChange={(values) => field.handleChange(values.map((v) => v.id))}
-                    value={membersData?.members.filter((m) => field.state.value.includes(m.id))}
+                    value={members.filter((m) => field.state.value.includes(m.id))}
                   >
                     <ComboboxChips>
                       <ComboboxValue>
@@ -322,16 +307,20 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
                             ))}
                             <ComboboxInput
                               aria-label="Select recruiters"
-                              placeholder={value.length > 0 ? undefined : "Select recruiters..."}
+                              placeholder={
+                                value.length > 0 ? undefined : "Select recruiters..."
+                              }
                             />
                           </>
                         )}
                       </ComboboxValue>
                     </ComboboxChips>
                     <ComboboxPopup>
-                      <ComboboxEmpty>No members found</ComboboxEmpty>
+                      {members.length === 0 && (
+                        <ComboboxEmpty>No members found</ComboboxEmpty>
+                      )}
                       <ComboboxList>
-                        {membersData?.members.map((member) => (
+                        {members.map((member) => (
                           <ComboboxItem key={member.id} value={member}>
                             <div className="flex items-center gap-2">
                               <Avatar className="size-6">
@@ -360,8 +349,10 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
             </form.Field>
           </CardContent>
         </Card>
+      </div>
 
-        {/* Compensation */}
+      {/* Compensation + Publishing */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Compensation</CardTitle>
@@ -427,7 +418,6 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
           </CardContent>
         </Card>
 
-        {/* Publishing */}
         <Card>
           <CardHeader>
             <CardTitle>Publishing</CardTitle>
@@ -457,15 +447,15 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
             </form.Field>
           </CardContent>
         </Card>
+      </div>
 
-        {/* Actions */}
-        <div className="flex justify-end gap-3">
-          <Button variant="outline" render={<Link to="/jobs" />}>
-            Cancel
-          </Button>
-          <Button type="submit">{isCreate ? "Create Job" : "Update Job"}</Button>
-        </div>
-      </Form>
-    </div>
+      {/* Actions */}
+      <div className="flex justify-end gap-3">
+        <Button variant="outline" render={<Link to="/jobs" />}>
+          Cancel
+        </Button>
+        <Button type="submit">{isCreate ? "Create Job" : "Update Job"}</Button>
+      </div>
+    </Form>
   );
 }

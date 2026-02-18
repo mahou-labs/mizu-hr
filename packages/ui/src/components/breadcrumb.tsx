@@ -1,6 +1,6 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { IconChevronRightOutline24, IconDotsOutline24 } from "nucleo-core-outline-24";
+import { IconChevronRightFill18, IconDotsFill18 } from "nucleo-ui-fill-18";
 import type * as React from "react";
 
 import { cn } from "../utils/cn";
@@ -62,12 +62,12 @@ function BreadcrumbSeparator({ children, className, ...props }: React.ComponentP
   return (
     <li
       aria-hidden="true"
-      className={cn("opacity-72 [&>svg]:size-4", className)}
+      className={cn("opacity-80 [&>svg]:size-4", className)}
       data-slot="breadcrumb-separator"
       role="presentation"
       {...props}
     >
-      {children ?? <IconChevronRightOutline24 />}
+      {children ?? <IconChevronRightFill18 />}
     </li>
   );
 }
@@ -81,7 +81,7 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<"span"
       role="presentation"
       {...props}
     >
-      <IconDotsOutline24 className="size-4" />
+      <IconDotsFill18 />
       <span className="sr-only">More</span>
     </span>
   );

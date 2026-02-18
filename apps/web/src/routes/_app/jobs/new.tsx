@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { v7 as uuidv7 } from "uuid";
 import { JobForm, type JobFormValues } from "@/components/job-form";
+import { Page } from "@/components/page";
 import { jobsCollection } from "@/utils/collections";
 
 export const Route = createFileRoute("/_app/jobs/new")({
@@ -24,5 +25,12 @@ function NewJobRoute() {
     await navigate({ to: "/jobs" });
   };
 
-  return <JobForm mode="create" onSubmit={createJob} />;
+  return (
+    <Page
+      title="Create Job Posting"
+      description="Fill in the details to create a new job posting"
+    >
+      <JobForm mode="create" onSubmit={createJob} />
+    </Page>
+  );
 }

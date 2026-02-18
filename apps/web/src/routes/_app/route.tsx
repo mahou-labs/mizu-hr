@@ -3,7 +3,6 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { Sidebar } from "@/components/sidebar";
 import { SidebarProvider } from "@/contexts/sidebar-context";
 import { orpc } from "@/utils/orpc-client";
-import { ScrollArea } from "@mizu-hr/ui/scroll-area";
 
 export const Route = createFileRoute("/_app")({
   ssr: "data-only",
@@ -31,18 +30,12 @@ function RouteComponent() {
 
   return (
     <SidebarProvider>
-      <div className="flex h-full overflow-hidden bg-sidebar py-2 pr-2">
+      <main className="flex h-full overflow-hidden bg-sidebar">
         <Sidebar />
-        {/* Native browser scroll implementation */}
-        {/*<div className="h-full flex-1 overflow-y-auto overscroll-contain rounded-md border border-border bg-background p-4">
+        <div className="h-full overflow-y-auto grow">
           <Outlet />
-        </div> */}
-
-        {/* Custom ScrollArea with themed scrollbar */}
-        <ScrollArea className="h-full flex-1 rounded-lg border border-border/50 bg-background p-4">
-          <Outlet />
-        </ScrollArea>
-      </div>
+        </div>
+      </main>
     </SidebarProvider>
   );
 }
