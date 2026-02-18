@@ -5,7 +5,6 @@ import { SidebarProvider } from "@/contexts/sidebar-context";
 import { orpc } from "@/utils/orpc-client";
 
 export const Route = createFileRoute("/_app")({
-  ssr: "data-only",
   component: RouteComponent,
   beforeLoad: ({ context }) => {
     if (!context.session) {

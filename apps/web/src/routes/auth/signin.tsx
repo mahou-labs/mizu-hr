@@ -20,8 +20,6 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { redirect } = useSearch({ from: "/auth" });
 
-  const { isPending } = authClient.useSession();
-
   const form = useForm({
     defaultValues: {
       email: "",
@@ -39,7 +37,7 @@ function RouteComponent() {
           onSuccess: async () => {
             toastManager.add({ title: "Sign in successful", type: "success" });
             await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
-            await navigate({ to: redirect ?? "/dashboard" });
+            await navigate({ to: redirect ?? "/" });
           },
           onError: (error) => {
             toastManager.add({
@@ -58,10 +56,6 @@ function RouteComponent() {
       }),
     },
   });
-
-  if (isPending) {
-    return <Loader />;
-  }
 
   return (
     <div className="mx-auto mt-10 w-full max-w-md p-6">

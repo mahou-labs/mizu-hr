@@ -29,7 +29,7 @@ function RouteComponent() {
         onSuccess: async () => {
           toastManager.add({ title: "Sign up successful", type: "success" });
           await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
-          await navigate({ to: redirect ?? "/dashboard" });
+          await navigate({ to: redirect ?? "/" });
         },
         onError: (error) => {
           toastManager.add({

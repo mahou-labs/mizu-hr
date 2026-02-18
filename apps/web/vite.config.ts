@@ -17,7 +17,7 @@ export default defineConfig({
     tsconfigPaths(),
     tailwindcss(),
     cloudflare({ viteEnvironment: { name: "ssr" } }),
-    tanstackStart(),
+    tanstackStart({ spa: { enabled: true } }),
     viteReact({ babel: { plugins: ["babel-plugin-react-compiler"] } }),
   ],
 });
