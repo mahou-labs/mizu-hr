@@ -33,7 +33,7 @@ function RouteComponent() {
               Open-source applicant tracking and recruitment platform.
             </p>
           </div>
-          <p className="text-xs text-zinc-400 dark:text-zinc-600">&copy; 2025 Mizu HR</p>
+          <p className="text-xs text-zinc-400 dark:text-zinc-600">&copy; 2025 Mahou Labs</p>
         </div>
       </div>
 
