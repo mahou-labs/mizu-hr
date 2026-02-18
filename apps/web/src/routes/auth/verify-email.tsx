@@ -94,18 +94,16 @@ function VerifyEmailRoute() {
 
   if (status === "loading") {
     return (
-      <div className="mx-auto mt-10 w-full max-w-md p-6">
-        <div className="flex flex-col items-center justify-center">
-          <Loader />
-          <p className="mt-4 text-muted-foreground">Verifying your email...</p>
-        </div>
+      <div className="flex flex-col items-center justify-center">
+        <Loader />
+        <p className="mt-4 text-muted-foreground">Verifying your email...</p>
       </div>
     );
   }
 
   if (status === "success") {
     return (
-      <div className="mx-auto mt-10 w-full max-w-md p-6">
+      <>
         <div className="mb-6 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
             <span className="text-2xl">✓</span>
@@ -120,13 +118,13 @@ function VerifyEmailRoute() {
         <Button className="w-full" onClick={() => navigate({ to: "/" })}>
           Go to Dashboard
         </Button>
-      </div>
+      </>
     );
   }
 
   if (status === "error") {
     return (
-      <div className="mx-auto mt-10 w-full max-w-md p-6">
+      <>
         <div className="mb-6 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
             <span className="text-2xl">⚠️</span>
@@ -150,13 +148,12 @@ function VerifyEmailRoute() {
             Back to Sign In
           </Button>
         </div>
-      </div>
+      </>
     );
   }
 
-  // Missing token state
   return (
-    <div className="mx-auto mt-10 w-full max-w-md p-6">
+    <>
       <div className="mb-6 text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
           <span className="text-2xl">✉️</span>
@@ -176,6 +173,6 @@ function VerifyEmailRoute() {
           Back to Sign In
         </Button>
       </div>
-    </div>
+    </>
   );
 }

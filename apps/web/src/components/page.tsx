@@ -36,7 +36,7 @@ function PageHeader() {
   const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div className="sticky top-0 z-10 flex w-full items-center border-b bg-background pl-6 py-2">
+    <div className="sticky top-0 z-10 flex w-full items-center border-b bg-sidebar pl-6 py-4">
       <button
         className="flex h-8 w-8 mr-2 items-center justify-center rounded-md border border-border bg-light text-foreground transition-all hover:bg-default"
         onClick={toggleSidebar}

@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import z from "zod";
 import { Button } from "@mizu-hr/ui/button";
 import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
@@ -49,8 +49,11 @@ function RouteComponent() {
   });
 
   return (
-    <div className="mx-auto mt-10 w-full max-w-md p-6">
-      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">Create Account</h1>
+    <>
+      <h1 className="font-bold text-2xl text-foreground">Create an account</h1>
+      <p className="mt-1 mb-6 text-sm text-muted-foreground">
+        Enter your details to get started.
+      </p>
 
       <form
         className="space-y-4"
@@ -135,14 +138,16 @@ function RouteComponent() {
         </form.Subscribe>
       </form>
 
-      <div className="mt-4 text-center">
-        <Button
-          onClick={() => navigate({ to: "/auth/signin", search: { redirect } })}
-          variant="link"
+      <p className="mt-6 text-center text-sm text-muted-foreground">
+        Already have an account?{" "}
+        <Link
+          to="/auth/signin"
+          search={{ redirect }}
+          className="text-foreground underline underline-offset-4 hover:text-foreground/80"
         >
-          Already have an account? Sign In
-        </Button>
-      </div>
-    </div>
+          Sign in
+        </Link>
+      </p>
+    </>
   );
 }
