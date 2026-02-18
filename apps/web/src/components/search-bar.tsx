@@ -1,5 +1,3 @@
-import { useSidebar } from "@/contexts/sidebar-context";
-import { cn } from "@/utils/cn";
 import { Button } from "@mizu-hr/ui/button";
 import {
   Command,
@@ -21,11 +19,11 @@ import {
 import { Kbd, KbdGroup } from "@mizu-hr/ui/kbd";
 import { useHotkey } from "@tanstack/react-hotkeys";
 import {
-  IconArrowCornerBottomLeftOutline24,
-  IconChevronDownOutline24,
-  IconChevronUpOutline24,
-  IconMagnifierOutline24,
-} from "nucleo-core-outline-24";
+  IconArrowCornerBottomLeftOutline18,
+  IconChevronDownOutline18,
+  IconChevronUpOutline18,
+  IconMagnifierOutline18,
+} from "nucleo-ui-outline-18";
 import { Fragment, useMemo, useState } from "react";
 
 type Item = {
@@ -68,7 +66,6 @@ function useModifierKey() {
 }
 
 export function SearchBar() {
-  const { isCollapsed } = useSidebar();
   const [open, setOpen] = useState(false);
   const modifierKey = useModifierKey();
   useHotkey("Mod+K", () => setOpen((open) => !open));
@@ -83,17 +80,12 @@ export function SearchBar() {
         render={
           <Button
             variant="ghost"
-            className="mb-2 h-8 w-full justify-start gap-3 px-1.75 text-muted-foreground outline-solid outline outline-border hover:bg-transparent"
+            className="h-8 ml-auto w-full max-w-3xs justify-start gap-3 px-1.75 text-muted-foreground outline-solid outline outline-border hover:bg-transparent"
           />
         }
       >
-        <IconMagnifierOutline24 className="size-4 shrink-0" />
-        <div
-          className={cn(
-            "flex flex-1 items-center justify-between transition-opacity duration-200",
-            isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100",
-          )}
-        >
+        <IconMagnifierOutline18 className="size-4 shrink-0" />
+        <div className="flex flex-1 items-center justify-between">
           <span>Search...</span>
           <KbdGroup>
             <Kbd>{modifierKey}</Kbd>
@@ -134,17 +126,17 @@ export function SearchBar() {
               <div className="flex items-center gap-2">
                 <KbdGroup>
                   <Kbd>
-                    <IconChevronUpOutline24 />
+                    <IconChevronUpOutline18 />
                   </Kbd>
                   <Kbd>
-                    <IconChevronDownOutline24 />
+                    <IconChevronDownOutline18 />
                   </Kbd>
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
               <div className="flex items-center gap-2">
                 <Kbd>
-                  <IconArrowCornerBottomLeftOutline24 />
+                  <IconArrowCornerBottomLeftOutline18 />
                 </Kbd>
                 <span>Open</span>
               </div>

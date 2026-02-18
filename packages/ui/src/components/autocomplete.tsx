@@ -1,5 +1,5 @@
 import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomplete";
-import { IconChevronExpandYOutline24, IconXmarkOutline24 } from "nucleo-core-outline-24";
+import { IconChevronExpandYOutline18, IconXmarkOutline18 } from "nucleo-ui-outline-18";
 
 import { cn } from "../utils/cn";
 import { Input } from "./input";
@@ -54,7 +54,7 @@ function AutocompleteInput({
             sizeValue === "sm" ? "end-0" : "end-0.5",
           )}
         >
-          <IconChevronExpandYOutline24 />
+          <IconChevronExpandYOutline18 />
         </AutocompleteTrigger>
       )}
       {showClear && (
@@ -64,7 +64,7 @@ function AutocompleteInput({
             sizeValue === "sm" ? "end-0" : "end-0.5",
           )}
         >
-          <IconXmarkOutline24 />
+          <IconXmarkOutline18 />
         </AutocompleteClear>
       )}
     </div>
@@ -195,7 +195,7 @@ function AutocompleteClear({ className, ...props }: AutocompletePrimitive.Clear.
       data-slot="autocomplete-clear"
       {...props}
     >
-      <IconXmarkOutline24 />
+      <IconXmarkOutline18 />
     </AutocompletePrimitive.Clear>
   );
 }

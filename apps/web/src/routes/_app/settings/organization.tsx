@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { IconCircleUserOutline24, IconUserPlusOutline24 } from "nucleo-core-outline-24";
+import { IconCircleUserOutline18, IconUserPlusOutline18 } from "nucleo-ui-outline-18";
 import { useState } from "react";
 import { z } from "zod";
 import { Avatar, AvatarFallback, AvatarImage } from "@mizu-hr/ui/avatar";
@@ -100,7 +100,7 @@ function RouteComponent() {
       </div>
 
       <Button className="mt-4" onClick={() => setIsDialogOpen(true)} variant="outline">
-        <IconUserPlusOutline24 className="mr-2 size-4" />
+        <IconUserPlusOutline18 className="mr-2 size-4" />
         Invite Member
       </Button>
 
@@ -251,7 +251,7 @@ function Member({ name, email, role, isPending = false, avatarUrl, className }: 
           <Avatar>
             <AvatarImage alt={`${name}'s avatar`} src={avatarUrl} />
             <AvatarFallback>
-              {initials || <IconCircleUserOutline24 className="size-5" />}
+              {initials || <IconCircleUserOutline18 className="size-5" />}
             </AvatarFallback>
           </Avatar>
 

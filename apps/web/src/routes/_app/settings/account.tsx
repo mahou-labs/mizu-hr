@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useHydrated } from "@tanstack/react-router";
 import { useTheme } from "better-themes";
 import {
-  IconCheckOutline24,
-  IconLaptopOutline24,
-  IconDarkModeOutline24,
-  IconSunOutline24,
-} from "nucleo-core-outline-24";
+  IconCheckOutline18,
+  IconLaptopOutline18,
+  IconDarkModeOutline18,
+  IconSunOutline18,
+} from "nucleo-ui-outline-18";
 import { Button } from "@mizu-hr/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mizu-hr/ui/card";
 import { cn } from "@/utils/cn";
@@ -19,16 +19,16 @@ type ThemeOption = "light" | "dark" | "system";
 
 const themeConfig: Record<
   ThemeOption,
-  { icon: typeof IconSunOutline24; label: string; description: string }
+  { icon: typeof IconSunOutline18; label: string; description: string }
 > = {
-  light: { icon: IconSunOutline24, label: "Light", description: "A clean, bright appearance" },
+  light: { icon: IconSunOutline18, label: "Light", description: "A clean, bright appearance" },
   dark: {
-    icon: IconDarkModeOutline24,
+    icon: IconDarkModeOutline18,
     label: "Dark",
     description: "Easy on the eyes in low light",
   },
   system: {
-    icon: IconLaptopOutline24,
+    icon: IconLaptopOutline18,
     label: "System",
     description: "Matches your device settings",
   },
@@ -70,7 +70,7 @@ function RouteComponent() {
                 >
                   <div className="flex w-full items-center justify-between">
                     <Icon className="size-5" />
-                    {isActive && <IconCheckOutline24 className="size-4 text-primary" />}
+                    {isActive && <IconCheckOutline18 className="size-4 text-primary" />}
                   </div>
                   <div className="text-left">
                     <div className="font-medium">{themeConfig[themeOption].label}</div>

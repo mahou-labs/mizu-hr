@@ -1,5 +1,5 @@
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
-import { IconCheckOutline24, IconChevronRightOutline24 } from "nucleo-core-outline-24";
+import { IconCheckOutline18, IconChevronRightOutline18 } from "nucleo-ui-outline-18";
 import type * as React from "react";
 
 import { cn } from "../utils/cn";
@@ -95,7 +95,7 @@ function MenuCheckboxItem({
       {...props}
     >
       <MenuPrimitive.CheckboxItemIndicator className="col-start-1">
-        <IconCheckOutline24 />
+        <IconCheckOutline18 />
       </MenuPrimitive.CheckboxItemIndicator>
       <span className="col-start-2">{children}</span>
     </MenuPrimitive.CheckboxItem>
@@ -117,7 +117,7 @@ function MenuRadioItem({ className, children, ...props }: MenuPrimitive.RadioIte
       {...props}
     >
       <MenuPrimitive.RadioItemIndicator className="col-start-1">
-        <IconCheckOutline24 />
+        <IconCheckOutline18 />
       </MenuPrimitive.RadioItemIndicator>
       <span className="col-start-2">{children}</span>
     </MenuPrimitive.RadioItem>
@@ -187,7 +187,7 @@ function MenuSubTrigger({
       {...props}
     >
       {children}
-      <IconChevronRightOutline24 className="ms-auto" />
+      <IconChevronRightOutline18 className="ms-auto" />
     </MenuPrimitive.SubmenuTrigger>
   );
 }

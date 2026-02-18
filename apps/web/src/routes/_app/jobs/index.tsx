@@ -1,16 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  IconSuitcaseOutline24,
-  IconOfficeOutline24,
-  IconClock2Outline24,
-  IconCurrencyDollarOutline24,
-  IconGlobeOutline24,
-  IconSpinnerLoaderOutline24,
-  IconMapPinOutline24,
-  IconCirclePlusOutline24,
-  IconTrashOutline24,
-  IconUsersPlusOutline24,
-} from "nucleo-core-outline-24";
+  IconSuitcaseOutline18,
+  IconOfficeOutline18,
+  IconClock2Outline18,
+  IconCurrencyDollarOutline18,
+  IconGlobeOutline18,
+  IconLoaderOutline18,
+  IconMapPinOutline18,
+  IconCirclePlusOutline18,
+  IconTrashOutline18,
+  IconUsersPlusOutline18,
+} from "nucleo-ui-outline-18";
 import { Suspense, useState } from "react";
 import { Page } from "@/components/page";
 import {
@@ -81,12 +81,12 @@ function JobsRoute() {
       description="Manage your open positions and job listings"
       actions={
         <Button render={<Link to="/jobs/new" />}>
-          <IconCirclePlusOutline24 className="mr-2 size-4" />
+          <IconCirclePlusOutline18 className="mr-2 size-4" />
           Add Job
         </Button>
       }
     >
-      <Suspense fallback={<IconSpinnerLoaderOutline24 />}>
+      <Suspense fallback={<IconLoaderOutline18 />}>
         <JobsList />
       </Suspense>
     </Page>
@@ -116,7 +116,7 @@ function JobsList() {
     <Empty className="flex-1 border">
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <IconSuitcaseOutline24 />
+          <IconSuitcaseOutline18 />
         </EmptyMedia>
         <EmptyTitle>No job postings yet</EmptyTitle>
         <EmptyDescription>
@@ -124,7 +124,7 @@ function JobsList() {
         </EmptyDescription>
       </EmptyHeader>
       <Button render={<Link to="/jobs/new" />}>
-        <IconCirclePlusOutline24 className="mr-2 size-4" />
+        <IconCirclePlusOutline18 className="mr-2 size-4" />
         Create Job Posting
       </Button>
     </Empty>
@@ -139,7 +139,7 @@ function JobsList() {
                   <CardTitle className="line-clamp-1 text-lg">{job.title}</CardTitle>
                   {job.department && (
                     <CardDescription className="mt-1 flex items-center gap-1">
-                      <IconOfficeOutline24 className="size-3" />
+                      <IconOfficeOutline18 className="size-3" />
                       {job.department}
                     </CardDescription>
                   )}
@@ -153,7 +153,7 @@ function JobsList() {
                     handleDeleteClick(job.id);
                   }}
                 >
-                  <IconTrashOutline24 className="size-4" />
+                  <IconTrashOutline18 className="size-4" />
                 </Button>
               </div>
             </CardHeader>
@@ -167,7 +167,7 @@ function JobsList() {
                 </Badge>
                 {job.remote && (
                   <Badge variant="outline">
-                    <IconGlobeOutline24 className="mr-1 size-3" />
+                    <IconGlobeOutline18 className="mr-1 size-3" />
                     Remote
                   </Badge>
                 )}
@@ -176,26 +176,26 @@ function JobsList() {
               <div className="space-y-1.5 text-muted-foreground text-sm">
                 {job.location && (
                   <div className="flex items-center gap-2">
-                    <IconMapPinOutline24 className="size-3.5" />
+                    <IconMapPinOutline18 className="size-3.5" />
                     <span>{job.location}</span>
                   </div>
                 )}
                 {job.experienceLevel && (
                   <div className="flex items-center gap-2">
-                    <IconUsersPlusOutline24 className="size-3.5" />
+                    <IconUsersPlusOutline18 className="size-3.5" />
                     <span>{experienceLevelLabels[job.experienceLevel as ExperienceLevel]}</span>
                   </div>
                 )}
                 {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined) && (
                   <div className="flex items-center gap-2">
-                    <IconCurrencyDollarOutline24 className="size-3.5" />
+                    <IconCurrencyDollarOutline18 className="size-3.5" />
                     <span>
                       {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined)}
                     </span>
                   </div>
                 )}
                 <div className="flex items-center gap-2">
-                  <IconClock2Outline24 className="size-3.5" />
+                  <IconClock2Outline18 className="size-3.5" />
                   <span>
                     {job.publishedAt
                       ? `Published ${new Date(job.publishedAt).toLocaleDateString()}`

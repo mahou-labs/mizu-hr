@@ -1,4 +1,4 @@
-import { IconLayoutLeftOutline24 } from "nucleo-core-outline-24";
+import { IconLayoutLeftOutline18 } from "nucleo-ui-outline-18";
 import { Fragment, type ReactNode } from "react";
 import { useSidebar } from "@/contexts/sidebar-context";
 import {
@@ -11,6 +11,7 @@ import {
 } from "@mizu-hr/ui/breadcrumb";
 import { Link } from "@tanstack/react-router";
 import { useBreadcrumbs } from "@/hooks/use-breadcrumbs";
+import { SearchBar } from "./search-bar";
 
 type PageProps = {
   children: ReactNode;
@@ -36,17 +37,19 @@ function PageHeader() {
   const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div className="sticky top-0 z-10 flex w-full items-center border-b bg-sidebar pl-6 py-4">
+    <div className="sticky top-0 z-10 flex w-full items-center border-b bg-background px-6 py-4">
       <button
         className="flex h-8 w-8 mr-2 items-center justify-center rounded-md border border-border bg-light text-foreground transition-all hover:bg-default"
         onClick={toggleSidebar}
         title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         type="button"
       >
-        <IconLayoutLeftOutline24 className="h-4 w-4" />
+        <IconLayoutLeftOutline18 className="h-4 w-4" />
       </button>
 
-      <Breadcrumb>
+      <SearchBar />
+
+      {/*<Breadcrumb>
         <BreadcrumbList>
           {breadcrumbs.map((crumb, index) => {
             const isLast = index === breadcrumbs.length - 1;
@@ -65,7 +68,7 @@ function PageHeader() {
             );
           })}
         </BreadcrumbList>
-      </Breadcrumb>
+      </Breadcrumb>*/}
     </div>
   );
 }

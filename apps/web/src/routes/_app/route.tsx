@@ -29,7 +29,7 @@ function RouteComponent() {
 
   return (
     <SidebarProvider>
-      <main className="flex h-full overflow-hidden bg-sidebar">
+      <main className="flex h-full overflow-hidden bg-background">
         <Sidebar />
         <div className="h-full overflow-y-auto grow">
           <Outlet />

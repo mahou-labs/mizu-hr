@@ -18,7 +18,7 @@ import { scan } from "react-scan";
 // import { hotkeysDevtoolsPlugin } from "@tanstack/react-hotkeys-devtools";
 // import { formDevtoolsPlugin } from "@tanstack/react-form-devtools";
 import { ThemeProvider } from "better-themes";
-import { IconCircleXmarkOutline24 } from "nucleo-core-outline-24";
+import { IconCircleXmarkOutline18 } from "nucleo-ui-outline-18";
 
 const Posthog = () => {
   useEffect(() => {
@@ -73,7 +73,7 @@ function NotFoundPage() {
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <IconCircleXmarkOutline24 />
+            <IconCircleXmarkOutline18 />
           </EmptyMedia>
           <EmptyTitle>Page not found</EmptyTitle>
           <EmptyDescription>
