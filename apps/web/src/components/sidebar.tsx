@@ -1,14 +1,5 @@
-import type { ToOptions } from "@tanstack/react-router";
-import { Link, useLocation } from "@tanstack/react-router";
-import {
-  IconHouse2Outline18,
-  IconSuitcaseOutline18,
-  IconHouse6Outline18,
-  IconGearOutline18,
-} from "nucleo-ui-outline-18";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { cn } from "@/utils/cn";
-import { OrgMenu } from "./org-menu";
 import { Separator } from "@mizu-hr/ui/separator";
 import {
   Tooltip,
@@ -17,8 +8,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@mizu-hr/ui/tooltip";
+import type { ToOptions } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
+import {
+  IconGearOutline18,
+  IconHouse2Outline18,
+  IconSuitcaseOutline18,
+} from "nucleo-ui-outline-18";
+import { OrgMenu } from "./org-menu";
 import { UserMenu } from "./user-menu";
-import { SearchBar } from "./search-bar";
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>();
 
@@ -35,7 +33,6 @@ export function Sidebar() {
     >
       <OrgMenu />
       <nav className="mt-4 flex flex-1 flex-col gap-1.5">
-        <SearchBar />
         <TooltipProvider delay={0} timeout={500}>
           <Tooltip disabled={!isCollapsed}>
             <TooltipTrigger

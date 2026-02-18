@@ -1,3 +1,4 @@
+import { useModifierKey } from "@/hooks/use-modifier-key";
 import { Button } from "@mizu-hr/ui/button";
 import {
   Command,
@@ -24,7 +25,7 @@ import {
   IconChevronUpOutline18,
   IconMagnifierOutline18,
 } from "nucleo-ui-outline-18";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useState } from "react";
 
 type Item = {
   value: string;
@@ -57,13 +58,6 @@ const groupedItems: Group[] = [
   { items: suggestions, value: "Suggestions" },
   { items: commands, value: "Commands" },
 ];
-
-function useModifierKey() {
-  return useMemo(() => {
-    if (typeof navigator === "undefined") return "⌘";
-    return navigator.platform.toLowerCase().includes("mac") ? "⌘" : "Ctrl";
-  }, []);
-}
 
 export function SearchBar() {
   const [open, setOpen] = useState(false);
