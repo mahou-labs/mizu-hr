@@ -9,7 +9,7 @@ import { rateLimiter } from "hono-rate-limiter";
 import { appRouter } from "./routers/index";
 import { auth } from "./utils/auth";
 import { createContext } from "./utils/context";
-import { isTableAllowed, proxyShapeRequest } from "./utils/electric";
+// import { isTableAllowed, proxyShapeRequest } from "./utils/electric";
 import { env } from "./utils/env";
 
 const app = new Hono();
@@ -87,24 +87,24 @@ app.use("/rpc/*", async (c, next) => {
   await next();
 });
 
-app.get("/electric/:table", async (c) => {
-  const context = await createContext(c);
-  if (!context.session?.activeOrganizationId) {
-    return c.json({ error: "Unauthorized" }, 401);
-  }
+// app.get("/electric/:table", async (c) => {
+//   const context = await createContext(c);
+//   if (!context.session?.activeOrganizationId) {
+//     return c.json({ error: "Unauthorized" }, 401);
+//   }
 
-  const table = c.req.param("table");
-  if (!isTableAllowed(table)) {
-    return c.json({ error: "Invalid table" }, 400);
-  }
+//   const table = c.req.param("table");
+//   if (!isTableAllowed(table)) {
+//     return c.json({ error: "Invalid table" }, 400);
+//   }
 
-  return proxyShapeRequest({
-    table,
-    orgId: context.session.activeOrganizationId,
-    clientUrl: new URL(c.req.url),
-    ifNoneMatch: c.req.header("if-none-match"),
-  });
-});
+//   return proxyShapeRequest({
+//     table,
+//     orgId: context.session.activeOrganizationId,
+//     clientUrl: new URL(c.req.url),
+//     ifNoneMatch: c.req.header("if-none-match"),
+//   });
+// });
 
 export default {
   port: 3000,

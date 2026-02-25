@@ -1,41 +1,70 @@
-import { snakeCamelMapper } from "@electric-sql/client";
-import { electricCollectionOptions } from "@tanstack/electric-db-collection";
+// import { snakeCamelMapper } from "@electric-sql/client";
+// import { electricCollectionOptions } from "@tanstack/electric-db-collection";
 import { createCollection } from "@tanstack/react-db";
-import { jobSelectSchema } from "@mizu-hr/schemas/job";
+// import { jobSelectSchema } from "@mizu-hr/schemas/job";
 import { orpc } from "./orpc-client";
+import { queryCollectionOptions } from "@tanstack/query-db-collection";
+import { QueryClient } from "@tanstack/query-core";
 
-const electricUrl = `${import.meta.env.VITE_API_URL}/electric/jobs`;
-const fetchClient = Object.assign(
-  (input: RequestInfo | URL, init?: RequestInit) => {
-    return fetch(input, { ...init, credentials: "include" });
-  },
-  { preconnect: fetch.preconnect },
-);
+const queryClient = new QueryClient();
 
+const jobOptions = orpc.job.getAll.queryOptions();
 export const jobsCollection = createCollection(
-  electricCollectionOptions({
-    id: "jobs",
-    schema: jobSelectSchema,
-    shapeOptions: {
-      url: electricUrl,
-      params: { table: "jobs" },
-      columnMapper: snakeCamelMapper(),
-      fetchClient,
-    },
+  queryCollectionOptions({
+    queryKey: jobOptions.queryKey,
+    queryFn: async (context) => jobOptions.queryFn(context),
     getKey: (job) => job.id,
+    queryClient,
+
     onInsert: async ({ transaction }) => {
       const jobToInsert = transaction.mutations[0].modified;
-      return await orpc.job.create.call(jobToInsert);
+      await orpc.job.create.call(jobToInsert);
     },
 
     onUpdate: async ({ transaction }) => {
       const { original, changes } = transaction.mutations[0];
-      return await orpc.job.update.call({ ...changes, id: original.id });
+      await orpc.job.update.call({ ...changes, id: original.id });
     },
 
     onDelete: async ({ transaction }) => {
       const jobToDelete = transaction.mutations[0].original;
-      return await orpc.job.delete.call({ id: jobToDelete.id });
+      await orpc.job.delete.call({ id: jobToDelete.id });
     },
   }),
 );
+
+// const electricUrl = `${import.meta.env.VITE_API_URL}/electric/jobs`;
+// const fetchClient = Object.assign(
+//   (input: RequestInfo | URL, init?: RequestInit) => {
+//     return fetch(input, { ...init, credentials: "include" });
+//   },
+//   { preconnect: fetch.preconnect },
+// );
+
+// export const jobsCollection = createCollection(
+//   electricCollectionOptions({
+//     id: "jobs",
+//     schema: jobSelectSchema,
+//     shapeOptions: {
+//       url: electricUrl,
+//       params: { table: "jobs" },
+//       columnMapper: snakeCamelMapper(),
+//       fetchClient,
+//     },
+//     getKey: (job) => job.id,
+//     onInsert: async ({ transaction }) => {
+//       const jobToInsert = transaction.mutations[0].modified;
+//       return await orpc.job.create.call(jobToInsert);
+//     },
+
+//     onUpdate: async ({ transaction }) => {
+//       const { original, changes } = transaction.mutations[0];
+//       return await orpc.job.update.call({ ...changes, id: original.id });
+//     },
+
+//     onDelete: async ({ transaction }) => {
+//       const jobToDelete = transaction.mutations[0].original;
+//       return await orpc.job.delete.call({ id: jobToDelete.id });
+//     },
+//   }),
+// );

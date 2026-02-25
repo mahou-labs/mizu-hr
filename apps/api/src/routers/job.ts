@@ -1,21 +1,39 @@
-import { ORPCError } from "@orpc/server";
-import { and, eq, sql } from "drizzle-orm";
-import z from "zod";
-import { job, jobCreateSchema, jobUpdateSchema } from "@mizu-hr/schemas/job";
-import { db, getTxid } from "@/utils/db";
+import { db } from "@/utils/db";
 import { tryCatch } from "@/utils/try-catch";
+import { job, jobCreateSchema, jobUpdateSchema } from "@mizu-hr/schemas/job";
+import { ORPCError } from "@orpc/server";
+import { and, desc, eq } from "drizzle-orm";
+import z from "zod";
 import { protectedProcedure } from "../utils/orpc";
 
 export const jobRouter = {
+  getAll: protectedProcedure.handler(async ({ context }) => {
+    const orgId = context.session.activeOrganizationId;
+    if (!orgId) {
+      throw new ORPCError("NOT_FOUND", {
+        message: "Organization not found",
+      });
+    }
+
+    const { data, error } = await tryCatch(
+      db.select().from(job).where(eq(job.organizationId, orgId)).orderBy(desc(job.createdAt)),
+    );
+
+    if (error) {
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "Failed to fetch job listings",
+        cause: error,
+      });
+    }
+
+    return data;
+  }),
+
   create: protectedProcedure
     .input(jobCreateSchema.omit({ createdAt: true, updatedAt: true, publishedAt: true }))
     .handler(async ({ input, context }) => {
-      const orgId = context.session?.activeOrganizationId;
-      if (!context.user) {
-        throw new ORPCError("UNAUTHORIZED", {
-          message: "User not authenticated",
-        });
-      }
+      const orgId = context.session.activeOrganizationId;
+      const userId = context.user?.id;
 
       if (!orgId) {
         throw new ORPCError("BAD_REQUEST", {
@@ -23,22 +41,15 @@ export const jobRouter = {
         });
       }
 
-      const userId = context.user.id;
-
       const { data, error } = await tryCatch(
-        db.transaction(async (tx) => {
-          const result = await tx
-            .insert(job)
-            .values({
-              ...input,
-              organizationId: orgId,
-              createdBy: userId,
-            })
-            .returning();
-
-          const txid = await getTxid(tx);
-          return { result, txid };
-        }),
+        db
+          .insert(job)
+          .values({
+            ...input,
+            organizationId: orgId,
+            createdBy: userId,
+          })
+          .returning(),
       );
 
       if (error) {
@@ -55,7 +66,8 @@ export const jobRouter = {
     .input(jobUpdateSchema.extend({ id: z.string() }))
     .handler(async ({ input, context }) => {
       const { id, ...updates } = input;
-      const orgId = context.session?.activeOrganizationId;
+      const orgId = context.session.activeOrganizationId;
+
       if (!orgId) {
         throw new ORPCError("BAD_REQUEST", {
           message: "No active organization selected",
@@ -63,16 +75,11 @@ export const jobRouter = {
       }
 
       const { data, error } = await tryCatch(
-        db.transaction(async (tx) => {
-          const result = await tx
-            .update(job)
-            .set(updates)
-            .where(and(eq(job.id, id), eq(job.organizationId, orgId)))
-            .returning();
-
-          const txid = await getTxid(tx);
-          return { result, txid };
-        }),
+        db
+          .update(job)
+          .set(updates)
+          .where(and(eq(job.id, id), eq(job.organizationId, orgId)))
+          .returning(),
       );
 
       if (error) {
@@ -82,31 +89,22 @@ export const jobRouter = {
         });
       }
 
-      if (!data.result[0]) {
-        throw new ORPCError("NOT_FOUND", {
-          message: "Job posting not found",
-        });
-      }
-
       return data;
     }),
 
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .handler(async ({ input, context }) => {
-      const orgId = context.session?.activeOrganizationId;
+      const orgId = context.session.activeOrganizationId;
+
       if (!orgId) {
         throw new ORPCError("BAD_REQUEST", {
           message: "No active organization selected",
         });
       }
 
-      const { data: txid, error } = await tryCatch(
-        db.transaction(async (tx) => {
-          await tx.delete(job).where(and(eq(job.id, input.id), eq(job.organizationId, orgId)));
-          const txid = await getTxid(tx);
-          return txid;
-        }),
+      const { error } = await tryCatch(
+        await db.delete(job).where(and(eq(job.id, input.id), eq(job.organizationId, orgId))),
       );
 
       if (error) {
@@ -115,7 +113,5 @@ export const jobRouter = {
           cause: error,
         });
       }
-
-      return { txid };
     }),
 };

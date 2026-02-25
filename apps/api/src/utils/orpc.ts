@@ -33,11 +33,11 @@ export const requireAuth = o
     },
   })
   .middleware(({ context, errors, next }) => {
-    if (!context?.user) {
+    if (!context?.user || !context.session) {
       throw errors.UNAUTHORIZED({ data: { invalidSession: true } });
     }
 
-    return next();
+    return next({ context: { user: context.user, session: context.session } });
   });
 
 const requireSubscription = o
