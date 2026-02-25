@@ -34,22 +34,9 @@ export const job = pgTable("jobs", {
     .notNull(),
 });
 
-export const jobSelectSchema = createSelectSchema(job, {
-  recruiters: z.preprocess(
-    (val) => (typeof val === "string" ? JSON.parse(val) : val),
-    z.array(z.string()),
-  ),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  publishedAt: z.preprocess(
-    (val) => (val === null || val === undefined ? null : val),
-    z.coerce.date().nullable(),
-  ),
-});
-
 export const jobCreateSchema = createInsertSchema(job, {
   recruiters: z.array(z.string()).default([]),
-}).omit({ organizationId: true, createdBy: true });
+})
 
 export const jobUpdateSchema = createUpdateSchema(job, {
   recruiters: z.array(z.string()).optional(),

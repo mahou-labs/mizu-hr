@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@mdxeditor/editor": "^3.52.4",
-    "@mizu-hr/schemas": "workspace:*",
     "@mizu-hr/ui": "workspace:*",
     "@orpc/client": "^1.13.5",
     "@orpc/tanstack-query": "^1.13.5",

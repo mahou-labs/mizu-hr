@@ -1,6 +1,6 @@
 import { db } from "@/utils/db";
 import { tryCatch } from "@/utils/try-catch";
-import { job, jobCreateSchema, jobUpdateSchema } from "@mizu-hr/schemas/job";
+import { job, jobCreateSchema, jobUpdateSchema } from "@/schema/job";
 import { ORPCError } from "@orpc/server";
 import { and, desc, eq } from "drizzle-orm";
 import z from "zod";
@@ -29,38 +29,36 @@ export const jobRouter = {
     return data;
   }),
 
-  create: protectedProcedure
-    .input(jobCreateSchema.omit({ createdAt: true, updatedAt: true, publishedAt: true }))
-    .handler(async ({ input, context }) => {
-      const orgId = context.session.activeOrganizationId;
-      const userId = context.user?.id;
+  create: protectedProcedure.input(jobCreateSchema).handler(async ({ input, context }) => {
+    const orgId = context.session.activeOrganizationId;
+    const userId = context.user?.id;
 
-      if (!orgId) {
-        throw new ORPCError("BAD_REQUEST", {
-          message: "No active organization selected",
-        });
-      }
+    if (!orgId) {
+      throw new ORPCError("BAD_REQUEST", {
+        message: "No active organization selected",
+      });
+    }
 
-      const { data, error } = await tryCatch(
-        db
-          .insert(job)
-          .values({
-            ...input,
-            organizationId: orgId,
-            createdBy: userId,
-          })
-          .returning(),
-      );
+    const { data, error } = await tryCatch(
+      db
+        .insert(job)
+        .values({
+          ...input,
+          organizationId: orgId,
+          createdBy: userId,
+        })
+        .returning(),
+    );
 
-      if (error) {
-        throw new ORPCError("INTERNAL_SERVER_ERROR", {
-          message: "Failed to create job posting",
-          cause: error,
-        });
-      }
+    if (error) {
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "Failed to create job posting",
+        cause: error,
+      });
+    }
 
-      return data;
-    }),
+    return data;
+  }),
 
   update: protectedProcedure
     .input(jobUpdateSchema.extend({ id: z.string() }))

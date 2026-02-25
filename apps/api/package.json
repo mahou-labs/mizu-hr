@@ -21,7 +21,6 @@
     "db:down": "docker compose down"
   },
   "dependencies": {
-    "@mizu-hr/schemas": "workspace:*",
     "@orpc/server": "^1.13.5",
     "@polar-sh/better-auth": "^1.8.1",
     "@polar-sh/sdk": "^0.43.1",

@@ -1,7 +1,6 @@
 // import { snakeCamelMapper } from "@electric-sql/client";
 // import { electricCollectionOptions } from "@tanstack/electric-db-collection";
 import { createCollection } from "@tanstack/react-db";
-// import { jobSelectSchema } from "@mizu-hr/schemas/job";
 import { orpc } from "./orpc-client";
 import { queryCollectionOptions } from "@tanstack/query-db-collection";
 import { QueryClient } from "@tanstack/query-core";

@@ -4,7 +4,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
-import * as authSchema from "@mizu-hr/schemas/auth";
+import * as authSchema from "@/schema/auth";
 import { db } from "./db";
 import { sendOrgInvite, sendPasswordResetEmail, sendVerificationEmail } from "./email";
 import { env } from "./env";

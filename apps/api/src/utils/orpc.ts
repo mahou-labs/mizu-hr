@@ -3,7 +3,7 @@ import { Polar } from "@polar-sh/sdk";
 import { redis } from "bun";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { organizations } from "@mizu-hr/schemas/auth";
+import { organizations } from "@/schema/auth";
 import type { Context } from "./context";
 import { db } from "./db";
 import { env } from "./env";
