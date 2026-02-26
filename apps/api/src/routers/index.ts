@@ -1,5 +1,6 @@
 import type { RouterClient } from "@orpc/server";
 import { protectedProcedure, publicProcedure } from "../utils/orpc";
+import { candidateRouter } from "./candidate";
 import { jobRouter } from "./job";
 import { orgInviteRouter } from "./org-invite";
 import { organizationRouter } from "./organization";
@@ -16,6 +17,7 @@ export const appRouter = {
       user: context.user,
     };
   }),
+  candidate: candidateRouter,
   job: jobRouter,
   organization: organizationRouter,
   orgInvite: orgInviteRouter,

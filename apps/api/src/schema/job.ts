@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { boolean, integer, json, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { organizations, users } from "./auth";
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-orm/zod";
+import { createInsertSchema, createUpdateSchema } from "drizzle-orm/zod";
 import z from "zod";
 
 export const job = pgTable("jobs", {
@@ -36,7 +36,7 @@ export const job = pgTable("jobs", {
 
 export const jobCreateSchema = createInsertSchema(job, {
   recruiters: z.array(z.string()).default([]),
-})
+});
 
 export const jobUpdateSchema = createUpdateSchema(job, {
   recruiters: z.array(z.string()).optional(),
