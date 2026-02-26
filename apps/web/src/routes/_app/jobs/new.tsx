@@ -19,8 +19,8 @@ function NewJobRoute() {
       createdAt: new Date(),
       updatedAt: new Date(),
       publishedAt: null,
-      organizationId: user.id,
-      createdBy: session.activeOrganizationId,
+      organizationId: user?.id || "",
+      createdBy: session?.activeOrganizationId || "",
     });
 
     await navigate({ to: "/jobs" });
