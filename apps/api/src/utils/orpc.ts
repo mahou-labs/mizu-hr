@@ -134,4 +134,5 @@ const requireSubscription = o
   });
 
 export const publicProcedure = o;
-export const protectedProcedure = publicProcedure.use(requireAuth).use(requireSubscription);
+export const authedProcedure = publicProcedure.use(requireAuth);
+export const protectedProcedure = authedProcedure.use(requireSubscription);
