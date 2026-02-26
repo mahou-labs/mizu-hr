@@ -81,7 +81,7 @@ app.use("/rpc/*", async (c, next) => {
   });
 
   if (matched) {
-    return c.newResponse(response.body, response);
+    return c.newResponse(response.body as ReadableStream | null, response);
   }
 
   await next();
