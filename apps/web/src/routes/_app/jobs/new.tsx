@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_app/jobs/new")({
 
 function NewJobRoute() {
   const navigate = useNavigate();
-  const { user, session } = useRouteContext({ from: "_app" });
+  const { user, session } = useRouteContext({ from: "/_app" });
 
   const createJob = async (values: JobFormValues) => {
     jobsCollection.insert({
