@@ -248,9 +248,7 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
               <div className="flex items-center justify-between rounded-lg border border-border p-4">
                 <div>
                   <FieldLabel className="mb-0">Remote Position</FieldLabel>
-                  <p className="text-muted-foreground text-sm">
-                    This position allows remote work
-                  </p>
+                  <p className="text-muted-foreground text-sm">This position allows remote work</p>
                 </div>
                 <form.Field name="remote">
                   {(field) => (
@@ -307,18 +305,14 @@ export function JobForm({ defaultValues = defaultJobFormValues, onSubmit, mode }
                             ))}
                             <ComboboxInput
                               aria-label="Select recruiters"
-                              placeholder={
-                                value.length > 0 ? undefined : "Select recruiters..."
-                              }
+                              placeholder={value.length > 0 ? undefined : "Select recruiters..."}
                             />
                           </>
                         )}
                       </ComboboxValue>
                     </ComboboxChips>
                     <ComboboxPopup>
-                      {members.length === 0 && (
-                        <ComboboxEmpty>No members found</ComboboxEmpty>
-                      )}
+                      {members.length === 0 && <ComboboxEmpty>No members found</ComboboxEmpty>}
                       <ComboboxList>
                         {members.map((member) => (
                           <ComboboxItem key={member.id} value={member}>

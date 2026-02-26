@@ -26,10 +26,7 @@ function EditJobRoute() {
   if (!job) return null;
 
   return (
-    <Page
-      title="Edit Job Posting"
-      description="Update the job posting details"
-    >
+    <Page title="Edit Job Posting" description="Update the job posting details">
       <JobForm
         mode="edit"
         defaultValues={{

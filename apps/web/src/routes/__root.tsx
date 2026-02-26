@@ -19,20 +19,7 @@ import { scan } from "react-scan";
 // import { formDevtoolsPlugin } from "@tanstack/react-form-devtools";
 import { ThemeProvider } from "better-themes";
 import { IconCircleXmarkOutline18 } from "nucleo-ui-outline-18";
-
-const Posthog = () => {
-  useEffect(() => {
-    if (import.meta.env.PROD) {
-      import("posthog-js").then(({ default: posthog }) => {
-        posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
-          api_host: import.meta.env.VITE_POSTHOG_HOST,
-        });
-      });
-    }
-  }, []);
-
-  return null;
-};
+import PostHogProvider from "@/contexts/posthog-context";
 
 type RouterAppContext = {
   orpc: typeof orpc;
@@ -99,13 +86,15 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body className="h-svh">
-        <ThemeProvider attribute="class" disableTransitionOnChange>
-          <ToastProvider>
-            <AnchoredToastProvider>
-              <Outlet />
-            </AnchoredToastProvider>
-          </ToastProvider>
-        </ThemeProvider>
+        <PostHogProvider>
+          <ThemeProvider attribute="class" disableTransitionOnChange>
+            <ToastProvider>
+              <AnchoredToastProvider>
+                <Outlet />
+              </AnchoredToastProvider>
+            </ToastProvider>
+          </ThemeProvider>
+        </PostHogProvider>
 
         <TanStackDevtools
           plugins={[
@@ -122,7 +111,6 @@ function RootDocument() {
           ]}
         />
         <Scripts />
-        <Posthog />
       </body>
     </html>
   );

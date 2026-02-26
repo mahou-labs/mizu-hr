@@ -213,7 +213,11 @@ function JobsRoute() {
                     <div className="flex items-center gap-2">
                       <IconCurrencyDollarOutline18 className="size-3.5" />
                       <span>
-                        {formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency ?? undefined)}
+                        {formatSalary(
+                          job.salaryMin,
+                          job.salaryMax,
+                          job.salaryCurrency ?? undefined,
+                        )}
                       </span>
                     </div>
                   )}

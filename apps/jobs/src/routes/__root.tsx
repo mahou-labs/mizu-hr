@@ -8,7 +8,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import Header from '../components/Header'
 
-import PostHogProvider from '../integrations/posthog/provider'
+import PostHogProvider from '../contexts/posthog-context'
 
 import TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
 

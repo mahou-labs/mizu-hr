@@ -51,9 +51,7 @@ function RouteComponent() {
   return (
     <>
       <h1 className="font-bold text-2xl text-foreground">Create an account</h1>
-      <p className="mt-1 mb-6 text-sm text-muted-foreground">
-        Enter your details to get started.
-      </p>
+      <p className="mt-1 mb-6 text-sm text-muted-foreground">Enter your details to get started.</p>
 
       <form
         className="space-y-4"

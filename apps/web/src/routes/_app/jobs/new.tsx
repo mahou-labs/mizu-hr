@@ -26,10 +26,7 @@ function NewJobRoute() {
   };
 
   return (
-    <Page
-      title="Create Job Posting"
-      description="Fill in the details to create a new job posting"
-    >
+    <Page title="Create Job Posting" description="Fill in the details to create a new job posting">
       <JobForm mode="create" onSubmit={createJob} />
     </Page>
   );

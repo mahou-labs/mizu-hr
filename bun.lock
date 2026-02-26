@@ -117,6 +117,7 @@
         "@orpc/client": "^1.13.5",
         "@orpc/tanstack-query": "^1.13.5",
         "@polar-sh/better-auth": "^1.8.1",
+        "@posthog/react": "^1.8.0",
         "@tailwindcss/vite": "^4.2.0",
         "@tanstack/devtools-vite": "^0.5.0",
         "@tanstack/query-db-collection": "^1.0.25",
