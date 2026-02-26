@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 @import "tailwindcss";
 
 @font-face {
@@ -41,13 +42,7 @@
 }
 
 :root {
-  --bg-color: #ffffff;
-  --text-color: #1f2937;
-  --input-bg: #f9fafb;
-  --input-border: #d1d5db;
-  --button-bg: #2563eb;
-  --button-hover: #1d4ed8;
-  --button-text: #ffffff;
+  --font-sans: "Geist", system-ui, sans-serif;
   --font-pixel-square: "Geist Pixel Square", ui-monospace, monospace;
   --font-pixel-grid: "Geist Pixel Grid", ui-monospace, monospace;
   --font-pixel-circle: "Geist Pixel Circle", ui-monospace, monospace;
@@ -55,24 +50,26 @@
   --font-pixel-line: "Geist Pixel Line", ui-monospace, monospace;
 }
 
-.dark {
-  --bg-color: #000000;
-  --text-color: #f1f5f9;
-  --input-bg: #1e293b;
-  --input-border: #475569;
-  --button-bg: #3b82f6;
-  --button-hover: #2563eb;
-  --button-text: #ffffff;
-}
-
 html {
-  font-family: "Geist Pixel Square", ui-monospace, monospace !important;
-  color: var(--text-color);
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+  font-family: var(--font-sans);
+  color: #fafafa;
+  background-color: #09090b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: #09090b;
+  min-height: 100vh;
+}
+
+::selection {
+  background-color: rgba(103, 232, 249, 0.3);
+  color: #ecfeff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
