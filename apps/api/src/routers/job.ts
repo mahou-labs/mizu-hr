@@ -4,9 +4,41 @@ import { job, jobCreateSchema, jobUpdateSchema } from "@/schema/job";
 import { ORPCError } from "@orpc/server";
 import { and, desc, eq } from "drizzle-orm";
 import z from "zod";
-import { protectedProcedure } from "../utils/orpc";
+import { protectedProcedure, publicProcedure } from "../utils/orpc";
 
 export const jobRouter = {
+  listPublished: publicProcedure.handler(async () => {
+    const { data, error } = await tryCatch(
+      db
+        .select({
+          id: job.id,
+          title: job.title,
+          description: job.description,
+          department: job.department,
+          location: job.location,
+          remote: job.remote,
+          employmentType: job.employmentType,
+          experienceLevel: job.experienceLevel,
+          salaryMin: job.salaryMin,
+          salaryMax: job.salaryMax,
+          salaryCurrency: job.salaryCurrency,
+          publishedAt: job.publishedAt,
+        })
+        .from(job)
+        .where(eq(job.status, "published"))
+        .orderBy(desc(job.publishedAt)),
+    );
+
+    if (error) {
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "Failed to fetch published job listings",
+        cause: error,
+      });
+    }
+
+    return data;
+  }),
+
   getAll: protectedProcedure.handler(async ({ context }) => {
     const orgId = context.session.activeOrganizationId;
     if (!orgId) {

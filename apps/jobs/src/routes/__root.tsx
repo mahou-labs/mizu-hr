@@ -1,78 +1,64 @@
+import { orpc } from "@/utils/orpc-client";
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import {
-  HeadContent,
-  Scripts,
   createRootRouteWithContext,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+  HeadContent,
+  Outlet,
+  Scripts,
+} from "@tanstack/react-router";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import PostHogProvider from "@/contexts/posthog-context";
 
-import Header from '../components/Header'
+type RouterAppContext = {
+  orpc: typeof orpc;
+  queryClient: QueryClient;
+};
 
-import PostHogProvider from '../contexts/posthog-context'
-
-import TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
-
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-
-import appCss from '../styles.css?url'
-
-import type { QueryClient } from '@tanstack/react-query'
-
-interface MyRouterContext {
-  queryClient: QueryClient
-}
-
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'TanStack Start Starter',
-      },
-    ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Job Board | Mizu HR" },
+      { name: "description", content: "Browse open positions and apply today." },
     ],
   }),
-  shellComponent: RootDocument,
-})
+  component: RootDocument,
+  notFoundComponent: NotFoundPage,
+});
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function NotFoundPage() {
+  return (
+    <div className="flex h-svh items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold tracking-tight">404</h1>
+        <p className="mt-2 text-muted-foreground">Page not found</p>
+      </div>
+    </div>
+  );
+}
+
+function RootDocument() {
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="min-h-svh bg-background text-foreground antialiased">
         <PostHogProvider>
-          <TanStackQueryProvider>
-            <Header />
-            {children}
-            <TanStackDevtools
-              config={{
-                position: 'bottom-right',
-              }}
-              plugins={[
-                {
-                  name: 'Tanstack Router',
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-                TanStackQueryDevtools,
-              ]}
-            />
-          </TanStackQueryProvider>
+          <Outlet />
         </PostHogProvider>
+
+        <TanStackDevtools
+          plugins={[
+            { name: "TanStack Query", render: <ReactQueryDevtoolsPanel /> },
+            { name: "TanStack Router", render: <TanStackRouterDevtoolsPanel /> },
+          ]}
+        />
         <Scripts />
       </body>
     </html>
-  )
+  );
 }
