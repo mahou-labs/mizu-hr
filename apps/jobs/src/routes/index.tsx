@@ -2,14 +2,7 @@ import { cn } from "@/utils/cn";
 import { orpc } from "@/utils/orpc-client";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import {
-  Briefcase,
-  Clock,
-  DollarSign,
-  MapPin,
-  Monitor,
-  X,
-} from "lucide-react";
+import { Briefcase, Clock, DollarSign, MapPin, Monitor, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 
 const employmentTypeLabels: Record<string, string> = {
@@ -127,9 +120,7 @@ function JobBoardRoute() {
             </div>
 
             {/* Detail panel */}
-            {selectedJob && (
-              <JobDetailPanel job={selectedJob} onClose={clearSelection} />
-            )}
+            {selectedJob && <JobDetailPanel job={selectedJob} onClose={clearSelection} />}
           </div>
         )}
       </div>
@@ -198,9 +189,7 @@ function JobCard({
           </div>
         </div>
 
-        <span className="shrink-0 text-xs text-muted-foreground">
-          {timeAgo(job.publishedAt)}
-        </span>
+        <span className="shrink-0 text-xs text-muted-foreground">{timeAgo(job.publishedAt)}</span>
       </div>
 
       {/* Tags row */}
@@ -268,9 +257,7 @@ function JobDetailPanel({ job, onClose }: { job: Job; onClose: () => void }) {
             </MetaRow>
           )}
 
-          {salary && (
-            <MetaRow icon={<DollarSign className="size-4" />}>{salary}</MetaRow>
-          )}
+          {salary && <MetaRow icon={<DollarSign className="size-4" />}>{salary}</MetaRow>}
         </div>
 
         <hr className="border-border" />
@@ -285,9 +272,7 @@ function JobDetailPanel({ job, onClose }: { job: Job; onClose: () => void }) {
 
         {/* Published date */}
         {job.publishedAt && (
-          <p className="text-xs text-muted-foreground">
-            Posted {timeAgo(job.publishedAt)}
-          </p>
+          <p className="text-xs text-muted-foreground">Posted {timeAgo(job.publishedAt)}</p>
         )}
       </div>
     </div>
