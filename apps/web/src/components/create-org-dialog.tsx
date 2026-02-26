@@ -2,7 +2,7 @@ import { useForm, useStore } from "@tanstack/react-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useDebounce } from "@uidotdev/usehooks";
-import { IconCheckOutline24, IconXmarkOutline24 } from "nucleo-core-outline-24";
+import { IconCheckOutline18, IconXmarkOutline18 } from "nucleo-ui-outline-18";
 import { z } from "zod";
 import { orpc } from "@/utils/orpc-client";
 import { Button } from "@mizu-hr/ui/button";
@@ -150,11 +150,11 @@ export function CreateOrgDialog({
                           "Checking availability..."
                         ) : slugAvailable ? (
                           <span className="flex gap-1 text-success">
-                            <IconCheckOutline24 className="size-4" /> Available
+                            <IconCheckOutline18 className="size-4" /> Available
                           </span>
                         ) : (
                           <span className="flex gap-1 text-destructive">
-                            <IconXmarkOutline24 className="size-4" /> Taken
+                            <IconXmarkOutline18 className="size-4" /> Taken
                           </span>
                         )}
                       </FieldDescription>

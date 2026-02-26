@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useRouteContext, useRouter } from "@tanstack/react-router";
-import { IconChevronDownOutline24 } from "nucleo-core-outline-24";
+import { IconChevronDownOutline18 } from "nucleo-ui-outline-18";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { authClient } from "@/utils/auth-client";
 import { cn } from "@/utils/cn";
@@ -50,7 +50,7 @@ export function UserMenu() {
           </span>
         </div>
 
-        <IconChevronDownOutline24
+        <IconChevronDownOutline18
           className={cn(
             "ml-auto size-3 shrink-0 text-foreground-muted",
             isCollapsed && "opacity-0",

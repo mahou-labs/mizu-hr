@@ -1,5 +1,5 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox";
-import { IconChevronExpandYOutline24, IconXmarkOutline24 } from "nucleo-core-outline-24";
+import { IconChevronExpandYOutline18, IconXmarkOutline18 } from "nucleo-ui-outline-18";
 import * as React from "react";
 
 import { cn } from "../utils/cn";
@@ -80,7 +80,7 @@ function ComboboxInput({
             sizeValue === "sm" ? "end-0" : "end-0.5",
           )}
         >
-          <IconChevronExpandYOutline24 />
+          <IconChevronExpandYOutline18 />
         </ComboboxTrigger>
       )}
       {showClear && (
@@ -90,7 +90,7 @@ function ComboboxInput({
             sizeValue === "sm" ? "end-0" : "end-0.5",
           )}
         >
-          <IconXmarkOutline24 />
+          <IconXmarkOutline18 />
         </ComboboxClear>
       )}
     </div>
@@ -285,7 +285,7 @@ function ComboboxChipRemove(props: ComboboxPrimitive.ChipRemove.Props) {
       data-slot="combobox-chip-remove"
       {...props}
     >
-      <IconXmarkOutline24 />
+      <IconXmarkOutline18 />
     </ComboboxPrimitive.ChipRemove>
   );
 }

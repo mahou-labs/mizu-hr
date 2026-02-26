@@ -65,7 +65,7 @@ export function JobDescriptionEditor({
         contentEditableClassName={cn(
           "min-h-[200px] max-w-none px-[calc(--spacing(3)-1px)] py-[calc(--spacing(1.5)-1px)] focus:outline-none",
           "placeholder:text-muted-foreground/72",
-          "prose prose-zinc prose-sm dark:prose-invert",
+          "prose prose-zinc prose-sm dark:prose-invert dark:text-foreground dark:[&_p]:text-foreground dark:[&_li]:text-foreground dark:[&_h1]:text-foreground dark:[&_h2]:text-foreground dark:[&_h3]:text-foreground",
           "[&_p]:my-2 [&_ul]:my-2 [&_ol]:my-2",
           "[&_h1]:mt-4 [&_h1]:mb-2 [&_h1]:text-xl [&_h1]:font-semibold",
           "[&_h2]:mt-3 [&_h2]:mb-2 [&_h2]:text-lg [&_h2]:font-semibold",

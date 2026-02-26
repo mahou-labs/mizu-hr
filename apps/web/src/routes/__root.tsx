@@ -1,5 +1,10 @@
-import { scan } from "react-scan";
+import { orpc } from "@/utils/orpc-client";
+import { Button } from "@mizu-hr/ui/button";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
+import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
+import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -7,32 +12,14 @@ import {
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
-import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { useEffect } from "react";
-import { TanStackDevtools } from "@tanstack/react-devtools";
-import { orpc } from "@/utils/orpc-client";
-import appCss from "../index.css?url";
-import { AnchoredToastProvider, ToastProvider } from "@mizu-hr/ui/toast";
-// import { ThemeProvider } from "@/utils/theme-provider";
+import { scan } from "react-scan";
+// import { hotkeysDevtoolsPlugin } from "@tanstack/react-hotkeys-devtools";
+// import { formDevtoolsPlugin } from "@tanstack/react-form-devtools";
 import { ThemeProvider } from "better-themes";
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@mizu-hr/ui/empty";
-import { Button } from "@mizu-hr/ui/button";
-import { IconCircleXmarkOutline24 } from "nucleo-core-outline-24";
-
-const Posthog = () => {
-  useEffect(() => {
-    if (import.meta.env.PROD) {
-      import("posthog-js").then(({ default: posthog }) => {
-        posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
-          api_host: import.meta.env.VITE_POSTHOG_HOST,
-        });
-      });
-    }
-  }, []);
-
-  return null;
-};
+import { IconCircleXmarkOutline18 } from "nucleo-ui-outline-18";
+import PostHogProvider from "@/contexts/posthog-context";
 
 type RouterAppContext = {
   orpc: typeof orpc;
@@ -50,13 +37,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "My App",
-      },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
+        title: "Mizu HR",
       },
     ],
   }),
@@ -79,7 +60,7 @@ function NotFoundPage() {
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <IconCircleXmarkOutline24 />
+            <IconCircleXmarkOutline18 />
           </EmptyMedia>
           <EmptyTitle>Page not found</EmptyTitle>
           <EmptyDescription>
@@ -100,18 +81,20 @@ function RootDocument() {
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body className="h-svh">
-        <ThemeProvider attribute="class" disableTransitionOnChange>
-          <ToastProvider>
-            <AnchoredToastProvider>
-              <Outlet />
-            </AnchoredToastProvider>
-          </ToastProvider>
-        </ThemeProvider>
+        <PostHogProvider>
+          <ThemeProvider attribute="class" disableTransitionOnChange>
+            <ToastProvider>
+              <AnchoredToastProvider>
+                <Outlet />
+              </AnchoredToastProvider>
+            </ToastProvider>
+          </ThemeProvider>
+        </PostHogProvider>
 
         <TanStackDevtools
           plugins={[
@@ -123,10 +106,11 @@ function RootDocument() {
               name: "TanStack Router",
               render: <TanStackRouterDevtoolsPanel />,
             },
+            // formDevtoolsPlugin(),
+            // hotkeysDevtoolsPlugin(),
           ]}
         />
         <Scripts />
-        <Posthog />
       </body>
     </html>
   );

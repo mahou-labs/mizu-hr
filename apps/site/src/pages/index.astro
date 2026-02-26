@@ -3,88 +3,274 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-  <main
-    class="flex items-center justify-center min-h-screen px-4 py-8 sm:py-16 relative z-10"
-  >
-    <div class="text-center w-full max-w-2xl">
-      <p class="text-sm sm:text-base font-medium text-blue-600 dark:text-blue-400 mb-4 tracking-wide uppercase">
-        Coming Soon
-      </p>
-      <h1
-        class="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-12 sm:mb-16 tracking-tight"
+  <!-- Floating Nav -->
+  <nav class="fixed top-5 left-0 right-0 z-50 flex justify-center px-4">
+    <div
+      class="flex items-center rounded-full py-2.5 px-5 gap-6"
+      style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px);"
+    >
+      <a href="/" class="flex items-center gap-1.5 no-underline">
+        <svg
+          width="18"
+          height="16"
+          viewBox="0 0 112 102"
+          fill="none"
+          class="shrink-0"
+        >
+          <path
+            d="M46.8825 0.364349C43.8699 1.03169 43.336 2.09944 45.7384 2.65239C47.035 2.95746 48.6176 4.23495 49.304 5.5315C50.1429 7.09499 49.7044 84.6022 48.8464 87.386C47.9884 90.227 46.8825 90.1698 38.1498 86.7759C28.9023 83.1913 27.9871 83.401 34.3173 87.6339C41.5056 92.4197 45.4715 96.6335 45.4715 99.4363C45.4715 105.137 51.7255 100.714 55.6342 92.229L57.0261 89.2546L56.5494 79.5113C56.3016 74.1726 56.149 63.4951 56.2062 55.792L56.3397 41.8159L63.8139 49.6906C71.7458 58.0801 86.4655 74.1726 88.3722 76.575L89.5162 78.0241L97.3337 77.5856C114.761 76.6322 114.456 76.7657 107.172 73.3527C88.5819 64.62 82.1182 60.6922 72.5657 52.3028C69.7247 49.805 65.1105 45.9916 62.3267 43.818C57.5981 40.138 57.293 39.833 58.132 39.4898C58.6087 39.28 61.4115 38.136 64.3478 36.9539C71.4217 34.1129 79.3535 30.5474 85.5312 27.4394C89.2683 25.5709 91.3085 24.7891 93.4631 24.4078C98.554 23.5117 98.8209 22.9968 95.713 20.194C91.8996 16.7429 86.5227 13.921 83.7199 13.921C82.5949 13.921 82.614 14.1498 83.9868 16.1709C85.6838 18.6686 85.5312 19.2597 82.5568 21.8147C77.8854 25.8378 58.3798 37.564 56.3778 37.564C56.1681 37.564 56.1299 31.9202 56.2634 23.6451L56.4922 9.70717L57.5409 7.85767C58.8756 5.49337 58.5324 4.88322 54.3758 2.09945C51.0963 -0.112321 50.0476 -0.360196 46.8825 0.364349Z"
+            fill="white"></path>
+          <path
+            d="M31.7433 32.3778C30.4277 33.6743 13.8585 39.0894 11.2272 39.0894C9.77815 39.0894 7.47105 37.6784 6.5749 36.2484C5.50715 34.4942 5.04954 34.5324 5.04954 36.3628C5.04954 38.5364 5.69782 40.138 7.68078 42.8074C10.007 45.9535 10.4836 46.0488 14.5449 44.104C18.9303 41.9875 28.6735 38.2695 29.1121 38.5364C30.2561 39.2419 28.6544 43.9324 24.4788 51.9786C18.7396 63.0756 12.009 71.16 2.45643 78.4627C-2.06244 81.9138 0.0921274 82.0472 5.35461 78.6343C17.7863 70.5499 25.1271 62.2557 35.7092 44.3328C37.9782 40.4812 39.351 38.5364 40.0756 38.1551C42.9737 36.6679 42.1729 35.276 36.9104 32.6638C33.078 30.7571 33.3831 30.7762 31.7433 32.3778Z"
+            fill="white"></path>
+        </svg>
+        <span class="text-[15px] tracking-[-0.2px] text-[#fafafa]">Mizu</span>
+      </a>
+
+      <div class="w-px h-4 shrink-0" style="background: rgba(255,255,255,0.1);">
+      </div>
+
+      <a
+        href="https://docs.mizuhr.com"
+        class="text-[13px] leading-4 text-[#a1a1aa] no-underline hover:text-[#fafafa] transition-colors"
       >
-        The future of hiring is open source
+        Docs
+      </a>
+
+      <div class="w-px h-4 shrink-0" style="background: rgba(255,255,255,0.1);">
+      </div>
+
+      <a
+        href="https://github.com/mahou-labs/mizu-hr"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-[13px] leading-4 text-[#a1a1aa] no-underline hover:text-[#fafafa] transition-colors"
+      >
+        GitHub
+      </a>
+    </div>
+  </nav>
+
+  <!-- Full-height page wrapper with side dotted lines -->
+  <div
+    class="relative flex flex-col items-center justify-center min-h-screen overflow-hidden"
+  >
+    <!-- Grain overlay -->
+    <svg
+      class="fixed inset-0 w-full h-full pointer-events-none z-40 opacity-[0.04]"
+      aria-hidden="true"
+    >
+      <filter id="grain">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.65"
+          numOctaves="4"
+          stitchTiles="stitch"></feTurbulence>
+        <feColorMatrix type="saturate" values="0"></feColorMatrix>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#grain)"></rect>
+    </svg>
+
+    <!-- Side dotted lines extending full height (hidden on mobile to avoid clipping with text) -->
+    <div
+      class="absolute inset-0 left-1/2 h-full pointer-events-none hidden sm:block"
+      style="width: 1440px; max-width: 100vw; transform: translateX(-50%);"
+    >
+      <!-- Left dashed line -->
+      <div
+        class="absolute top-0 h-full w-px"
+        style="left: 12.5%; background: repeating-linear-gradient(to bottom, #27272A 0px, #27272A 4px, transparent 4px, transparent 10px);"
+      >
+      </div>
+      <!-- Right dashed line -->
+      <div
+        class="absolute top-0 h-full w-px"
+        style="right: 12.5%; background: repeating-linear-gradient(to bottom, #27272A 0px, #27272A 4px, transparent 4px, transparent 10px);"
+      >
+      </div>
+
+      <!-- Top crosshairs (near nav) -->
+      <div
+        class="absolute w-1.5 h-1.5 rounded-full bg-[#3F3F46]"
+        style="left: calc(12.5% - 3px); top: 80px;"
+      >
+      </div>
+      <div
+        class="absolute h-px w-5 bg-[#3F3F46]"
+        style="left: calc(12.5% - 10px); top: calc(80px + 2.5px);"
+      >
+      </div>
+      <div
+        class="absolute w-1.5 h-1.5 rounded-full bg-[#3F3F46]"
+        style="right: calc(12.5% - 3px); top: 80px;"
+      >
+      </div>
+      <div
+        class="absolute h-px w-5 bg-[#3F3F46]"
+        style="right: calc(12.5% - 10px); top: calc(80px + 2.5px);"
+      >
+      </div>
+
+      <!-- Mid-upper tick marks -->
+      <div
+        class="absolute h-px w-3 bg-[#27272A]"
+        style="left: calc(12.5% - 6px); top: 30%;"
+      >
+      </div>
+      <div
+        class="absolute h-px w-3 bg-[#27272A]"
+        style="right: calc(12.5% - 6px); top: 30%;"
+      >
+      </div>
+
+      <!-- Center crosshairs -->
+      <div
+        class="absolute w-1.5 h-1.5 rounded-full bg-[#3F3F46]"
+        style="left: calc(12.5% - 3px); top: 50%;"
+      >
+      </div>
+      <div
+        class="absolute h-px w-5 bg-[#3F3F46]"
+        style="left: calc(12.5% - 10px); top: calc(50% + 2.5px);"
+      >
+      </div>
+      <div
+        class="absolute w-1.5 h-1.5 rounded-full bg-[#3F3F46]"
+        style="right: calc(12.5% - 3px); top: 50%;"
+      >
+      </div>
+      <div
+        class="absolute h-px w-5 bg-[#3F3F46]"
+        style="right: calc(12.5% - 10px); top: calc(50% + 2.5px);"
+      >
+      </div>
+
+      <!-- Mid-lower tick marks -->
+      <div
+        class="absolute h-px w-3 bg-[#27272A]"
+        style="left: calc(12.5% - 6px); top: 70%;"
+      >
+      </div>
+      <div
+        class="absolute h-px w-3 bg-[#27272A]"
+        style="right: calc(12.5% - 6px); top: 70%;"
+      >
+      </div>
+
+      <!-- Bottom diamonds -->
+      <div
+        class="absolute w-2 h-2 rotate-45 border border-[#27272A]"
+        style="left: calc(12.5% - 4px); bottom: 80px;"
+      >
+      </div>
+      <div
+        class="absolute w-2 h-2 rotate-45 border border-[#27272A]"
+        style="right: calc(12.5% - 4px); bottom: 80px;"
+      >
+      </div>
+    </div>
+
+    <!-- Hero content -->
+    <main class="relative flex flex-col items-center z-10 px-4">
+      <!-- Badge -->
+      <div
+        class="flex items-center rounded-full py-1.25 pr-3.5 pl-1.25 gap-2 mb-10"
+        style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);"
+      >
+        <span
+          class="inline-block rounded-full py-0.75 px-2.5 bg-[#3B82F6] text-[11px] tracking-[0.3px] text-white text-center leading-3.5"
+        >
+          OPEN SOURCE
+        </span>
+        <span class="text-[13px] leading-4 text-[#71717a]">
+          Self-host free forever &middot; Cloud coming soon
+        </span>
+      </div>
+
+      <!-- Heading -->
+      <h1
+        class="text-[clamp(40px,6vw,80px)] leading-none tracking-[-3.5px] max-w-195 mb-7 text-center text-[#fafafa] font-normal"
+      >
+        Hiring, without the bloat.
       </h1>
 
-      <div id="waitlist-container">
-        <form id="waitlist-form" class="mt-8">
-          <div class="flex flex-col sm:flex-row gap-3 mb-4 sm:items-center">
-            <input
-              type="email"
-              id="email-input"
-              name="email"
-              placeholder="Enter your email"
-              required
-              class="flex-1 px-4 py-3.5 sm:px-5 sm:py-4 text-base sm:text-lg rounded-xl border-2 border-gray-300 bg-gray-50 text-gray-900 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 transition-all outline-none focus:border-blue-600 focus:shadow-[0_0_0_3px_rgba(59,130,246,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Email address"
-            />
-            <button
-              type="submit"
-              id="submit-button"
-              class="px-4 py-3.5 sm:px-8 sm:py-4 text-base sm:text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl border-none cursor-pointer transition-all outline-none hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(59,130,246,0.3)] focus:shadow-[0_0_0_3px_rgba(59,130,246,0.3)] sm:flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
-            >
-              Get Notified
-            </button>
-          </div>
-          <p class="mt-4 text-sm opacity-70 leading-relaxed">
-            Be the first to know when Mizu HR launches. No spam, just updates.
-          </p>
-        </form>
-        <div id="success-message" class="hidden mt-8">
-          <div
-            class="px-6 py-4 text-base sm:text-lg rounded-xl bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-2 border-green-200 dark:border-green-800"
+      <!-- Subtext -->
+      <p
+        class="text-[18px] leading-[165%] max-w-120 mb-12 text-center text-[#52525b] font-normal"
+      >
+        Mizu is an open-source applicant tracking system. A modern alternative
+        to Ashby, Greenhouse, and Lever.
+      </p>
+
+      <!-- Waitlist area: fixed height container to prevent layout shift -->
+      <div class="w-full max-w-100" style="min-height: 50px;">
+        <!-- Email form -->
+        <form
+          id="waitlist-form"
+          class="flex items-center w-full rounded-xl p-1.25"
+          style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"
+        >
+          <input
+            type="email"
+            id="email-input"
+            name="email"
+            placeholder="you@company.com"
+            required
+            class="flex-1 min-w-0 bg-transparent py-2.5 px-3.5 text-[14px] leading-4.5 text-[#fafafa] placeholder-[#3f3f46] border-none outline-none"
+            aria-label="Email address"
+          />
+          <button
+            type="submit"
+            id="submit-button"
+            class="rounded-lg py-2.5 px-5.5 bg-[#fafafa] text-[14px] leading-4.5 text-[#09090b] font-normal text-center whitespace-nowrap cursor-pointer border-none hover:bg-[#e4e4e7] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <p class="font-medium mb-1">✓ You're on the list!</p>
-            <p class="text-sm opacity-80">
-              We'll notify you when Mizu HR launches.
-            </p>
-          </div>
+            Join Waitlist
+          </button>
+        </form>
+
+        <!-- Success message: same position as form, hidden by default -->
+        <div
+          id="success-message"
+          class="hidden items-center justify-center w-full rounded-xl py-2.75 px-4 text-[14px] leading-4.5 text-[#a1a1aa] text-center"
+          style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"
+        >
+          You're on the list &mdash; we'll be in touch.
         </div>
       </div>
 
-      <div class="flex items-center justify-center gap-6 mt-12">
-        <a
-          href="https://github.com/mahou-labs/mizu-hr"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="opacity-50 hover:opacity-100 transition-opacity"
-          aria-label="GitHub"
-        >
-          <svg class="w-6 h-6" viewBox="0 0 32 32" fill="currentColor">
-            <path d="M16 2C8.27 2 2 8.27 2 16c0 6.19 4.01 11.44 9.58 13.29.7.13.96-.3.96-.67 0-.33-.01-1.42-.02-2.58-3.9.85-4.72-1.65-4.72-1.65-.64-1.62-1.56-2.05-1.56-2.05-1.27-.87.1-.85.1-.85 1.4.1 2.14 1.44 2.14 1.44 1.25 2.14 3.28 1.52 4.08 1.16.13-.91.49-1.52.89-1.87-3.11-.35-6.38-1.56-6.38-6.93 0-1.53.55-2.78 1.44-3.76-.14-.36-.62-1.78.14-3.71 0 0 1.18-.38 3.85 1.44a13.4 13.4 0 0 1 7.02 0c2.67-1.82 3.85-1.44 3.85-1.44.76 1.93.28 3.35.14 3.71.9.98 1.44 2.23 1.44 3.76 0 5.38-3.28 6.57-6.4 6.92.5.43.95 1.29.95 2.6 0 1.87-.02 3.38-.02 3.84 0 .37.25.81.96.67C25.99 27.44 30 22.19 30 16c0-7.73-6.27-14-14-14z"/>
-          </svg>
-        </a>
-        <a
-          href="https://x.com/nchartiot"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="opacity-50 hover:opacity-100 transition-opacity"
-          aria-label="X (Twitter)"
-        >
-          <svg class="w-6 h-6" viewBox="0 0 32 32" fill="currentColor">
-            <path d="M18.42 14.71 27.9 4h-2.25l-8.23 9.3L10.6 4H3.24l9.94 14.06L3.24 28h2.25l8.69-9.82L21.4 28h7.36l-10.34-13.29Zm-3.08 3.48-.99-1.42L6.3 5.63h3.42l6.4 9.16 1.01 1.42 8.32 11.9h-3.42l-6.69-9.92Z"/>
-          </svg>
-        </a>
-      </div>
-    </div>
-  </main>
+      <!-- Helper text -->
+      <p class="text-[12px] leading-4 text-[#3f3f46] mt-3.5 text-center">
+        We'll notify you when early access opens.
+      </p>
+    </main>
+
+    <!-- Subtle X link at bottom -->
+    <a
+      href="https://x.com/nchartiot"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="absolute bottom-6 flex items-center gap-1.5 text-[12px] leading-4 text-[#3f3f46] no-underline hover:text-[#52525b] transition-colors z-10"
+    >
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+        ></path>
+      </svg>
+      <span>Follow for updates</span>
+    </a>
+  </div>
 
   <script>
     import { orpc } from "../utils/orpc-client";
 
     declare global {
       interface Window {
-        posthog?: { capture: (event: string, properties?: Record<string, unknown>) => void };
+        posthog?: {
+          capture: (
+            event: string,
+            properties?: Record<string, unknown>,
+          ) => void;
+        };
       }
     }
 
@@ -118,13 +304,13 @@ import Layout from "../layouts/Layout.astro";
       try {
         await orpc.waitlist.addEmail({ email });
         window.posthog?.capture("waitlist_success");
-        form.classList.add("hidden");
+        form.style.display = "none";
         successMessage.classList.remove("hidden");
       } catch (error) {
         console.error("Failed to add email to waitlist:", error);
         submitButton.disabled = false;
         emailInput.disabled = false;
-        submitButton.textContent = "Get Notified";
+        submitButton.textContent = "Join Waitlist";
         alert("Something went wrong, please try again later.");
       }
     });

@@ -3,7 +3,7 @@ import { Polar } from "@polar-sh/sdk";
 import { redis } from "bun";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { organization } from "@/schema/auth";
+import { organizations } from "@/schema/auth";
 import type { Context } from "./context";
 import { db } from "./db";
 import { env } from "./env";
@@ -33,11 +33,11 @@ export const requireAuth = o
     },
   })
   .middleware(({ context, errors, next }) => {
-    if (!context?.user) {
+    if (!context?.user || !context.session) {
       throw errors.UNAUTHORIZED({ data: { invalidSession: true } });
     }
 
-    return next();
+    return next({ context: { user: context.user, session: context.session } });
   });
 
 const requireSubscription = o
@@ -113,8 +113,8 @@ const requireSubscription = o
     const { data: pgOrg, error: dbError } = await tryCatch(
       db
         .select()
-        .from(organization)
-        .where(eq(organization.id, orgId))
+        .from(organizations)
+        .where(eq(organizations.id, orgId))
         .then((org) => org[0]),
     );
 
@@ -134,4 +134,5 @@ const requireSubscription = o
   });
 
 export const publicProcedure = o;
-export const protectedProcedure = publicProcedure.use(requireAuth).use(requireSubscription);
+export const authedProcedure = publicProcedure.use(requireAuth);
+export const protectedProcedure = authedProcedure.use(requireSubscription);

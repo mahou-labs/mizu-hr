@@ -1,13 +1,4 @@
-import {
-  IconChevronDownOutline24,
-  IconChevronUpOutline24,
-  IconArrowCornerBottomLeftOutline24,
-  IconMagnifierOutline24,
-} from "nucleo-core-outline-24";
-import { Fragment, useMemo, useState } from "react";
-import { useSidebar } from "@/contexts/sidebar-context";
-import { useKeyPress } from "@/hooks/use-key-press";
-import { cn } from "@/utils/cn";
+import { useModifierKey } from "@/hooks/use-modifier-key";
 import { Button } from "@mizu-hr/ui/button";
 import {
   Command,
@@ -27,6 +18,14 @@ import {
   CommandShortcut,
 } from "@mizu-hr/ui/command";
 import { Kbd, KbdGroup } from "@mizu-hr/ui/kbd";
+import { useHotkey } from "@tanstack/react-hotkeys";
+import {
+  IconArrowCornerBottomLeftOutline18,
+  IconChevronDownOutline18,
+  IconChevronUpOutline18,
+  IconMagnifierOutline18,
+} from "nucleo-ui-outline-18";
+import { Fragment, useState } from "react";
 
 type Item = {
   value: string;
@@ -60,18 +59,10 @@ const groupedItems: Group[] = [
   { items: commands, value: "Commands" },
 ];
 
-function useModifierKey() {
-  return useMemo(() => {
-    if (typeof navigator === "undefined") return "⌘";
-    return navigator.platform.toLowerCase().includes("mac") ? "⌘" : "Ctrl";
-  }, []);
-}
-
 export function SearchBar() {
-  const { isCollapsed } = useSidebar();
   const [open, setOpen] = useState(false);
   const modifierKey = useModifierKey();
-  useKeyPress("k", () => setOpen((open) => !open), { mod: true, preventDefault: true });
+  useHotkey("Mod+K", () => setOpen((open) => !open));
 
   function handleItemClick(_item: Item) {
     setOpen(false);
@@ -83,17 +74,12 @@ export function SearchBar() {
         render={
           <Button
             variant="ghost"
-            className="mb-2 h-8 w-full justify-start gap-3 px-1.75 text-muted-foreground outline-solid outline outline-border hover:bg-transparent"
+            className="h-8 ml-auto w-full max-w-3xs justify-start gap-3 px-1.75 text-muted-foreground outline-solid outline outline-border hover:bg-transparent"
           />
         }
       >
-        <IconMagnifierOutline24 className="size-4 shrink-0" />
-        <div
-          className={cn(
-            "flex flex-1 items-center justify-between transition-opacity duration-200",
-            isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100",
-          )}
-        >
+        <IconMagnifierOutline18 className="size-4 shrink-0" />
+        <div className="flex flex-1 items-center justify-between">
           <span>Search...</span>
           <KbdGroup>
             <Kbd>{modifierKey}</Kbd>
@@ -134,17 +120,17 @@ export function SearchBar() {
               <div className="flex items-center gap-2">
                 <KbdGroup>
                   <Kbd>
-                    <IconChevronUpOutline24 />
+                    <IconChevronUpOutline18 />
                   </Kbd>
                   <Kbd>
-                    <IconChevronDownOutline24 />
+                    <IconChevronDownOutline18 />
                   </Kbd>
                 </KbdGroup>
                 <span>Navigate</span>
               </div>
               <div className="flex items-center gap-2">
                 <Kbd>
-                  <IconArrowCornerBottomLeftOutline24 />
+                  <IconArrowCornerBottomLeftOutline18 />
                 </Kbd>
                 <span>Open</span>
               </div>

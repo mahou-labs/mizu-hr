@@ -80,7 +80,7 @@ function ResetPasswordRoute() {
   // Show error state if token is invalid
   if (error === "INVALID_TOKEN" || error === "invalid_token") {
     return (
-      <div className="mx-auto mt-10 w-full max-w-md p-6">
+      <>
         <div className="mb-6 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
             <span className="text-2xl">⚠️</span>
@@ -103,14 +103,14 @@ function ResetPasswordRoute() {
             Back to Sign In
           </Button>
         </div>
-      </div>
+      </>
     );
   }
 
   // Show success state after password reset
   if (resetSuccess) {
     return (
-      <div className="mx-auto mt-10 w-full max-w-md p-6">
+      <>
         <div className="mb-6 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
             <span className="text-2xl">✓</span>
@@ -124,14 +124,14 @@ function ResetPasswordRoute() {
         <Button className="w-full" onClick={() => navigate({ to: "/auth/signin" })}>
           Sign In
         </Button>
-      </div>
+      </>
     );
   }
 
   // Show error if no token provided
   if (!token) {
     return (
-      <div className="mx-auto mt-10 w-full max-w-md p-6">
+      <>
         <div className="mb-6 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
             <span className="text-2xl">🔗</span>
@@ -155,12 +155,12 @@ function ResetPasswordRoute() {
             Back to Sign In
           </Button>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="mx-auto mt-10 w-full max-w-md p-6">
+    <>
       <h1 className="mb-2 text-center font-bold text-3xl text-foreground">Reset Your Password</h1>
       <p className="mb-6 text-center text-muted-foreground">Enter your new password below.</p>
 
@@ -234,6 +234,6 @@ function ResetPasswordRoute() {
           Back to Sign In
         </Button>
       </div>
-    </div>
+    </>
   );
 }

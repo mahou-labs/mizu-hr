@@ -1,0 +1,49 @@
+{
+  "name": "jobs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 3005",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "bun run build && wrangler deploy",
+    "typecheck": "tsc -b",
+    "lint": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check"
+  },
+  "dependencies": {
+    "@orpc/client": "^1.13.5",
+    "@orpc/tanstack-query": "^1.13.5",
+    "@posthog/react": "^1.8.0",
+    "@tailwindcss/vite": "^4.2.0",
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-router": "^1.162.6",
+    "@tanstack/react-router-ssr-query": "^1.162.6",
+    "@tanstack/react-start": "^1.162.6",
+    "@tanstack/router-plugin": "^1.162.6",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.575.0",
+    "posthog-js": "^1.352.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.25.2",
+    "@tanstack/devtools-vite": "^0.5.0",
+    "@tanstack/react-devtools": "^0.9.6",
+    "@tanstack/react-query-devtools": "^5.91.3",
+    "@tanstack/react-router-devtools": "^1.162.6",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "typescript": "^5.9.3",
+    "vite": "7.3.1",
+    "vite-tsconfig-paths": "^6.1.1",
+    "wrangler": "^4.67.0"
+  }
+}

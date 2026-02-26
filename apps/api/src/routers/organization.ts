@@ -1,16 +1,10 @@
 import { redis } from "bun";
 import * as z from "zod";
 import { auth } from "../utils/auth";
-import {
-  type CachedSubscriptionData,
-  protectedProcedure,
-  publicProcedure,
-  requireAuth,
-} from "../utils/orpc";
+import { authedProcedure, type CachedSubscriptionData, protectedProcedure } from "../utils/orpc";
 
 export const organizationRouter = {
-  createOrg: publicProcedure
-    .use(requireAuth)
+  createOrg: authedProcedure
     .input(
       z.object({
         name: z.string().min(1),
@@ -39,7 +33,7 @@ export const organizationRouter = {
       return data;
     }),
 
-  checkSlugAvailability: protectedProcedure
+  checkSlugAvailability: authedProcedure
     .input(z.string().min(1))
     .output(z.boolean())
     .handler(async ({ input }) => {
@@ -51,7 +45,8 @@ export const organizationRouter = {
         });
 
         return status;
-      } catch {
+      } catch (e) {
+        console.error(e);
         return false;
       }
     }),

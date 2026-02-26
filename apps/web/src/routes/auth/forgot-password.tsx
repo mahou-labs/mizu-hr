@@ -50,7 +50,7 @@ function ForgotPasswordRoute() {
 
   if (emailSent) {
     return (
-      <div className="mx-auto mt-10 w-full max-w-md p-6">
+      <>
         <div className="mb-6 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
             <span className="text-2xl">✉️</span>
@@ -74,12 +74,12 @@ function ForgotPasswordRoute() {
             Back to Sign In
           </Button>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="mx-auto mt-10 w-full max-w-md p-6">
+    <>
       <h1 className="mb-2 text-center font-bold text-3xl text-foreground">Forgot Password?</h1>
       <p className="mb-6 text-center text-muted-foreground">
         Enter your email address and we'll send you a link to reset your password.
@@ -133,6 +133,6 @@ function ForgotPasswordRoute() {
           Back to Sign In
         </Button>
       </div>
-    </div>
+    </>
   );
 }

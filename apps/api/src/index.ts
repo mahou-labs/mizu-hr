@@ -9,6 +9,7 @@ import { rateLimiter } from "hono-rate-limiter";
 import { appRouter } from "./routers/index";
 import { auth } from "./utils/auth";
 import { createContext } from "./utils/context";
+// import { isTableAllowed, proxyShapeRequest } from "./utils/electric";
 import { env } from "./utils/env";
 
 const app = new Hono();
@@ -33,7 +34,7 @@ app.use(
   rateLimiter({
     windowMs: 10 * 60 * 1000, // 10 minutes
     limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-    standardHeaders: "draft-6", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+    standardHeaders: "draft-7", // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
     keyGenerator: async (c) => {
       const authSession = await auth.api.getSession({ headers: c.req.raw.headers });
       return authSession?.user.id ?? c.req.header("X-Forwarded-For") ?? "";
@@ -80,11 +81,30 @@ app.use("/rpc/*", async (c, next) => {
   });
 
   if (matched) {
-    return c.newResponse(response.body, response);
+    return c.newResponse(response.body as ReadableStream | null, response);
   }
 
   await next();
 });
+
+// app.get("/electric/:table", async (c) => {
+//   const context = await createContext(c);
+//   if (!context.session?.activeOrganizationId) {
+//     return c.json({ error: "Unauthorized" }, 401);
+//   }
+
+//   const table = c.req.param("table");
+//   if (!isTableAllowed(table)) {
+//     return c.json({ error: "Invalid table" }, 400);
+//   }
+
+//   return proxyShapeRequest({
+//     table,
+//     orgId: context.session.activeOrganizationId,
+//     clientUrl: new URL(c.req.url),
+//     ifNoneMatch: c.req.header("if-none-match"),
+//   });
+// });
 
 export default {
   port: 3000,

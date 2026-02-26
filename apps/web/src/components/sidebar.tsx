@@ -1,13 +1,5 @@
-import type { ToOptions } from "@tanstack/react-router";
-import { Link, useLocation } from "@tanstack/react-router";
-import {
-  IconSuitcaseOutline24,
-  IconHouse6Outline24,
-  IconGearOutline24,
-} from "nucleo-core-outline-24";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { cn } from "@/utils/cn";
-import { OrgMenu } from "./org-menu";
 import { Separator } from "@mizu-hr/ui/separator";
 import {
   Tooltip,
@@ -16,8 +8,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@mizu-hr/ui/tooltip";
+import type { ToOptions } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
+import {
+  IconGearOutline18,
+  IconHouse2Outline18,
+  IconSuitcaseOutline18,
+} from "nucleo-ui-outline-18";
+import { OrgMenu } from "./org-menu";
 import { UserMenu } from "./user-menu";
-import { SearchBar } from "./search-bar";
 
 const tooltipHandle = TooltipCreateHandle<React.ComponentType>();
 
@@ -28,20 +27,19 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "relative flex h-full flex-col gap-3 bg-default bg-sidebar px-4 py-2 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
+        "relative flex h-full flex-col shrink-0 gap-3 border-r bg-default bg-background p-4 transition-[width] duration-200 ease-in-out motion-reduce:transition-none",
         isCollapsed ? "w-16" : "w-64",
       )}
     >
       <OrgMenu />
       <nav className="mt-4 flex flex-1 flex-col gap-1.5">
-        <SearchBar />
         <TooltipProvider delay={0} timeout={500}>
           <Tooltip disabled={!isCollapsed}>
             <TooltipTrigger
               render={
                 <SidebarItem
                   href="/"
-                  icon={IconHouse6Outline24}
+                  icon={IconHouse2Outline18}
                   isActive={location.pathname === "/"}
                   label="Dashboard"
                 />
@@ -57,7 +55,7 @@ export function Sidebar() {
               render={
                 <SidebarItem
                   href="/jobs"
-                  icon={IconSuitcaseOutline24}
+                  icon={IconSuitcaseOutline18}
                   isActive={location.pathname.startsWith("/jobs")}
                   label="Jobs"
                 />
@@ -71,7 +69,7 @@ export function Sidebar() {
           <Separator className="mt-auto h-0 bg-transparent" orientation="horizontal" />
           <SidebarItem
             href="/settings"
-            icon={IconGearOutline24}
+            icon={IconGearOutline18}
             isActive={location.pathname.startsWith("/settings")}
             label="Settings"
           />

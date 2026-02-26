@@ -1,11 +1,13 @@
+import { sql } from "drizzle-orm";
 import { boolean, integer, json, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { randomUUIDv7 } from "bun";
-import { organization, user } from "./auth";
+import { organizations, users } from "./auth";
+import { createInsertSchema, createUpdateSchema } from "drizzle-orm/zod";
+import z from "zod";
 
-export const job = pgTable("job", {
+export const job = pgTable("jobs", {
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => randomUUIDv7()),
+    .default(sql`uuidv7()`),
   title: text("title").notNull(),
   description: text("description").notNull(),
   department: text("department"),
@@ -20,14 +22,22 @@ export const job = pgTable("job", {
   recruiters: json("recruiters").$type<string[]>().default([]).notNull(),
   organizationId: text("organization_id")
     .notNull()
-    .references(() => organization.id, { onDelete: "cascade" }),
+    .references(() => organizations.id, { onDelete: "cascade" }),
   createdBy: text("created_by")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   publishedAt: timestamp("published_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
+});
+
+export const jobCreateSchema = createInsertSchema(job, {
+  recruiters: z.array(z.string()).default([]),
+});
+
+export const jobUpdateSchema = createUpdateSchema(job, {
+  recruiters: z.array(z.string()).optional(),
 });

@@ -1,6 +1,11 @@
-import { IconLayoutLeftOutline24 } from "nucleo-core-outline-24";
-import { type ReactNode } from "react";
 import { useSidebar } from "@/contexts/sidebar-context";
+import { useModifierKey } from "@/hooks/use-modifier-key";
+import { Button } from "@mizu-hr/ui/button";
+import { Kbd, KbdGroup } from "@mizu-hr/ui/kbd";
+import { Tooltip, TooltipPopup, TooltipTrigger } from "@mizu-hr/ui/tooltip";
+import { IconLayoutLeftOutline18 } from "nucleo-ui-outline-18";
+import { type ReactNode } from "react";
+import { SearchBar } from "./search-bar";
 
 type PageProps = {
   children: ReactNode;
@@ -22,24 +27,47 @@ export function Page({ children, title, description, actions }: PageProps) {
 }
 
 function PageHeader() {
-  const { isCollapsed, toggleSidebar } = useSidebar();
+  const { toggleSidebar } = useSidebar();
+  const modifierKey = useModifierKey();
+  // const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div className="flex w-full items-center pl-6">
-      <button
-        className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-light text-foreground transition-all hover:bg-default"
-        onClick={toggleSidebar}
-        title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        type="button"
-      >
-        {isCollapsed ? (
-          <IconLayoutLeftOutline24 className="h-4 w-4" />
-        ) : (
-          <IconLayoutLeftOutline24 className="h-4 w-4" />
-        )}
-      </button>
+    <div className="sticky top-0 z-10 flex w-full items-center border-b bg-background px-6 py-4">
+      <Tooltip>
+        <TooltipTrigger delay={0}>
+          <Button className="text-muted-foreground p-1" onClick={toggleSidebar} variant="link">
+            <IconLayoutLeftOutline18 />
+          </Button>
+        </TooltipTrigger>
+        <TooltipPopup>
+          <KbdGroup>
+            <Kbd>{modifierKey}</Kbd>
+            <Kbd>B</Kbd>
+          </KbdGroup>
+        </TooltipPopup>
+      </Tooltip>
+      <SearchBar />
 
-      <div className="flex items-center justify-center ml-4 text-sm">breadcrumbs/will/go-here</div>
+      {/*<Breadcrumb>
+        <BreadcrumbList>
+          {breadcrumbs.map((crumb, index) => {
+            const isLast = index === breadcrumbs.length - 1;
+
+            return (
+              <Fragment key={crumb.href}>
+                {index > 0 && <BreadcrumbSeparator />}
+                <BreadcrumbItem>
+                  {isLast ? (
+                    <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink render={<Link to={crumb.href} />}>{crumb.label}</BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              </Fragment>
+            );
+          })}
+        </BreadcrumbList>
+      </Breadcrumb>*/}
     </div>
   );
 }

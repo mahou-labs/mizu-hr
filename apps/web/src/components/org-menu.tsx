@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouteContext, useRouter } from "@tanstack/react-router";
 import {
-  IconCheckOutline24,
-  IconChevronDownOutline24,
-  IconCirclePlusOutline24,
-} from "nucleo-core-outline-24";
+  IconCheckOutline18,
+  IconChevronDownOutline18,
+  IconCirclePlusOutline18,
+} from "nucleo-ui-outline-18";
 import { useState } from "react";
 import { useSidebar } from "@/contexts/sidebar-context";
 import { cn } from "@/utils/cn";
@@ -96,7 +96,7 @@ export function OrgMenu() {
           </span>
         </div>
 
-        <IconChevronDownOutline24
+        <IconChevronDownOutline18
           className={cn(
             "ml-auto size-3 shrink-0 text-foreground-muted transition-opacity",
             isCollapsed && "opacity-0",
@@ -114,7 +114,7 @@ export function OrgMenu() {
               </Avatar>
               <span className="flex-1">{org.name}</span>
               {org.id === session?.activeOrganizationId && (
-                <IconCheckOutline24 className="size-4" />
+                <IconCheckOutline18 className="size-4" />
               )}
             </MenuItem>
           ))}
@@ -122,7 +122,7 @@ export function OrgMenu() {
           <MenuSeparator />
 
           <MenuItem onClick={() => setIsCreateOrgDialogOpen(true)}>
-            <IconCirclePlusOutline24 className="size-4" />
+            <IconCirclePlusOutline18 className="size-4" />
             <span>Create Organization</span>
           </MenuItem>
         </MenuPopup>

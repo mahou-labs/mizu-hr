@@ -1,0 +1,24 @@
+# Dependencies
+/node_modules
+
+# Build outputs
+/dist/
+.vinxi
+.output
+.tanstack/
+.nitro/
+
+# Deployment
+.wrangler
+
+# Environment & local files
+.env*
+!.env.example
+.DS_Store
+*.local
+
+# Logs
+*.log*
+
+# TypeScript
+*.tsbuildinfo

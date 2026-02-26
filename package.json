@@ -2,11 +2,11 @@
   "name": "mizu-hr",
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.6.1",
-    "oxfmt": "^0.27.0",
-    "oxlint": "^1.42.0",
-    "turbo": "2.8.1"
+    "oxfmt": "^0.35.0",
+    "oxlint": "^1.49.0",
+    "turbo": "2.8.10"
   },
-  "packageManager": "bun@1.3.0",
+  "packageManager": "bun@1.3.9",
   "private": true,
   "scripts": {
     "lint": "turbo lint",
@@ -36,7 +36,7 @@
     "catalog": {
       "react": "^19.2.4",
       "react-dom": "^19.2.4",
-      "@types/react": "^19.2.10",
+      "@types/react": "^19.2.14",
       "@types/react-dom": "^19.2.2"
     }
   }

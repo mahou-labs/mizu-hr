@@ -1,4 +1,12 @@
-# Mizu HR
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="apps/site/public/favicon.svg" />
+    <source media="(prefers-color-scheme: light)" srcset=".github/logo-dark.svg" />
+    <img alt="Mizu" src=".github/logo-dark.svg" width="48" />
+  </picture>
+</p>
+
+<h1 align="center">Mizu HR</h1>
 
 Mizu HR is an open-source applicant tracking system (ATS) and hiring platform. Built for modern teams who want full control over their recruitment process without vendor lock-in or per-seat pricing.
 
@@ -65,4 +73,4 @@ bun dev
 
 <a href="https://github.com/mahou-labs/mizu-hr/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=mahou-labs/mizu-hr" />
-</a>
+</

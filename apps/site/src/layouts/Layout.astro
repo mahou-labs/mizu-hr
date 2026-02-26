@@ -12,19 +12,10 @@ import PostHog from "../components/posthog.astro";
     <meta name="generator" content={Astro.generator} />
     <meta
       name="description"
-      content="The future of hiring is open source. Join our waitlist for updates."
+      content="Mizu is an open-source applicant tracking system. A modern alternative to Ashby, Greenhouse, and Lever."
     />
-    <title>Mizu HR - The Future of Hiring</title>
+    <title>Mizu HR - Hiring, without the bloat.</title>
     <PostHog />
-    <script>
-      if (
-        localStorage.getItem("theme") === "dark" ||
-        (!localStorage.getItem("theme") &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
-      }
-    </script>
   </head>
   <body>
     <slot />

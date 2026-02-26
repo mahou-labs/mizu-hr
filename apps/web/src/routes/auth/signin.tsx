@@ -2,7 +2,6 @@ import { useForm } from "@tanstack/react-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import z from "zod";
-import Loader from "@/components/loader";
 import { Button } from "@mizu-hr/ui/button";
 import { Checkbox } from "@mizu-hr/ui/checkbox";
 import { Field, FieldError, FieldLabel } from "@mizu-hr/ui/field";
@@ -19,8 +18,6 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { redirect } = useSearch({ from: "/auth" });
-
-  const { isPending } = authClient.useSession();
 
   const form = useForm({
     defaultValues: {
@@ -39,7 +36,7 @@ function RouteComponent() {
           onSuccess: async () => {
             toastManager.add({ title: "Sign in successful", type: "success" });
             await queryClient.fetchQuery(orpc.user.getSession.queryOptions());
-            await navigate({ to: redirect ?? "/dashboard" });
+            await navigate({ to: redirect ?? "/" });
           },
           onError: (error) => {
             toastManager.add({
@@ -59,13 +56,12 @@ function RouteComponent() {
     },
   });
 
-  if (isPending) {
-    return <Loader />;
-  }
-
   return (
-    <div className="mx-auto mt-10 w-full max-w-md p-6">
-      <h1 className="mb-6 text-center font-bold text-3xl text-foreground">Welcome Back</h1>
+    <>
+      <h1 className="font-bold text-2xl text-foreground">Welcome back</h1>
+      <p className="mt-1 mb-6 text-sm text-muted-foreground">
+        Enter your credentials to sign in to your account.
+      </p>
 
       <form
         className="space-y-4"
@@ -131,13 +127,12 @@ function RouteComponent() {
               </label>
             )}
           </form.Field>
-          <Button
-            render={<Link to="/auth/forgot-password" />}
-            variant="link"
-            className="h-auto p-0"
+          <Link
+            to="/auth/forgot-password"
+            className="text-sm text-muted-foreground hover:text-foreground"
           >
             Forgot password?
-          </Button>
+          </Link>
         </div>
 
         <form.Subscribe>
@@ -153,14 +148,16 @@ function RouteComponent() {
         </form.Subscribe>
       </form>
 
-      <div className="mt-4 text-center">
-        <Button
-          onClick={() => navigate({ to: "/auth/signup", search: { redirect } })}
-          variant="link"
+      <p className="mt-6 text-center text-sm text-muted-foreground">
+        Don't have an account?{" "}
+        <Link
+          to="/auth/signup"
+          search={{ redirect }}
+          className="text-foreground underline underline-offset-4 hover:text-foreground/80"
         >
-          Need an account? Sign Up
-        </Button>
-      </div>
-    </div>
+          Sign up
+        </Link>
+      </p>
+    </>
   );
 }

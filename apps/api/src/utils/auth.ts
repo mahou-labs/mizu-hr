@@ -4,7 +4,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
-import * as schema from "../schema/auth";
+import * as authSchema from "@/schema/auth";
 import { db } from "./db";
 import { sendOrgInvite, sendPasswordResetEmail, sendVerificationEmail } from "./email";
 import { env } from "./env";
@@ -17,10 +17,13 @@ const polarClient = new Polar({
 export const getActiveOrganization = async (userId: string) => {
   try {
     const userOrganizations = await db
-      .select({ id: schema.organization.id })
-      .from(schema.member)
-      .innerJoin(schema.organization, eq(schema.member.organizationId, schema.organization.id))
-      .where(eq(schema.member.userId, userId));
+      .select({ id: authSchema.organizations.id })
+      .from(authSchema.members)
+      .innerJoin(
+        authSchema.organizations,
+        eq(authSchema.members.organizationId, authSchema.organizations.id),
+      )
+      .where(eq(authSchema.members.userId, userId));
 
     if (userOrganizations.length === 0) {
       return null;
@@ -40,7 +43,8 @@ export const getActiveOrganization = async (userId: string) => {
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
-    schema,
+    schema: authSchema,
+    usePlural: true,
   }),
   trustedOrigins: [env.APP_URL],
   emailAndPassword: {
@@ -103,61 +107,61 @@ export const auth = betterAuth({
     },
   },
   databaseHooks: {
-    // user: {
-    //   create: {
-    //     before: async (user) => {
-    //       try {
-    //         // Check if a Polar customer already exists with this email
-    //         const { result: existingCustomers } = await polarClient.customers.list({
-    //           email: user.email,
-    //         });
+    user: {
+      create: {
+        before: async (user) => {
+          try {
+            // Check if a Polar customer already exists with this email
+            const { result: existingCustomers } = await polarClient.customers.list({
+              email: user.email,
+            });
 
-    //         const existingCustomer = existingCustomers.items[0];
+            const existingCustomer = existingCustomers.items[0];
 
-    //         if (existingCustomer?.externalId) {
-    //           // Use the existing external ID as the user ID
-    //           return {
-    //             data: {
-    //               ...user,
-    //               id: existingCustomer.externalId,
-    //             },
-    //           };
-    //         }
-    //       } catch (error) {
-    //         console.error(error);
-    //       }
+            if (existingCustomer?.externalId) {
+              // Use the existing external ID as the user ID
+              return {
+                data: {
+                  ...user,
+                  id: existingCustomer.externalId,
+                },
+              };
+            }
+          } catch (error) {
+            console.error(error);
+          }
 
-    //       // No existing customer, proceed with normal user creation
-    //       return {
-    //         data: user,
-    //       };
-    //     },
-    //     after: async (user) => {
-    //       try {
-    //         // Check if customer already exists
-    //         const { result: existingCustomers } = await polarClient.customers.list({
-    //           email: user.email,
-    //         });
+          // No existing customer, proceed with normal user creation
+          return {
+            data: user,
+          };
+        },
+        after: async (user) => {
+          try {
+            // Check if customer already exists
+            const { result: existingCustomers } = await polarClient.customers.list({
+              email: user.email,
+            });
 
-    //         const existingCustomer = existingCustomers.items[0];
+            const existingCustomer = existingCustomers.items[0];
 
-    //         if (existingCustomer) {
-    //           return;
-    //         }
+            if (existingCustomer) {
+              return;
+            }
 
-    //         // Create new customer
-    //         await polarClient.customers.create({
-    //           email: user.email,
-    //           name: user.name,
-    //           externalId: user.id,
-    //         });
-    //       } catch (error) {
-    //         console.error(error);
-    //         // Don't throw - we don't want to fail user creation if Polar fails
-    //       }
-    //     },
-    //   },
-    // },
+            // Create new customer
+            await polarClient.customers.create({
+              email: user.email,
+              name: user.name,
+              externalId: user.id,
+            });
+          } catch (error) {
+            console.error(error);
+            // Don't throw - we don't want to fail user creation if Polar fails
+          }
+        },
+      },
+    },
     session: {
       create: {
         before: async (session) => {
@@ -189,7 +193,7 @@ export const auth = betterAuth({
     }),
     polar({
       client: polarClient,
-      createCustomerOnSignUp: true,
+      createCustomerOnSignUp: false,
       use: [
         checkout({
           products: [
