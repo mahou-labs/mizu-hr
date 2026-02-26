@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouteContext } from "@tanstack/react-router";
 import { v7 as uuidv7 } from "uuid";
 import { JobForm, type JobFormValues } from "@/components/job-form";
 import { Page } from "@/components/page";
@@ -10,6 +10,7 @@ export const Route = createFileRoute("/_app/jobs/new")({
 
 function NewJobRoute() {
   const navigate = useNavigate();
+  const { user, session } = useRouteContext({ from: "_app" });
 
   const createJob = async (values: JobFormValues) => {
     jobsCollection.insert({
@@ -18,8 +19,8 @@ function NewJobRoute() {
       createdAt: new Date(),
       updatedAt: new Date(),
       publishedAt: null,
-      organizationId: "",
-      createdBy: "",
+      organizationId: user.id,
+      createdBy: session.activeOrganizationId,
     });
 
     await navigate({ to: "/jobs" });

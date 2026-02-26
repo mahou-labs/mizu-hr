@@ -134,7 +134,7 @@ export const jobRouter = {
       }
 
       const { error } = await tryCatch(
-        await db.delete(job).where(and(eq(job.id, input.id), eq(job.organizationId, orgId))),
+        db.delete(job).where(and(eq(job.id, input.id), eq(job.organizationId, orgId))),
       );
 
       if (error) {
