@@ -1,13 +1,18 @@
-name: Deploy (Main)
+name: Release
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to deploy (e.g., v1.2.3)"
+        required: true
+        type: string
 
 concurrency:
-  group: deploy-staging-${{ github.ref }}
-  cancel-in-progress: true
+  group: release
+  cancel-in-progress: false
 
 jobs:
   ci:
@@ -19,43 +24,54 @@ jobs:
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     outputs:
       admin: ${{ steps.filter.outputs.admin }}
-      docs: ${{ steps.filter.outputs.docs }}
-      site: ${{ steps.filter.outputs.site }}
       api: ${{ steps.filter.outputs.api }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
+          fetch-depth: 0
+
+      - name: Get previous release tag
+        id: prev_tag
+        run: |
+          CURRENT_TAG="${{ github.event.release.tag_name || inputs.tag }}"
+          PREV_TAG=$(git describe --tags --abbrev=0 "$CURRENT_TAG^" 2>/dev/null || echo "")
+          if [ -z "$PREV_TAG" ]; then
+            echo "No previous tag found, will deploy all apps"
+            echo "prev_tag=" >> $GITHUB_OUTPUT
+          else
+            echo "Previous tag: $PREV_TAG"
+            echo "prev_tag=$PREV_TAG" >> $GITHUB_OUTPUT
+          fi
 
       - name: Detect changed paths
         uses: dorny/paths-filter@v3
         id: filter
         with:
+          base: ${{ steps.prev_tag.outputs.prev_tag || github.event.release.tag_name || inputs.tag }}
           filters: |
             admin:
               - 'apps/admin/**'
               - 'packages/ui/**'
               - 'bun.lock'
-            docs:
-              - 'apps/docs/**'
-              - 'bun.lock'
-            site:
-              - 'apps/site/**'
-              - 'bun.lock'
             api:
               - 'apps/api/**'
               - 'bun.lock'
 
-  deploy-admin:
-    name: Deploy Admin (Staging)
+  release-admin:
+    name: Admin
     runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: [ci, changes]
-    if: needs.changes.outputs.admin == 'true'
+    if: needs.changes.outputs.admin == 'true' || needs.changes.outputs.admin == ''
     environment:
-      name: staging
-      url: ${{ vars.APP_STAGING_URL }}
+      name: production
+      url: ${{ vars.APP_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -69,7 +85,7 @@ jobs:
         run: bun run build
         working-directory: apps/admin
         env:
-          VITE_API_URL: ${{ vars.API_STAGING_URL }}
+          VITE_API_URL: ${{ vars.API_URL }}
           VITE_POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
           VITE_POSTHOG_HOST: ${{ vars.POSTHOG_HOST }}
 
@@ -79,20 +95,20 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: apps/admin
-          command: deploy --env staging
+          command: deploy
 
-  deploy-api:
-    name: Deploy API (Staging)
+  release-api:
+    name: API
     runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: [ci, changes]
-    if: needs.changes.outputs.api == 'true'
+    if: needs.changes.outputs.api == 'true' || needs.changes.outputs.api == ''
     environment:
-      name: staging
-      url: ${{ vars.API_STAGING_URL }}
+      name: production
+      url: ${{ vars.API_URL }}
     env:
       DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
       DOKPLOY_API_TOKEN: ${{ secrets.DOKPLOY_API_TOKEN }}
-      DOKPLOY_APPLICATION_ID: ${{ secrets.DOKPLOY_API_APPLICATION_ID_STAGING }}
+      DOKPLOY_APPLICATION_ID: ${{ secrets.DOKPLOY_API_APPLICATION_ID }}
     steps:
       - name: Validate inputs
         run: |
@@ -105,13 +121,14 @@ jobs:
             exit 1
           fi
           if [ -z "$DOKPLOY_APPLICATION_ID" ]; then
-            echo "::error::DOKPLOY_API_APPLICATION_ID_STAGING secret is not set"
+            echo "::error::DOKPLOY_API_APPLICATION_ID secret is not set"
             exit 1
           fi
 
       - name: Trigger Dokploy deployment
         run: |
-          echo "Triggering staging deployment for application: $DOKPLOY_APPLICATION_ID"
+          echo "Triggering production deployment for application: $DOKPLOY_APPLICATION_ID"
+          echo "Release tag: ${{ github.event.release.tag_name || inputs.tag }}"
 
           response=$(curl -X POST \
             "$DOKPLOY_URL/api/application.deploy" \
@@ -133,7 +150,7 @@ jobs:
             exit 1
           fi
 
-          echo "::notice::Staging deployment triggered successfully"
+          echo "::notice::Production deployment triggered successfully"
 
       - name: Wait for deployment
         run: |
@@ -142,7 +159,7 @@ jobs:
 
       - name: Health check
         run: |
-          API_URL="${{ vars.API_STAGING_URL }}"
+          API_URL="${{ vars.API_URL }}"
           if [ -n "$API_URL" ]; then
             echo "Checking API health at $API_URL/healthcheck"
 
@@ -161,71 +178,5 @@ jobs:
             echo "::error::Health check failed after 5 attempts"
             exit 1
           else
-            echo "::notice::Skipping health check - API_STAGING_URL not configured"
+            echo "::notice::Skipping health check - API_URL not configured"
           fi
-
-  deploy-docs:
-    name: Deploy Docs (Production)
-    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
-    needs: [ci, changes]
-    if: needs.changes.outputs.docs == 'true'
-    environment:
-      name: production
-      url: ${{ vars.DOCS_URL }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Build docs
-        run: bun run build
-        working-directory: apps/docs
-
-      - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: apps/docs
-          command: deploy
-
-  deploy-site:
-    name: Deploy Site (Production)
-    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
-    needs: [ci, changes]
-    if: needs.changes.outputs.site == 'true'
-    environment:
-      name: production
-      url: ${{ vars.SITE_URL }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Build site
-        run: bun run build
-        working-directory: apps/site
-        env:
-          PUBLIC_API_URL: ${{ vars.API_URL }}
-
-      - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: apps/site
-          command: deploy
