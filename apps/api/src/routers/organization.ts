@@ -99,4 +99,81 @@ export const organizationRouter = {
       return null;
     }
   }),
+
+  updateOrg: protectedProcedure
+    .input(
+      z
+        .object({
+          name: z.string().min(1).optional(),
+          slug: z.string().min(1).optional(),
+        })
+        .refine((data) => data.name || data.slug, {
+          message: "At least one of name or slug is required",
+        }),
+    )
+    .handler(async ({ context: { headers }, input }) => {
+      return await auth.api.updateOrganization({
+        headers,
+        body: {
+          data: input,
+        },
+      });
+    }),
+
+  updateOrgLogo: protectedProcedure
+    .input(z.object({ logo: z.union([z.url(), z.literal("")]) }))
+    .handler(async ({ context: { headers }, input }) => {
+      return await auth.api.updateOrganization({
+        headers,
+        body: {
+          data: { logo: input.logo },
+        },
+      });
+    }),
+
+  deleteOrg: protectedProcedure.handler(async ({ context: { headers, session } }) => {
+    return await auth.api.deleteOrganization({
+      headers,
+      body: {
+        organizationId: session.activeOrganizationId!,
+      },
+    });
+  }),
+
+  removeMember: protectedProcedure
+    .input(z.object({ memberIdOrEmail: z.string() }))
+    .handler(async ({ context: { headers }, input }) => {
+      return await auth.api.removeMember({
+        headers,
+        body: {
+          memberIdOrEmail: input.memberIdOrEmail,
+        },
+      });
+    }),
+
+  updateMemberRole: protectedProcedure
+    .input(
+      z.object({
+        memberId: z.string(),
+        role: z.enum(["admin", "member"]),
+      }),
+    )
+    .handler(async ({ context: { headers }, input }) => {
+      return await auth.api.updateMemberRole({
+        headers,
+        body: {
+          memberId: input.memberId,
+          role: input.role,
+        },
+      });
+    }),
+
+  leaveOrg: protectedProcedure.handler(async ({ context: { headers, session } }) => {
+    return await auth.api.leaveOrganization({
+      headers,
+      body: {
+        organizationId: session.activeOrganizationId!,
+      },
+    });
+  }),
 };
