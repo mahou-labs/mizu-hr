@@ -37,7 +37,7 @@ bun db:start
 
 ```bash
 cp apps/api/.env.example apps/api/.env
-cp apps/web/.env.example apps/web/.env
+cp apps/admin/.env.example apps/admin/.env
 ```
 
 4. Push the database schema:
@@ -55,7 +55,7 @@ bun dev
 | App | URL |
 |-----|-----|
 | API | [http://localhost:3000](http://localhost:3000) |
-| Web | [http://localhost:3001](http://localhost:3001) |
+| Admin | [http://localhost:3001](http://localhost:3001) |
 | Site | [http://localhost:3002](http://localhost:3002) |
 | Docs | [http://localhost:3003](http://localhost:3003) |
 

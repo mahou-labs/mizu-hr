@@ -23,9 +23,7 @@ jobs:
     name: Detect Changes
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     outputs:
-      web: ${{ steps.filter.outputs.web }}
-      docs: ${{ steps.filter.outputs.docs }}
-      site: ${{ steps.filter.outputs.site }}
+      admin: ${{ steps.filter.outputs.admin }}
       api: ${{ steps.filter.outputs.api }}
     steps:
       - name: Checkout
@@ -53,25 +51,19 @@ jobs:
         with:
           base: ${{ steps.prev_tag.outputs.prev_tag || github.event.release.tag_name || inputs.tag }}
           filters: |
-            web:
-              - 'apps/web/**'
+            admin:
+              - 'apps/admin/**'
               - 'packages/ui/**'
-              - 'bun.lock'
-            docs:
-              - 'apps/docs/**'
-              - 'bun.lock'
-            site:
-              - 'apps/site/**'
               - 'bun.lock'
             api:
               - 'apps/api/**'
               - 'bun.lock'
 
-  deploy-app:
-    name: Deploy App (Production)
+  deploy-admin:
+    name: Deploy Admin (Production)
     runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: [ci, changes]
-    if: needs.changes.outputs.web == 'true' || needs.changes.outputs.web == ''
+    if: needs.changes.outputs.admin == 'true' || needs.changes.outputs.admin == ''
     environment:
       name: production
       url: ${{ vars.APP_URL }}
@@ -89,9 +81,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build web app
+      - name: Build admin app
         run: bun run build
-        working-directory: apps/web
+        working-directory: apps/admin
         env:
           VITE_API_URL: ${{ vars.API_URL }}
           VITE_POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
@@ -102,7 +94,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: apps/web
+          workingDirectory: apps/admin
           command: deploy
 
   deploy-api:
@@ -188,73 +180,3 @@ jobs:
           else
             echo "::notice::Skipping health check - API_URL not configured"
           fi
-
-  deploy-docs:
-    name: Deploy Docs (Production)
-    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
-    needs: [ci, changes]
-    if: needs.changes.outputs.docs == 'true' || needs.changes.outputs.docs == ''
-    environment:
-      name: production
-      url: ${{ vars.DOCS_URL }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.tag_name || inputs.tag }}
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Build docs
-        run: bun run build
-        working-directory: apps/docs
-
-      - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: apps/docs
-          command: deploy
-
-  deploy-site:
-    name: Deploy Site (Production)
-    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
-    needs: [ci, changes]
-    if: needs.changes.outputs.site == 'true' || needs.changes.outputs.site == ''
-    environment:
-      name: production
-      url: ${{ vars.SITE_URL }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.tag_name || inputs.tag }}
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Build site
-        run: bun run build
-        working-directory: apps/site
-        env:
-          PUBLIC_API_URL: ${{ vars.API_URL }}
-
-      - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: apps/site
-          command: deploy

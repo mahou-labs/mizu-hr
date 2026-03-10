@@ -17,7 +17,7 @@
     "build": "turbo build",
     "typecheck": "turbo typecheck",
     "dev:native": "turbo -F native dev",
-    "dev:web": "turbo -F web dev",
+    "dev:admin": "turbo -F admin dev",
     "dev:api": "turbo -F api dev",
     "db:push": "turbo -F api db:push",
     "db:studio": "turbo -F api db:studio",

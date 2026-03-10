@@ -14,8 +14,8 @@ TypeScript monorepo (Turborepo + Bun) for a full-stack HR application:
 
 ```bash
 bun install                    # Install dependencies
-bun dev                        # Start all services (web:3001, api:3000, db studio)
-bun dev:web                    # Start frontend only
+bun dev                        # Start all services (admin:3001, api:3000, db studio)
+bun dev:admin                  # Start frontend only
 bun dev:api                    # Start API only
 bun lint                       # Run OxLint across all apps
 bun format                     # Run OxFmt across all apps
@@ -31,13 +31,13 @@ bun db:studio                  # Open Drizzle Studio
 
 # Run commands in specific apps
 turbo -F api <command>         # Run in API app
-turbo -F web <command>         # Run in web app
+turbo -F admin <command>       # Run in admin app
 turbo -F @mizu-hr/ui <command> # Run in UI package
 ```
 
 ### Testing
 
-Testing libraries installed but no tests exist yet. `@testing-library/react`, `jsdom` available in web app. No test runner configured - will need vitest setup.
+Testing libraries installed but no tests exist yet. `@testing-library/react`, `jsdom` available in admin app. No test runner configured - will need vitest setup.
 
 ## Code Style Guidelines
 
@@ -148,7 +148,7 @@ export const myTable = pgTable("my_table", {
 
 ### Frontend Routes (TanStack Start)
 
-File-based routing in `apps/web/src/routes/`. `_app/` prefix = protected routes:
+File-based routing in `apps/admin/src/routes/`. `_app/` prefix = protected routes:
 
 ```typescript
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -193,7 +193,7 @@ mizu-hr/
 │   │       ├── routers/  # oRPC route handlers
 │   │       ├── schema/   # Drizzle table definitions
 │   │       └── utils/    # Auth, DB, procedures, tryCatch
-│   ├── web/              # TanStack Start frontend (port 3001)
+│   ├── admin/            # TanStack Start frontend (port 3001)
 │   │   └── src/
 │   │       ├── routes/   # File-based routing (_app/ = protected)
 │   │       ├── components/

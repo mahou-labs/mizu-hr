@@ -1,4 +1,4 @@
-name: Deploy Staging
+name: Deploy (Main)
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
     name: Detect Changes
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     outputs:
-      web: ${{ steps.filter.outputs.web }}
+      admin: ${{ steps.filter.outputs.admin }}
       docs: ${{ steps.filter.outputs.docs }}
       site: ${{ steps.filter.outputs.site }}
       api: ${{ steps.filter.outputs.api }}
@@ -31,8 +31,8 @@ jobs:
         id: filter
         with:
           filters: |
-            web:
-              - 'apps/web/**'
+            admin:
+              - 'apps/admin/**'
               - 'packages/ui/**'
               - 'bun.lock'
             docs:
@@ -45,11 +45,11 @@ jobs:
               - 'apps/api/**'
               - 'bun.lock'
 
-  deploy-app:
-    name: Deploy App (Staging)
+  deploy-admin:
+    name: Deploy Admin (Staging)
     runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     needs: [ci, changes]
-    if: needs.changes.outputs.web == 'true'
+    if: needs.changes.outputs.admin == 'true'
     environment:
       name: staging
       url: ${{ vars.APP_STAGING_URL }}
@@ -65,9 +65,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build web app
+      - name: Build admin app
         run: bun run build
-        working-directory: apps/web
+        working-directory: apps/admin
         env:
           VITE_API_URL: ${{ vars.API_STAGING_URL }}
           VITE_POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
@@ -78,7 +78,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: apps/web
+          workingDirectory: apps/admin
           command: deploy --env staging
 
   deploy-api:
@@ -163,3 +163,69 @@ jobs:
           else
             echo "::notice::Skipping health check - API_STAGING_URL not configured"
           fi
+
+  deploy-docs:
+    name: Deploy Docs (Production)
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
+    needs: [ci, changes]
+    if: needs.changes.outputs.docs == 'true'
+    environment:
+      name: production
+      url: ${{ vars.DOCS_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build docs
+        run: bun run build
+        working-directory: apps/docs
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/docs
+          command: deploy
+
+  deploy-site:
+    name: Deploy Site (Production)
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
+    needs: [ci, changes]
+    if: needs.changes.outputs.site == 'true'
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build site
+        run: bun run build
+        working-directory: apps/site
+        env:
+          PUBLIC_API_URL: ${{ vars.API_URL }}
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/site
+          command: deploy

@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "mizu-hr-app",
+  "name": "mizu-hr-admin",
   "main": "@tanstack/react-start/server-entry",
   "compatibility_date": "2026-02-07",
   "compatibility_flags": ["nodejs_compat"],
@@ -12,7 +12,7 @@
   },
   "env": {
     "staging": {
-      "name": "mizu-hr-app-staging",
+      "name": "mizu-hr-admin-staging",
       "route": "staging.mizuhr.com",
     },
   },
